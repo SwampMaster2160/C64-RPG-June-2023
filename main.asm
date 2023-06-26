@@ -15,7 +15,7 @@ byte_a ds 1
 
 ; ROM header
 	word reset                   ; Reset routine
-	word 0                       ; NMI routine
+	word reset                   ; NMI routine
 	byte $C3, $C2, $CD, $38, $30 ; Magic bytes "CBM80" in PETSCII
 
 reset subroutine
@@ -23,13 +23,23 @@ reset subroutine
 	; Setup processor port (RAM layout and datasette control)
 	;lda #%00101111
 	;sta _6510_processor_port_bit_directions
-	lda #%00100111
-	sta _6510_processor_port_out_bits
-	lda #%00101111
-	sta _6510_processor_port_bit_directions
-	; Set screen as output device
-	lda #$03
-	sta $9A
+	;lda #%00100101
+	;sta _6510_processor_port_out_bits
+	;lda #%00101111
+	;sta 0;_6510_processor_port_bit_directions
+	;sta 2
+	;lda #$35
+	;sta 1
+	;sta 1
+	;sta 1
+	;LDA #$36
+	;STA $01
+	;byte $85, $01
+	;sta 1
+	;sta 2
+	;sta 3
+	;sta 4
+	;sta 5
 	; Setup VIC-II
 	lda #3 | C64_25_ROWS | C64_SCREEN_ON ; No vertical scroll, 25 rows, screen on, text mode, extended background off
 	sta c64_screen_control_0
@@ -46,9 +56,22 @@ reset subroutine
 	sta c64_background_colors
 	lda #C64_COLOR_WHITE
 	sta c64_tile_colors
+
+	;lda #<irq
+	;sta $FFFE
+	;lda #>irq
+	;sta $FFFF
+
+	cli
 .loop
 	inc $0400
 	jmp .loop
+
+irq subroutine
+	sei
+	inc $0400
+	cli
+	rti
 
 ; ----- Pad file to 16KiB -----
 * = $BFFF

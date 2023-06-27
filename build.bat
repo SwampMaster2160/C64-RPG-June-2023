@@ -1,3 +1,3 @@
-del main.bin
-dasm main.asm -f3 -o"main.bin"
-x64sc -cart16 "main.bin"
+del "game"
+dasm main.asm -f3 -o"game"
+x64sc "game"

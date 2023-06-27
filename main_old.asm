@@ -30,9 +30,9 @@ reset subroutine
 	lda #1
 	sta c64_vic_interrupt_control
 	lda #0
+	sta c64_screen_interrupt_line
 	sta $DC0D
 	sta $DD0D
-	sta c64_screen_interrupt_line
 	lda #(0 | C64_40_COLUMNS)              ; No horizontal scroll, 40 columns, multicolor off
 	sta c64_screen_control_1
 	lda #0                                 ; Disable sprites

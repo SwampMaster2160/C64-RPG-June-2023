@@ -49,7 +49,7 @@ init subroutine
 	lda #0                                 ; Disable sprites
 	sta c64_sprite_enables
 	lda #(4 << 1) | (1 << 4)               ; Tile shapes at $2000-$27FF, tile selections at $0400-$0800
-	sta c64_vic_memory_layout
+	;sta c64_vic_memory_layout
 	lda #1                                 ; Interrupt only when a set scanline is reached
 	sta c64_vic_interrupt_control
 	lda #0                                 ; Disable sprites
@@ -75,11 +75,12 @@ init subroutine
 	lda #$60            ; rts
 	sta sta_x_modable+3
 
-	lda #C64_COLOR_BLACK
+	/*lda #C64_COLOR_BLACK
 	sta c64_background_colors
 	sta c64_border_color
 	jsr clear_screen
-	jsr display_all_chars
+	jsr display_all_chars*/
+	jsr move_screen_chars_up
 
 	;lda #$00
 	;sta $0401
@@ -115,8 +116,7 @@ clear_screen subroutine
 	lda #C64_COLOR_WHITE
 	sta c64_tile_colors+$300,x
 	inx
-	txa
-	cmp #<1000
+	cpx #<1000
 	bne .last_loop
 	rts
 
@@ -176,6 +176,17 @@ irq subroutine
 	pla
 	cli
 	rti
+
+move_screen_chars_up subroutine
+	ldx #0
+.loop_0
+	lda $0400+40,x
+	sta $0400,x
+	inx
+	bne .loop_0
+	; Incomplete
+	rts
+
 * = $2000
 	byte $00, $00, $00, $00, $00, $00, $00, $00
 	byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF

@@ -1,6 +1,8 @@
 	processor 6502
 	include "c64_hardware.asm"
 
+c64_screen_control_0_settings_no_scroll = C64_SCREEN_ON/* | C64_25_ROWS*/
+
 ; ----- Zeropage vars -----
 	seg.u zeropage
 * = 2
@@ -8,6 +10,8 @@
 
 sta_x_modable ds 4
 byte_a ds 1
+byte_b ds 1
+screen_row_buffer ds 40
 
 ; ----- .PRG File header -----
 	seg file_header
@@ -40,11 +44,12 @@ init subroutine
 	lda #%00100101
 	sta _6510_processor_port_out_bits
 	; Setup VIC-II
-	lda #((7 | C64_SCREEN_ON) | %00000000) ; No vertical scroll, 24 rows, screen on, text mode, extended background off
+	lda #(0 | c64_screen_control_0_settings_no_scroll) ; No vertical scroll, 24 rows, screen on, text mode, extended background off
 	sta c64_screen_control_0
 	lda #247                               ; Interrupt at line 247
 	sta c64_screen_interrupt_line
-	lda #(7)                               ; No horizontal scroll, 38 columns, multicolor off
+	lda #(0 | C64_40_COLUMNS)                               ; No horizontal scroll, 38 columns, multicolor off
+	;lda #(6)                               ; No horizontal scroll, 38 columns, multicolor off
 	sta c64_screen_control_1
 	lda #0                                 ; Disable sprites
 	sta c64_sprite_enables
@@ -80,11 +85,13 @@ init subroutine
 	sta c64_border_color
 	jsr clear_screen
 	jsr display_all_chars*/
-	jsr display_all_chars
+	;jsr display_all_chars
+	;lda #0
+	;sta $0400+1000-40-3
 	lda #0
-	sta $0400+1000-40-3
-	;jsr move_screen_chars_up
-	;jsr garble_bottom_screen_row
+	sta byte_b
+	;jsr move_screen_chars_down
+	;jsr garble_top_screen_row
 
 	;lda #$00
 	;sta $0401
@@ -170,12 +177,34 @@ irq subroutine
 	lda #$FF
 	sta c64_vic_interrupt_status
 
-	;inc $0400
-	;inc c64_border_color
 	lda #C64_COLOR_RED
 	sta c64_border_color
-	;jsr move_screen_chars_up
-	;jsr garble_bottom_screen_row
+	/*lda byte_b
+	sec
+	sbc #1
+	and #%00000111
+	sta byte_b
+	ora #c64_screen_control_0_settings_no_scroll
+	sta c64_screen_control_0
+	lda byte_b
+	cmp #7
+	bne .skip_char_moves
+	jsr move_screen_chars_up
+	jsr garble_bottom_screen_row
+.skip_char_moves*/
+	lda byte_b
+	clc
+	adc #1
+	and #%00000111
+	sta byte_b
+	ora #c64_screen_control_0_settings_no_scroll
+	sta c64_screen_control_0
+	lda byte_b
+	cmp #0
+	bne .skip_char_moves
+	jsr move_screen_chars_down
+	jsr garble_top_screen_row
+.skip_char_moves
 	lda #C64_COLOR_CYAN
 	sta c64_border_color
 	; Pull a, x and y from the stack and return from interrupt
@@ -187,7 +216,7 @@ irq subroutine
 	cli
 	rti
 
-; Scrolls the entire screen up 1 tile
+; Scrolls the screen's chars up 1 tile, leaves the bottom row unchanged.
 move_screen_chars_up subroutine
 	ldx #0
 .loop_0
@@ -213,11 +242,53 @@ move_screen_chars_up subroutine
 	bne .loop_3
 	rts
 
+; Scrolls the screen's chars down 1 tile, leaves the top row unchanged.
+move_screen_chars_down subroutine
+	ldx #<(999-40)
+.loop_0
+	lda $0700,x
+	;lda #0
+	sta $0700+40,x
+	dex
+	cpx #$FF
+	bne .loop_0
+.loop_1
+	lda $0600,x
+	sta $0600+40,x
+	dex
+	cpx #$FF
+	bne .loop_1
+.loop_2
+	lda $0500,x
+	sta $0500+40,x
+	dex
+	cpx #$FF
+	bne .loop_2
+.loop_3
+	lda $0400,x
+	;lda #0
+	sta $0400+40,x
+	dex
+	cpx #$FF
+	bne .loop_3
+	rts
+
 garble_bottom_screen_row subroutine
 	ldx #0
 .loop
 	lda byte_a
 	sta $0400+1000-40,x
+	inc byte_a
+	inx
+	cpx #40
+	bne .loop
+	rts
+
+garble_top_screen_row subroutine
+	ldx #0
+.loop
+	lda byte_a
+	sta $0400,x
 	inc byte_a
 	inx
 	cpx #40

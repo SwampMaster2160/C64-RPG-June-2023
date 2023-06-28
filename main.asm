@@ -40,11 +40,11 @@ init subroutine
 	lda #%00100101
 	sta _6510_processor_port_out_bits
 	; Setup VIC-II
-	lda #(3 | C64_25_ROWS | C64_SCREEN_ON) ; No vertical scroll, 25 rows, screen on, text mode, extended background off
+	lda #((7 | C64_SCREEN_ON) | %00000000) ; No vertical scroll, 24 rows, screen on, text mode, extended background off
 	sta c64_screen_control_0
-	lda #0                                 ; Interrupt at line 0
+	lda #247                               ; Interrupt at line 247
 	sta c64_screen_interrupt_line
-	lda #(0 | C64_40_COLUMNS)              ; No horizontal scroll, 40 columns, multicolor off
+	lda #(7)                               ; No horizontal scroll, 38 columns, multicolor off
 	sta c64_screen_control_1
 	lda #0                                 ; Disable sprites
 	sta c64_sprite_enables
@@ -80,7 +80,11 @@ init subroutine
 	sta c64_border_color
 	jsr clear_screen
 	jsr display_all_chars*/
-	jsr move_screen_chars_up
+	jsr display_all_chars
+	lda #0
+	sta $0400+1000-40-3
+	;jsr move_screen_chars_up
+	;jsr garble_bottom_screen_row
 
 	;lda #$00
 	;sta $0401
@@ -167,7 +171,13 @@ irq subroutine
 	sta c64_vic_interrupt_status
 
 	;inc $0400
-	inc c64_border_color
+	;inc c64_border_color
+	lda #C64_COLOR_RED
+	sta c64_border_color
+	;jsr move_screen_chars_up
+	;jsr garble_bottom_screen_row
+	lda #C64_COLOR_CYAN
+	sta c64_border_color
 	; Pull a, x and y from the stack and return from interrupt
 	pla
 	tay
@@ -177,6 +187,7 @@ irq subroutine
 	cli
 	rti
 
+; Scrolls the entire screen up 1 tile
 move_screen_chars_up subroutine
 	ldx #0
 .loop_0
@@ -184,10 +195,36 @@ move_screen_chars_up subroutine
 	sta $0400,x
 	inx
 	bne .loop_0
-	; Incomplete
+.loop_1
+	lda $0500+40,x
+	sta $0500,x
+	inx
+	bne .loop_1
+.loop_2
+	lda $0600+40,x
+	sta $0600,x
+	inx
+	bne .loop_2
+.loop_3
+	lda $0700+40,x
+	sta $0700,x
+	inx
+	cpx #<(1000-40)
+	bne .loop_3
+	rts
+
+garble_bottom_screen_row subroutine
+	ldx #0
+.loop
+	lda byte_a
+	sta $0400+1000-40,x
+	inc byte_a
+	inx
+	cpx #40
+	bne .loop
 	rts
 
 * = $2000
 	byte $00, $00, $00, $00, $00, $00, $00, $00
 	byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
-	byte #10101010, #01010101, #10101010, #01010101, #10101010, #01010101, #10101010, #01010101
+	byte #%10101010, #%01010101, #%10101010, #%01010101, #%10101010, #%01010101, #%10101010, #%01010101

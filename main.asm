@@ -193,9 +193,9 @@ irq subroutine
 	jsr move_screen_chars_up
 	jsr garble_bottom_screen_row
 .skip_char_moves*/
-	lda #247
+	;lda #247
 	;lda #175
-	sta c64_screen_interrupt_line
+	;sta c64_screen_interrupt_line
 	lda byte_b
 	clc
 	adc #1
@@ -209,6 +209,10 @@ irq subroutine
 	cmp #0
 	bne .skip_char_moves
 	jsr move_screen_chars_down_pt_0
+	lda #C64_COLOR_YELLOW
+	;sta c64_border_color
+	lda #247
+	sta c64_screen_interrupt_line
 	lda byte_b
 	ora #c64_screen_control_0_settings_no_scroll
 	sta c64_screen_control_0

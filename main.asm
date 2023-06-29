@@ -46,8 +46,8 @@ init subroutine
 	; Setup VIC-II
 	lda #(0 | c64_screen_control_0_settings_no_scroll) ; No vertical scroll, 24 rows, screen on, text mode, extended background off
 	sta c64_screen_control_0
-	;lda #247                               ; Interrupt at line 247
-	lda #175                               ; Interrupt at line 175
+	lda #247                               ; Interrupt at line 247
+	;lda #175                               ; Interrupt at line 175
 	sta c64_screen_interrupt_line
 	lda #(0 | C64_40_COLUMNS)                               ; No horizontal scroll, 38 columns, multicolor off
 	;lda #(6)                               ; No horizontal scroll, 38 columns, multicolor off
@@ -193,22 +193,36 @@ irq subroutine
 	jsr move_screen_chars_up
 	jsr garble_bottom_screen_row
 .skip_char_moves*/
+	lda #247
+	;lda #175
+	sta c64_screen_interrupt_line
 	lda byte_b
 	clc
 	adc #1
 	and #%00000111
 	sta byte_b
+	beq .skip_scroll_set
 	ora #c64_screen_control_0_settings_no_scroll
 	sta c64_screen_control_0
+.skip_scroll_set
 	lda byte_b
 	cmp #0
 	bne .skip_char_moves
 	jsr move_screen_chars_down_pt_0
+	lda byte_b
+	ora #c64_screen_control_0_settings_no_scroll
+	sta c64_screen_control_0
 	jsr garble_top_screen_row
 	jsr move_screen_chars_down_pt_1
 .skip_char_moves
+	lda byte_b
+	cmp #7
+	bne .skip_interrupt_line_change
+	lda #175
+	sta c64_screen_interrupt_line
+.skip_interrupt_line_change
 	lda #C64_COLOR_CYAN
-	sta c64_border_color
+	;sta c64_border_color
 	; Pull a, x and y from the stack and return from interrupt
 	pla
 	tay
@@ -275,14 +289,12 @@ move_screen_chars_down_pt_1 subroutine
 	ldx #<(999-40)
 .loop_0
 	lda $0700,x
-	;lda #$FF
 	sta $0700+40,x
 	dex
 	cpx #$FF
 	bne .loop_0
 .loop_1
 	lda $0600,x
-	;lda #$30
 	sta $0600+40,x
 	dex
 	cpx #$FF
@@ -290,7 +302,6 @@ move_screen_chars_down_pt_1 subroutine
 	ldx #0
 .loop_2
 	lda $0600,x
-	;sta screen_row_buffer,x
 	lda screen_row_buffer,x
 	sta $0600+40,x
 	inx

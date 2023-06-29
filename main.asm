@@ -46,7 +46,8 @@ init subroutine
 	; Setup VIC-II
 	lda #(0 | c64_screen_control_0_settings_no_scroll) ; No vertical scroll, 24 rows, screen on, text mode, extended background off
 	sta c64_screen_control_0
-	lda #247                               ; Interrupt at line 247
+	;lda #247                               ; Interrupt at line 247
+	lda #175                               ; Interrupt at line 175
 	sta c64_screen_interrupt_line
 	lda #(0 | C64_40_COLUMNS)                               ; No horizontal scroll, 38 columns, multicolor off
 	;lda #(6)                               ; No horizontal scroll, 38 columns, multicolor off
@@ -202,8 +203,9 @@ irq subroutine
 	lda byte_b
 	cmp #0
 	bne .skip_char_moves
-	jsr move_screen_chars_down
+	jsr move_screen_chars_down_pt_0
 	jsr garble_top_screen_row
+	jsr move_screen_chars_down_pt_1
 .skip_char_moves
 	lda #C64_COLOR_CYAN
 	sta c64_border_color
@@ -243,34 +245,59 @@ move_screen_chars_up subroutine
 	rts
 
 ; Scrolls the screen's chars down 1 tile, leaves the top row unchanged.
-move_screen_chars_down subroutine
+move_screen_chars_down_pt_0 subroutine
+	ldx #$00
+.loop_0
+	lda $0600,x
+	sta screen_row_buffer,x
+	inx
+	cpx #40
+	bne .loop_0
+	ldx #$FF
+.loop_1
+	lda $0500,x
+	sta $0500+40,x
+	dex
+	cpx #$FF
+	bne .loop_1
+	ldx #$FF
+.loop_2
+	lda $0400,x
+	sta $0400+40,x
+	dex
+	cpx #$FF
+	bne .loop_2
+	ldx #$FF
+	rts
+
+; Scrolls the screen's chars down 1 tile, leaves the top row unchanged.
+move_screen_chars_down_pt_1 subroutine
 	ldx #<(999-40)
 .loop_0
 	lda $0700,x
-	;lda #0
+	;lda #$FF
 	sta $0700+40,x
 	dex
 	cpx #$FF
 	bne .loop_0
 .loop_1
 	lda $0600,x
+	;lda #$30
 	sta $0600+40,x
 	dex
 	cpx #$FF
 	bne .loop_1
+	ldx #0
 .loop_2
-	lda $0500,x
-	sta $0500+40,x
-	dex
-	cpx #$FF
+	lda $0600,x
+	;sta screen_row_buffer,x
+	lda screen_row_buffer,x
+	sta $0600+40,x
+	inx
+	cpx #40
 	bne .loop_2
-.loop_3
-	lda $0400,x
-	;lda #0
-	sta $0400+40,x
-	dex
-	cpx #$FF
-	bne .loop_3
+	ldx #$FF
+
 	rts
 
 garble_bottom_screen_row subroutine

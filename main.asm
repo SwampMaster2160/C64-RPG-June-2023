@@ -11,7 +11,9 @@ c64_screen_control_0_settings_no_scroll = C64_SCREEN_ON/* | C64_25_ROWS*/
 sta_x_modable ds 4
 byte_a ds 1
 byte_b ds 1
+last_rng ds 1
 screen_row_buffer ds 40
+screen_color_buffer ds 40
 
 ; ----- .PRG File header -----
 	seg file_header
@@ -91,6 +93,7 @@ init subroutine
 	;sta $0400+1000-40-3
 	lda #0
 	sta byte_b
+	sta last_rng
 	;jsr move_screen_chars_down
 	;jsr garble_top_screen_row
 
@@ -208,16 +211,20 @@ irq subroutine
 	lda byte_b
 	cmp #0
 	bne .skip_char_moves
+	lda #C64_COLOR_ORANGE
+	sta c64_border_color
 	jsr move_screen_chars_down_pt_0
 	lda #C64_COLOR_YELLOW
-	;sta c64_border_color
+	sta c64_border_color
 	lda #247
 	sta c64_screen_interrupt_line
 	lda byte_b
 	ora #c64_screen_control_0_settings_no_scroll
 	sta c64_screen_control_0
-	jsr garble_top_screen_row
 	jsr move_screen_chars_down_pt_1
+	jsr garble_top_screen_row
+	;lda #C64_COLOR_GREEN
+	;sta c64_border_color
 .skip_char_moves
 	lda byte_b
 	cmp #7
@@ -225,8 +232,8 @@ irq subroutine
 	lda #175
 	sta c64_screen_interrupt_line
 .skip_interrupt_line_change
-	lda #C64_COLOR_CYAN
-	;sta c64_border_color
+	lda #C64_COLOR_GREEN
+	sta c64_border_color
 	; Pull a, x and y from the stack and return from interrupt
 	pla
 	tay
@@ -268,6 +275,8 @@ move_screen_chars_down_pt_0 subroutine
 .loop_0
 	lda $0600,x
 	sta screen_row_buffer,x
+	;lda c64_tile_colors+$200,x
+	;sta screen_color_buffer,x
 	inx
 	cpx #40
 	bne .loop_0
@@ -275,6 +284,8 @@ move_screen_chars_down_pt_0 subroutine
 .loop_1
 	lda $0500,x
 	sta $0500+40,x
+	;lda c64_tile_colors+$100,x
+	;sta c64_tile_colors+$100+40,x
 	dex
 	cpx #$FF
 	bne .loop_1
@@ -282,6 +293,8 @@ move_screen_chars_down_pt_0 subroutine
 .loop_2
 	lda $0400,x
 	sta $0400+40,x
+	;lda c64_tile_colors,x
+	;sta c64_tile_colors+40,x
 	dex
 	cpx #$FF
 	bne .loop_2
@@ -294,20 +307,26 @@ move_screen_chars_down_pt_1 subroutine
 .loop_0
 	lda $0700,x
 	sta $0700+40,x
+	;lda c64_tile_colors+$300,x
+	;sta c64_tile_colors+$300+40,x
 	dex
 	cpx #$FF
 	bne .loop_0
 .loop_1
 	lda $0600,x
 	sta $0600+40,x
+	;lda c64_tile_colors+$200,x
+	;sta c64_tile_colors+$200+40,x
 	dex
 	cpx #$FF
 	bne .loop_1
 	ldx #0
 .loop_2
-	lda $0600,x
+	;lda $0600,x
 	lda screen_row_buffer,x
 	sta $0600+40,x
+	;lda screen_color_buffer,x
+	;sta c64_tile_colors+$200+40,x
 	inx
 	cpx #40
 	bne .loop_2
@@ -328,13 +347,39 @@ garble_bottom_screen_row subroutine
 
 garble_top_screen_row subroutine
 	ldx #0
-.loop
-	lda byte_a
+.loop_0
+	jsr rng
 	sta $0400,x
-	inc byte_a
 	inx
 	cpx #40
-	bne .loop
+	bne .loop_0
+	ldx #0
+.loop_1
+	jsr rng
+	rol
+	rol
+	rol
+	rol
+	sta c64_tile_colors,x
+	inx
+	cpx #40
+	bne .loop_1
+	rts
+
+; Calculates a new random u8
+; --- Outputs ---
+; a: the random number generated
+rng subroutine
+	; Calculate last_rng * 5 + 1
+	lda last_rng
+	asl
+	asl
+	clc
+	adc last_rng
+	clc
+	adc #1
+	; Store back in last_rng and return
+	sta last_rng
 	rts
 
 * = $2000

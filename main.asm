@@ -25,6 +25,10 @@ last_rng ds 1
 
 file_content subroutine
 ; BASIC program that runs when "RUN" is entered into the BASIC command line, jumps to "init" subroutine in machine code mode.
+; A BASIC program consists of a singily linked list where each node contains:
+; A pointer to the next line node
+; A line number
+; BASIC bytecode for the line.
 basic_program subroutine
 .line_0
 	word .end_line      ; Pointer to next line (end line)
@@ -180,9 +184,12 @@ irq subroutine
 	pla
 	rti
 
-; Calculates a new random u8
+; Calculates a new random byte
+; --- Inputs ---
+; last_rng: The seed for the algorithm
 ; --- Outputs ---
-; a: the random number generated
+; a:        The random number generated (last_rng * 5 + 1)
+; last_rng: Also the random number generated
 rng subroutine
 	; Calculate last_rng * 5 + 1
 	lda last_rng
@@ -192,11 +199,13 @@ rng subroutine
 	adc last_rng
 	clc
 	adc #1
-	; Store back in last_rng and return
+	; Store back in last_rng
 	sta last_rng
+	; Return the number generated
 	rts
 
 * = $2000
+; World tiles
 	byte $00, $00, $00, $00, $00, $00, $00, $00
 	byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
 	byte #%10101010, #%01010101, #%10101010, #%01010101, #%10101010, #%01010101, #%10101010, #%01010101

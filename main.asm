@@ -181,8 +181,8 @@ irq subroutine
 	lda #$FF
 	sta c64_vic_interrupt_status
 
-	lda #C64_COLOR_RED
-	sta c64_border_color
+	;lda #C64_COLOR_RED
+	;sta c64_border_color
 	/*lda byte_b
 	sec
 	sbc #1
@@ -214,8 +214,8 @@ irq subroutine
 	lda #C64_COLOR_ORANGE
 	sta c64_border_color
 	jsr move_screen_chars_down_pt_0
-	lda #C64_COLOR_YELLOW
-	sta c64_border_color
+	;lda #C64_COLOR_YELLOW
+	;sta c64_border_color
 	lda #247
 	sta c64_screen_interrupt_line
 	lda byte_b
@@ -229,11 +229,11 @@ irq subroutine
 	lda byte_b
 	cmp #7
 	bne .skip_interrupt_line_change
-	lda #175
+	lda #148;175
 	sta c64_screen_interrupt_line
 .skip_interrupt_line_change
 	lda #C64_COLOR_GREEN
-	sta c64_border_color
+	;sta c64_border_color
 	; Pull a, x and y from the stack and return from interrupt
 	pla
 	tay
@@ -289,16 +289,16 @@ move_screen_chars_down_pt_0 subroutine
 	dex
 	cpx #$FF
 	bne .loop_1
-	ldx #$FF
+	;ldx #$FF
 .loop_2
 	lda $0400,x
 	sta $0400+40,x
-	;lda c64_tile_colors,x
-	;sta c64_tile_colors+40,x
+	lda c64_tile_colors,x
+	sta c64_tile_colors+40,x
 	dex
 	cpx #$FF
 	bne .loop_2
-	ldx #$FF
+	;ldx #$FF
 	rts
 
 ; Scrolls the screen's chars down 1 tile, leaves the top row unchanged.

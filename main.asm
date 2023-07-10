@@ -55,7 +55,7 @@ init subroutine
 	lda #0                                               ; Disable sprites
 	sta c64_sprite_enables
 	lda #(4 << 1) | (1 << 4)                             ; Tile shapes at $2000-$27FF, tile selections at $0400-$0800
-	;sta c64_vic_memory_layout
+	sta c64_vic_memory_layout
 	lda #1                                               ; Interrupt only when a set scanline is reached
 	sta c64_vic_interrupt_control
 	lda #0                                               ; Disable sprites
@@ -205,7 +205,4 @@ rng subroutine
 	rts
 
 * = $2000
-; World tiles
-	byte $00, $00, $00, $00, $00, $00, $00, $00
-	byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
-	byte #%10101010, #%01010101, #%10101010, #%01010101, #%10101010, #%01010101, #%10101010, #%01010101
+	include "data/world_chars.asm"

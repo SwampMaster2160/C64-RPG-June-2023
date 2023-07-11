@@ -1,0 +1,4 @@
+; World metatiles
+METATILE_BLANK = 0
+METATILE_TEST_0 = 1
+METATILE_TEST_1 = 2

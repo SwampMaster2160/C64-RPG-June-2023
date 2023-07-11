@@ -1,4 +1,4 @@
 ; World tiles
 TILE_BLANK = 0
 TILE_TEST_0 = 1
-TILE_TEST_2 = 2
+TILE_TEST_1 = 2

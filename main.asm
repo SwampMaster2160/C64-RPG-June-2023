@@ -9,6 +9,7 @@
 sta_x_modable_0 ds 4
 sta_x_modable_1 ds 4
 lda_x_modable ds 4
+lda_y_modable ds 4
 byte_a ds 1
 byte_b ds 1
 last_rng ds 1
@@ -92,6 +93,11 @@ init subroutine
 	sta lda_x_modable
 	lda #$60            ; rts
 	sta lda_x_modable+3
+	; Setup lda_y_modable
+	lda #$B9            ; lda #$XXXX,y
+	sta lda_y_modable
+	lda #$60            ; rts
+	sta lda_y_modable+3
 
 	lda #C64_COLOR_BLACK
 	sta c64_background_colors
@@ -113,6 +119,7 @@ init subroutine
 	lda #>c64_tile_colors
 	sta sta_x_modable_1+2
 	lda #0
+	ldx #0
 	jsr draw_tile
 
 	lda #<($0400+83)
@@ -124,6 +131,7 @@ init subroutine
 	lda #>(c64_tile_colors+83)
 	sta sta_x_modable_1+2
 	lda #1
+	ldx #0
 	jsr draw_tile
 
 	lda #<($0400+85)
@@ -135,6 +143,7 @@ init subroutine
 	lda #>(c64_tile_colors+85)
 	sta sta_x_modable_1+2
 	lda #2
+	ldx #1
 	jsr draw_tile
 
 	;lda #$00
@@ -252,64 +261,82 @@ rng subroutine
 ; Draws a 2x2 char tile on screen
 ; --- Inputs ---
 ; a:                 The tile ID to draw
+; x:                 The drawing offset
 ; sta_x_modable_0+1: The address of the top left char on the screen that should be drawn over
 ; sta_x_modable_1+1: The address of the top left char's color on the screen that should be drawn over
 ; --- Corrupted ---
-; x, lda_x_modable+1
+; y, lda_y_modable+1
+; --- Outputs ---
+; x: Has 41 added
 draw_tile subroutine
 	; Get location of where the tile should be copied from (tiles + a * 8)
-	tax
+	tay
+	; Low byte
 	asl
 	asl
 	asl
 	clc
 	adc #<tiles
 	php
-	sta lda_x_modable+1 ; Low byte
-	txa
+	sta lda_y_modable+1
+	; High byte
+	tya
 	rol
 	rol
 	rol
 	and #%00000111
 	plp
 	adc #>tiles
-	sta lda_x_modable+2 ; High byte
+	sta lda_y_modable+2
 	; Copy chars to screen
-	ldx #0
-	jsr lda_x_modable
+	ldy #0
+	jsr lda_y_modable
 	jsr sta_x_modable_0
+	iny
 	inx
-	jsr lda_x_modable
+	jsr lda_y_modable
 	jsr sta_x_modable_0
+	; Next row
+	iny
+	txa
+	clc
+	adc #39
+	tax
+	jsr lda_y_modable
+	jsr sta_x_modable_0
+	iny
 	inx
-	jsr lda_x_modable
-	ldx #40
-	jsr sta_x_modable_0
-	ldx #3
-	jsr lda_x_modable
-	ldx #41
+	jsr lda_y_modable
 	jsr sta_x_modable_0
 	; Copy colors to screen
-	ldx #4
-	jsr lda_x_modable
-	ldx #0
+	iny
+	txa
+	sec
+	sbc #41
+	tax
+	jsr lda_y_modable
 	jsr sta_x_modable_1
-	ldx #5
-	jsr lda_x_modable
-	ldx #1
+	iny
+	inx
+	jsr lda_y_modable
 	jsr sta_x_modable_1
-	ldx #6
-	jsr lda_x_modable
-	ldx #40
+	; Next row
+	iny
+	txa
+	clc
+	adc #39
+	tax
+	jsr lda_y_modable
 	jsr sta_x_modable_1
-	ldx #7
-	jsr lda_x_modable
-	ldx #41
+	iny
+	inx
+	jsr lda_y_modable
 	jsr sta_x_modable_1
 	; Return nothing
 	rts
 
 	include "data/tiles.asm"
+	include "data/metatiles.asm"
 
 * = $2000
 	include "data/world_chars.asm"

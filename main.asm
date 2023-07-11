@@ -1,12 +1,14 @@
 	processor 6502
-	include "c64_hardware.asm"
+	include "constants/mod.asm"
 
 ; ----- Zeropage vars -----
 	seg.u zeropage
 * = 2
 ; ----- Zeropage vars -----
 
-sta_x_modable ds 4
+sta_x_modable_0 ds 4
+sta_x_modable_1 ds 4
+lda_x_modable ds 4
 byte_a ds 1
 byte_b ds 1
 last_rng ds 1
@@ -75,11 +77,21 @@ init subroutine
 	sta $FFFE
 	lda #>irq
 	sta $FFFF
-	; Setup sta_imp
+	; Setup sta_x_modable_0
 	lda #$9D            ; sta #$XXXX,x
-	sta sta_x_modable
+	sta sta_x_modable_0
 	lda #$60            ; rts
-	sta sta_x_modable+3
+	sta sta_x_modable_0+3
+	; Setup sta_x_modable_1
+	lda #$9D            ; sta #$XXXX,x
+	sta sta_x_modable_1
+	lda #$60            ; rts
+	sta sta_x_modable_1+3
+	; Setup lda_x_modable
+	lda #$BD            ; lda #$XXXX,x
+	sta lda_x_modable
+	lda #$60            ; rts
+	sta lda_x_modable+3
 
 	/*lda #C64_COLOR_BLACK
 	sta c64_background_colors
@@ -91,6 +103,16 @@ init subroutine
 	;sta $0400+1000-40-3
 	lda #0
 	sta last_rng
+
+	lda #<$0400
+	sta sta_x_modable_0+1
+	lda #>$0400
+	sta sta_x_modable_0+2
+	lda #<c64_tile_colors
+	sta sta_x_modable_1+1
+	lda #>c64_tile_colors
+	sta sta_x_modable_1+2
+	jsr draw_tile
 
 	;lda #$00
 	;sta $0401
@@ -134,15 +156,15 @@ clear_screen subroutine
 display_all_chars subroutine
 	; Load $0400 into sta_x_modable's address
 	lda #$00
-	sta sta_x_modable+1
+	sta sta_x_modable_0+1
 	lda #$04
-	sta sta_x_modable+2
+	sta sta_x_modable_0+2
 	; Start with tile 0
 	ldx #0
 .loop
 	; Draw tile
 	txa
-	jsr sta_x_modable
+	jsr sta_x_modable_0
 	; Increment tile count
 	inx
 	; Check if we should go to the next row (if the tile id is a multiple of 16)
@@ -150,13 +172,13 @@ display_all_chars subroutine
 	and #%00001111 ; a %= 16
 	bne .skip_next_row
 	; If so add (40-16) to sta_x_modable's address
-	lda sta_x_modable+1
+	lda sta_x_modable_0+1
 	clc
 	adc #(40-16)
-	sta sta_x_modable+1
-	lda sta_x_modable+2
+	sta sta_x_modable_0+1
+	lda sta_x_modable_0+2
 	adc #0
-	sta sta_x_modable+2
+	sta sta_x_modable_0+2
 	; If not then we will skip to here
 .skip_next_row
 	; If the tile number overflows to 0 then we have drawn all tiles so return
@@ -203,6 +225,49 @@ rng subroutine
 	sta last_rng
 	; Return the number generated
 	rts
+
+draw_tile subroutine
+	; Get location of tile
+	lda #<tiles
+	sta lda_x_modable+1
+	lda #>tiles
+	sta lda_x_modable+2
+	; Copy tile shapes to screen
+	ldx #0
+	jsr lda_x_modable
+	jsr sta_x_modable_0
+	inx
+	jsr lda_x_modable
+	jsr sta_x_modable_0
+	inx
+	jsr lda_x_modable
+	ldx #40
+	jsr sta_x_modable_0
+	ldx #3
+	jsr lda_x_modable
+	ldx #41
+	jsr sta_x_modable_0
+	; Copy tile colors to screen
+	ldx #4
+	jsr lda_x_modable
+	ldx #0
+	jsr sta_x_modable_1
+	ldx #5
+	jsr lda_x_modable
+	ldx #1
+	jsr sta_x_modable_1
+	ldx #6
+	jsr lda_x_modable
+	ldx #40
+	jsr sta_x_modable_1
+	ldx #7
+	jsr lda_x_modable
+	ldx #41
+	jsr sta_x_modable_1
+
+	rts
+
+	include "data/tiles.asm"
 
 * = $2000
 	include "data/world_chars.asm"

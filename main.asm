@@ -93,9 +93,9 @@ init subroutine
 	lda #$60            ; rts
 	sta lda_x_modable+3
 
-	/*lda #C64_COLOR_BLACK
+	lda #C64_COLOR_BLACK
 	sta c64_background_colors
-	sta c64_border_color
+	/*sta c64_border_color
 	jsr clear_screen
 	jsr display_all_chars*/
 	;jsr display_all_chars
@@ -112,6 +112,29 @@ init subroutine
 	sta sta_x_modable_1+1
 	lda #>c64_tile_colors
 	sta sta_x_modable_1+2
+	lda #0
+	jsr draw_tile
+
+	lda #<($0400+83)
+	sta sta_x_modable_0+1
+	lda #>($0400+83)
+	sta sta_x_modable_0+2
+	lda #<(c64_tile_colors+83)
+	sta sta_x_modable_1+1
+	lda #>(c64_tile_colors+83)
+	sta sta_x_modable_1+2
+	lda #1
+	jsr draw_tile
+
+	lda #<($0400+85)
+	sta sta_x_modable_0+1
+	lda #>($0400+85)
+	sta sta_x_modable_0+2
+	lda #<(c64_tile_colors+85)
+	sta sta_x_modable_1+1
+	lda #>(c64_tile_colors+85)
+	sta sta_x_modable_1+2
+	lda #2
 	jsr draw_tile
 
 	;lda #$00
@@ -226,13 +249,32 @@ rng subroutine
 	; Return the number generated
 	rts
 
+; Draws a 2x2 char tile on screen
+; --- Inputs ---
+; a:                 The tile ID to draw
+; sta_x_modable_0+1: The address of the top left char on the screen that should be drawn over
+; sta_x_modable_1+1: The address of the top left char's color on the screen that should be drawn over
+; --- Corrupted ---
+; x, lda_x_modable+1
 draw_tile subroutine
-	; Get location of tile
-	lda #<tiles
-	sta lda_x_modable+1
-	lda #>tiles
-	sta lda_x_modable+2
-	; Copy tile shapes to screen
+	; Get location of where the tile should be copied from (tiles + a * 8)
+	tax
+	asl
+	asl
+	asl
+	clc
+	adc #<tiles
+	php
+	sta lda_x_modable+1 ; Low byte
+	txa
+	rol
+	rol
+	rol
+	and #%00000111
+	plp
+	adc #>tiles
+	sta lda_x_modable+2 ; High byte
+	; Copy chars to screen
 	ldx #0
 	jsr lda_x_modable
 	jsr sta_x_modable_0
@@ -247,7 +289,7 @@ draw_tile subroutine
 	jsr lda_x_modable
 	ldx #41
 	jsr sta_x_modable_0
-	; Copy tile colors to screen
+	; Copy colors to screen
 	ldx #4
 	jsr lda_x_modable
 	ldx #0
@@ -264,7 +306,7 @@ draw_tile subroutine
 	jsr lda_x_modable
 	ldx #41
 	jsr sta_x_modable_1
-
+	; Return nothing
 	rts
 
 	include "data/tiles.asm"

@@ -146,6 +146,26 @@ init subroutine
 	ldx #1
 	jsr draw_tile
 
+	lda #<($0400+85)
+	sta sta_x_modable_0+1
+	lda #>($0400+85)
+	sta sta_x_modable_0+2
+	lda #<(c64_tile_colors+85)
+	sta sta_x_modable_1+1
+	lda #>(c64_tile_colors+85)
+	sta sta_x_modable_1+2
+	lda #0
+	ldx #5
+	jsr draw_metatile
+
+	lda #1
+	ldx #10
+	jsr draw_metatile
+
+	lda #2
+	ldx #15
+	jsr draw_metatile
+
 	;lda #$00
 	;sta $0401
 	;lda #$01
@@ -258,6 +278,69 @@ rng subroutine
 	; Return the number generated
 	rts
 
+; Draws a 4x4 char metatile on screen
+; --- Inputs ---
+; a:                 The metatile ID to draw
+; x:                 The drawing offset
+; sta_x_modable_0+1: The address of the top left char on the screen that should be drawn over
+; sta_x_modable_1+1: The address of the top left char's color on the screen that should be drawn over
+; --- Corrupted ---
+; y, lda_y_modable+1
+; --- Outputs ---
+; x: Has 123 added
+draw_metatile subroutine
+	; Get location to copy metatile from (metatiles + a * 4)
+	tay
+	; Low byte
+	asl
+	asl
+	clc
+	adc #<metatiles
+	php
+	sta lda_y_modable+1
+	; High byte
+	tya
+	ror
+	ror
+	and #%00000011
+	plp
+	adc #>metatiles
+	sta lda_y_modable+2
+	; Get tiles
+	ldy #3
+	jsr lda_y_modable
+	pha
+	dey
+	jsr lda_y_modable
+	pha
+	dey
+	jsr lda_y_modable
+	pha
+	dey
+	jsr lda_y_modable
+	; Draw tiles
+	jsr draw_tile
+	txa
+	sec
+	sbc #39
+	tax
+	pla
+	jsr draw_tile
+	txa
+	clc
+	adc #37
+	tax
+	pla
+	jsr draw_tile
+	txa
+	sec
+	sbc #39
+	tax
+	pla
+	jsr draw_tile
+	; Return
+	rts
+
 ; Draws a 2x2 char tile on screen
 ; --- Inputs ---
 ; a:                 The tile ID to draw
@@ -281,9 +364,9 @@ draw_tile subroutine
 	sta lda_y_modable+1
 	; High byte
 	tya
-	rol
-	rol
-	rol
+	ror
+	ror
+	ror
 	and #%00000111
 	plp
 	adc #>tiles

@@ -141,13 +141,18 @@ draw_metatile subroutine
 ; Draws a map
 ; --- Inputs ---
 ; a:                 The map ID to draw
+; --- Corrupted ---
+; y, lda_y_modable_0+1, lda_y_modable_1+1, sta_x_modable_0+1, sta_x_modable_1+1
 draw_map subroutine
 	; Get the location that we should copy the map from (maps + a * 64)
 	tay
 	; Low byte
-	ror
-	ror
-	and #%11000000
+	asl
+	asl
+	asl
+	asl
+	asl
+	asl
 	clc
 	adc #<maps
 	php
@@ -159,9 +164,69 @@ draw_map subroutine
 	plp
 	adc #>maps
 	sta lda_y_modable_1+2
-	;
+	; Get the locations of the chars and colors that we should copy to for the first row
+	lda #<$0400
+	sta sta_x_modable_0+1
+	lda #>$0400
+	sta sta_x_modable_0+2
+	lda #<c64_tile_colors
+	sta sta_x_modable_1+1
+	lda #>c64_tile_colors
+	sta sta_x_modable_1+2
+	; Set the index into the metatiles of the map to 0
 	ldy #0
-	; Return nothing
+; At the start or each time we finnish drawing a row of metatiles
+.rows_loop
+	; Set the amount of metatiles we have drawn this row to 0
+	lda #0
+	sta byte_0
+	; Set char offset to 0
+	ldx #0
+.row_loop
+	; Draw metatile
+	tya
+	pha
+	jsr lda_y_modable_1
+	jsr draw_metatile
+	pla
+	tay
+	; Set char offset for the next metatile
+	txa
+	sec
+	sbc #119
+	tax
+	; Increment the index into the maps metatiles
+	iny
+	; If we have copied 50 tiles then return from the subroutine
+	cpy #50
+	beq .end
+	; Increment the amount of metatiles that have been drawn this row
+	lda byte_0
+	clc
+	adc #1
+	sta byte_0
+	; If we have drawn less than 10 tiles this row then continue on to draw the next char
+	cmp #10
+	bne .row_loop
+	; If we have drawn 10 tiles then move the screen char and color pointers to point one metatile down
+	lda sta_x_modable_0+1
+	clc
+	adc #160
+	sta sta_x_modable_0+1
+	lda sta_x_modable_0+2
+	adc #0
+	sta sta_x_modable_0+2
+	lda sta_x_modable_1+1
+	clc
+	adc #160
+	sta sta_x_modable_1+1
+	lda sta_x_modable_1+2
+	adc #0
+	sta sta_x_modable_1+2
+	; Continue on to draw next row
+	jmp .rows_loop
+; At the end return nothing
+.end
 	rts
 
 ; Fills screen with tile 0 colored white

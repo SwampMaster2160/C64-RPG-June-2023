@@ -7,3 +7,4 @@ lda_x_modable ds 4
 lda_y_modable_0 ds 4
 lda_y_modable_1 ds 4
 last_rng ds 1
+byte_0 ds 1

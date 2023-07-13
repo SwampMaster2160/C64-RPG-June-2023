@@ -73,62 +73,7 @@ init subroutine
 	lda #0
 	sta last_rng
 
-	/*lda #<$0400
-	sta sta_x_modable_0+1
-	lda #>$0400
-	sta sta_x_modable_0+2
-	lda #<c64_tile_colors
-	sta sta_x_modable_1+1
-	lda #>c64_tile_colors
-	sta sta_x_modable_1+2
 	lda #0
-	ldx #0
-	jsr draw_tile
-
-	lda #<($0400+83)
-	sta sta_x_modable_0+1
-	lda #>($0400+83)
-	sta sta_x_modable_0+2
-	lda #<(c64_tile_colors+83)
-	sta sta_x_modable_1+1
-	lda #>(c64_tile_colors+83)
-	sta sta_x_modable_1+2
-	lda #1
-	ldx #0
-	jsr draw_tile
-
-	lda #<($0400+85)
-	sta sta_x_modable_0+1
-	lda #>($0400+85)
-	sta sta_x_modable_0+2
-	lda #<(c64_tile_colors+85)
-	sta sta_x_modable_1+1
-	lda #>(c64_tile_colors+85)
-	sta sta_x_modable_1+2
-	lda #2
-	ldx #1
-	jsr draw_tile
-
-	lda #<($0400+85)
-	sta sta_x_modable_0+1
-	lda #>($0400+85)
-	sta sta_x_modable_0+2
-	lda #<(c64_tile_colors+85)
-	sta sta_x_modable_1+1
-	lda #>(c64_tile_colors+85)
-	sta sta_x_modable_1+2
-	lda #0
-	ldx #5
-	jsr draw_metatile
-
-	lda #1
-	ldx #10
-	jsr draw_metatile
-
-	lda #2
-	ldx #15
-	jsr draw_metatile*/
-
 	jsr draw_map
 
 	;lda #$00

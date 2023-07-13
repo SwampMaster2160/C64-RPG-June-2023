@@ -51,11 +51,16 @@ init subroutine
 	sta lda_x_modable
 	lda #$60            ; rts
 	sta lda_x_modable+3
-	; Setup lda_y_modable
+	; Setup lda_y_modable_0
 	lda #$B9            ; lda #$XXXX,y
-	sta lda_y_modable
+	sta lda_y_modable_0
 	lda #$60            ; rts
-	sta lda_y_modable+3
+	sta lda_y_modable_0+3
+	; Setup lda_y_modable_1
+	lda #$B9            ; lda #$XXXX,y
+	sta lda_y_modable_1
+	lda #$60            ; rts
+	sta lda_y_modable_1+3
 
 	lda #C64_COLOR_BLACK
 	sta c64_background_colors
@@ -68,7 +73,7 @@ init subroutine
 	lda #0
 	sta last_rng
 
-	lda #<$0400
+	/*lda #<$0400
 	sta sta_x_modable_0+1
 	lda #>$0400
 	sta sta_x_modable_0+2
@@ -122,7 +127,9 @@ init subroutine
 
 	lda #2
 	ldx #15
-	jsr draw_metatile
+	jsr draw_metatile*/
+
+	jsr draw_map
 
 	;lda #$00
 	;sta $0401

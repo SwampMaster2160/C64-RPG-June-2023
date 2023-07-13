@@ -5,7 +5,7 @@
 ; sta_x_modable_0+1: The address of the top left char on the screen that should be drawn over
 ; sta_x_modable_1+1: The address of the top left char's color on the screen that should be drawn over
 ; --- Corrupted ---
-; y, lda_y_modable+1
+; y, lda_y_modable_0+1
 ; --- Outputs ---
 ; x: Has 41 added
 draw_tile subroutine
@@ -18,7 +18,7 @@ draw_tile subroutine
 	clc
 	adc #<tiles
 	php
-	sta lda_y_modable+1
+	sta lda_y_modable_0+1
 	; High byte
 	tya
 	ror
@@ -27,14 +27,14 @@ draw_tile subroutine
 	and #%00000111
 	plp
 	adc #>tiles
-	sta lda_y_modable+2
+	sta lda_y_modable_0+2
 	; Copy chars to screen
 	ldy #0
-	jsr lda_y_modable
+	jsr lda_y_modable_0
 	jsr sta_x_modable_0
 	iny
 	inx
-	jsr lda_y_modable
+	jsr lda_y_modable_0
 	jsr sta_x_modable_0
 	; Next row
 	iny
@@ -42,11 +42,11 @@ draw_tile subroutine
 	clc
 	adc #39
 	tax
-	jsr lda_y_modable
+	jsr lda_y_modable_0
 	jsr sta_x_modable_0
 	iny
 	inx
-	jsr lda_y_modable
+	jsr lda_y_modable_0
 	jsr sta_x_modable_0
 	; Copy colors to screen
 	iny
@@ -54,11 +54,11 @@ draw_tile subroutine
 	sec
 	sbc #41
 	tax
-	jsr lda_y_modable
+	jsr lda_y_modable_0
 	jsr sta_x_modable_1
 	iny
 	inx
-	jsr lda_y_modable
+	jsr lda_y_modable_0
 	jsr sta_x_modable_1
 	; Next row
 	iny
@@ -66,11 +66,11 @@ draw_tile subroutine
 	clc
 	adc #39
 	tax
-	jsr lda_y_modable
+	jsr lda_y_modable_0
 	jsr sta_x_modable_1
 	iny
 	inx
-	jsr lda_y_modable
+	jsr lda_y_modable_0
 	jsr sta_x_modable_1
 	; Return nothing
 	rts
@@ -82,7 +82,7 @@ draw_tile subroutine
 ; sta_x_modable_0+1: The address of the top left char on the screen that should be drawn over
 ; sta_x_modable_1+1: The address of the top left char's color on the screen that should be drawn over
 ; --- Corrupted ---
-; y, lda_y_modable+1
+; y, lda_y_modable_0+1
 ; --- Outputs ---
 ; x: Has 123 added
 draw_metatile subroutine
@@ -94,7 +94,7 @@ draw_metatile subroutine
 	clc
 	adc #<metatiles
 	php
-	sta lda_y_modable+1
+	sta lda_y_modable_0+1
 	; High byte
 	tya
 	ror
@@ -102,19 +102,19 @@ draw_metatile subroutine
 	and #%00000011
 	plp
 	adc #>metatiles
-	sta lda_y_modable+2
+	sta lda_y_modable_0+2
 	; Get tiles
 	ldy #3
-	jsr lda_y_modable
+	jsr lda_y_modable_0
 	pha
 	dey
-	jsr lda_y_modable
+	jsr lda_y_modable_0
 	pha
 	dey
-	jsr lda_y_modable
+	jsr lda_y_modable_0
 	pha
 	dey
-	jsr lda_y_modable
+	jsr lda_y_modable_0
 	; Draw tiles
 	jsr draw_tile
 	txa
@@ -139,7 +139,29 @@ draw_metatile subroutine
 	rts
 
 ; Draws a map
+; --- Inputs ---
+; a:                 The map ID to draw
 draw_map subroutine
+	; Get the location that we should copy the map from (maps + a * 64)
+	tay
+	; Low byte
+	ror
+	ror
+	and #%11000000
+	clc
+	adc #<maps
+	php
+	sta lda_y_modable_1+1
+	; High byte
+	tya
+	lsr
+	lsr
+	plp
+	adc #>maps
+	sta lda_y_modable_1+2
+	;
+	ldy #0
+	; Return nothing
 	rts
 
 ; Fills screen with tile 0 colored white

@@ -1,4 +1,5 @@
 	include "constants/c64_hardware.asm"
-	include "constants/chars.asm"
+	include "constants/world_chars.asm"
 	include "constants/tiles.asm"
 	include "constants/metatiles.asm"
+	include "constants/maps.asm"

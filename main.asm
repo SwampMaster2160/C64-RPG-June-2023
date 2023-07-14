@@ -38,3 +38,5 @@ basic_program subroutine
 
 * = $2000
 	include "data/world_chars.asm"
+* = $2800
+	include "data/gui_chars.asm"

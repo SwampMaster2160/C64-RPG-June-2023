@@ -140,7 +140,7 @@ draw_metatile subroutine
 
 ; Draws a map
 ; --- Inputs ---
-; a:                 The map ID to draw
+; a: The map ID to draw
 ; --- Corrupted ---
 ; y, lda_y_modable_0+1, lda_y_modable_1+1, sta_x_modable_0+1, sta_x_modable_1+1
 draw_map subroutine

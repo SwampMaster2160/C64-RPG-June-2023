@@ -15,7 +15,8 @@ init subroutine
 	sta c64_screen_control_1
 	lda #0                                               ; Disable sprites
 	sta c64_sprite_enables
-	lda #(4 << 1) | (1 << 4)                             ; Tile shapes at $2000-$27FF, tile selections at $0400-$0800
+	//lda #(4 << 1) | (1 << 4)                             ; Tile shapes at $2000-$27FF, tile selections at $0400-$0800
+	lda #(5 << 1) | (1 << 4)                             ; Tile shapes at $2000-$27FF, tile selections at $0400-$0800
 	sta c64_vic_memory_layout
 	lda #1                                               ; Interrupt only when a set scanline is reached
 	sta c64_vic_interrupt_control
@@ -74,7 +75,8 @@ init subroutine
 	sta last_rng
 
 	lda #0
-	jsr draw_map
+	;jsr draw_map
+	jsr display_all_chars
 
 	;lda #$00
 	;sta $0401

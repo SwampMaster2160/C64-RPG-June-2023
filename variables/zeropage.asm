@@ -1,4 +1,3 @@
-	seg.u zeropage
 * = 2
 
 sta_x_modable_0 ds 1

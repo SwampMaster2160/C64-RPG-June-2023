@@ -3,3 +3,4 @@
 	include "constants/tiles.asm"
 	include "constants/metatiles.asm"
 	include "constants/maps.asm"
+	include "constants/gui_chars.asm"

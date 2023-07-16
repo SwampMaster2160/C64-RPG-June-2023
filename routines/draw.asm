@@ -256,6 +256,173 @@ clear_screen subroutine
 	bne .last_loop
 	rts
 
+; Draws a textbox
+; --- Inputs ---
+; sta_x_modable_0_address: The address to draw the textbox at
+; text_color:              The color to draw the textbox in
+; x:                       The width of the textbox
+; y:                       The height of the textbox
+; --- Corrupted ---
+; sta_x_modable_1_address, a
+draw_textbox subroutine
+	; Push x to stack
+	dex
+	txa
+	pha
+	; Calculate the pointer to the textbox's color area
+	lda sta_x_modable_0_address
+	sta sta_x_modable_1_address
+	lda sta_x_modable_0_address+1
+	clc
+	adc #>(c64_tile_colors - $0400)
+	sta sta_x_modable_1_address+1
+	; Draw first row
+	jsr draw_textbox_top_chars_row
+	pla
+	pha
+	tax
+	jsr draw_textbox_colors_row
+	;
+	dey
+.loop
+	dey
+	beq .loop_end
+	; Move char and color pointers to the next row
+	lda sta_x_modable_0_address
+	clc
+	adc #40
+	sta sta_x_modable_0_address
+	sta sta_x_modable_1_address
+	lda sta_x_modable_0_address+1
+	adc #0
+	sta sta_x_modable_0_address+1
+	clc
+	adc #>(c64_tile_colors - $0400)
+	sta sta_x_modable_1_address+1
+	; Draw middle rows
+	pla
+	pha
+	tax
+	jsr draw_textbox_middle_chars_row
+	pla
+	pha
+	tax
+	jsr draw_textbox_colors_row
+	jmp .loop
+.loop_end
+	; Move char and color pointers to the next row
+	lda sta_x_modable_0_address
+	clc
+	adc #40
+	sta sta_x_modable_0_address
+	sta sta_x_modable_1_address
+	lda sta_x_modable_0_address+1
+	adc #0
+	sta sta_x_modable_0_address+1
+	clc
+	adc #>(c64_tile_colors - $0400)
+	sta sta_x_modable_1_address+1
+	; Draw last row
+	pla
+	pha
+	tax
+	jsr draw_textbox_bottom_chars_row
+	pla
+	pha
+	tax
+	jsr draw_textbox_colors_row
+	; Restore stack and return
+	pla
+	rts
+
+; Draws the top row of a textbox
+; --- Inputs ---
+; sta_x_modable_0_address: The address to draw the textbox at
+; x:                       The width of the textbox - 1
+; --- Corrupted ---
+; a
+draw_textbox_top_chars_row subroutine
+	; Draw rightmost char
+	lda #GUI_CHAR_LINE_DOWN_LEFT
+	jsr sta_x_modable_0
+	; Draw middle chars
+	lda #GUI_CHAR_LINE_HORIZONTAL
+.loop
+	dex
+	beq .loop_end
+	jsr sta_x_modable_0
+	jmp .loop
+.loop_end
+	; Draw leftmost char
+	lda #GUI_CHAR_LINE_RIGHT_DOWN
+	jsr sta_x_modable_0
+	; Return
+	rts
+
+; Draws a middle row of a textbox
+; --- Inputs ---
+; sta_x_modable_0_address: The address to draw the textbox at
+; x:                       The width of the textbox - 1
+; --- Corrupted ---
+; a
+draw_textbox_middle_chars_row subroutine
+	; Draw rightmost char
+	lda #GUI_CHAR_LINE_VERTICAL
+	jsr sta_x_modable_0
+	; Draw middle chars
+	lda '  ; Space
+.loop
+	dex
+	beq .loop_end
+	jsr sta_x_modable_0
+	jmp .loop
+.loop_end
+	; Draw leftmost char
+	lda #GUI_CHAR_LINE_VERTICAL
+	jsr sta_x_modable_0
+	; Return
+	rts
+
+; Draws the bottom row of a textbox
+; --- Inputs ---
+; sta_x_modable_0_address: The address to draw the textbox at
+; x:                       The width of the textbox - 1
+; --- Corrupted ---
+; a
+draw_textbox_bottom_chars_row subroutine
+	; Draw rightmost char
+	lda #GUI_CHAR_LINE_UP_LEFT
+	jsr sta_x_modable_0
+	; Draw middle chars
+	lda #GUI_CHAR_LINE_HORIZONTAL
+.loop
+	dex
+	beq .loop_end
+	jsr sta_x_modable_0
+	jmp .loop
+.loop_end
+	; Draw leftmost char
+	lda #GUI_CHAR_LINE_UP_RIGHT
+	jsr sta_x_modable_0
+	; Return
+	rts
+
+; Draw a color row of a textbox
+; --- Inputs ---
+; sta_x_modable_1_address: The address to draw the textbox at
+; x:                       The width of the textbox - 1
+; --- Corrupted ---
+; a
+draw_textbox_colors_row subroutine
+	lda text_color
+.loop
+	jsr sta_x_modable_1
+	dex
+	bmi .loop_end
+	jsr .loop
+.loop_end
+	rts
+
 ; Display all 256 chars in the top left as a 16x16 box
 display_all_chars subroutine
 	; Load $0400 into sta_x_modable's address

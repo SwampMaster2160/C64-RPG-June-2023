@@ -62,17 +62,20 @@ init subroutine
 	sta lda_y_modable_1
 	lda #$60            ; rts
 	sta lda_y_modable_1+3
-
+	; Init vars
+	lda #0
+	sta is_next_screen_interrupt_for_gui
+	lda #0
+	sta last_rng
 	lda #C64_COLOR_BLACK
-	sta c64_background_colors
+	sta gui_background_color
+
+	;lda #C64_COLOR_BLACK
+	;sta c64_background_colors
 	/*sta c64_border_color
 	jsr clear_screen
 	jsr display_all_chars*/
 	;jsr display_all_chars
-	;lda #0
-	;sta $0400+1000-40-3
-	lda #0
-	sta last_rng
 
 	lda #0
 	jsr draw_map
@@ -86,13 +89,7 @@ init subroutine
 	ldx #40
 	ldy #5
 	jsr draw_textbox
-
-	;lda #$00
-	;sta $0401
-	;lda #$01
-	;sta $0402
-	;lda #$02
-	;sta $0403
+	
 	; Loop untill interrupt
 	cli
 .loop

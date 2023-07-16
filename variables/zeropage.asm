@@ -13,3 +13,6 @@ lda_y_modable_1_address ds 3
 last_rng ds 1
 byte_0 ds 1
 text_color ds 1
+world_background_color ds 1
+gui_background_color ds 1
+is_next_screen_interrupt_for_gui ds 1

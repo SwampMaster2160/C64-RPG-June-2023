@@ -11,7 +11,7 @@ init subroutine
 	sta c64_screen_control_0
 	lda #32                                              ; Interrupt at line 288
 	sta c64_screen_interrupt_line
-	lda #(0 | C64_40_COLUMNS)                            ; No horizontal scroll, 40 columns, multicolor off
+	lda #(0 | C64_40_COLUMNS | C64_MULTICOLOR_MODE)      ; No horizontal scroll, 40 columns, multicolor on
 	sta c64_screen_control_1
 	lda #0                                               ; Disable sprites
 	sta c64_sprite_enables

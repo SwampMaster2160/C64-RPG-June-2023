@@ -1,3 +1,4 @@
 ; World maps
-MAP_0 = 0
-MAP_1 = 1
+	newEnum
+	enumVariant MAP_0
+	enumVariant MAP_1

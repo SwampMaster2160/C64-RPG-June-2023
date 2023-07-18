@@ -1,6 +1,7 @@
 	processor 6502
 
 ; Include code that is not directly assembled into bytes
+	include "macros/mod.asm"
 	include "constants/mod.asm"
 	include "variables/mod.asm"
 

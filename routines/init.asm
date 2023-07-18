@@ -7,22 +7,22 @@ init subroutine
 	lda #%00100101
 	sta _6510_processor_port_out_bits
 	; Setup VIC-II
-	lda #((3 | C64_SCREEN_ON | C64_25_ROWS) | %10000000) ; No vertical scroll, 25 rows, screen on, text mode, extended background off
+	lda #((3 | C64_25_ROWS) | %10000000)            ; No vertical scroll, 25 rows, screen off, text mode, extended background off
 	sta c64_screen_control_0
-	lda #32                                              ; Interrupt at line 288
+	lda #32                                         ; Interrupt at line 288
 	sta c64_screen_interrupt_line
-	lda #(0 | C64_40_COLUMNS | C64_MULTICOLOR_MODE)      ; No horizontal scroll, 40 columns, multicolor on
+	lda #(0 | C64_40_COLUMNS | C64_MULTICOLOR_MODE) ; No horizontal scroll, 40 columns, multicolor on
 	sta c64_screen_control_1
-	lda #0                                               ; Disable sprites
+	lda #0                                          ; Disable sprites
 	sta c64_sprite_enables
-	lda #(4 << 1) | (1 << 4)                             ; Tile shapes at $2000-$27FF, tile selections at $0400-$0800
-	;lda #(5 << 1) | (1 << 4)                             ; Tile shapes at $27FF-$3000, tile selections at $0400-$0800
+	lda #(4 << 1) | (1 << 4)                        ; Tile shapes at $2000-$27FF, tile selections at $0400-$0800
+	;lda #(5 << 1) | (1 << 4)                       ; Tile shapes at $27FF-$3000, tile selections at $0400-$0800
 	sta c64_vic_memory_layout
-	lda #1                                               ; Interrupt only when a set scanline is reached
+	lda #1                                          ; Interrupt only when a set scanline is reached
 	sta c64_vic_interrupt_control
-	lda #0                                               ; Disable sprites
+	lda #0                                          ; Disable sprites
 	sta c64_sprite_enables
-	lda #$FF                                             ; Acknowledge any outstanding VIC-II interrupts
+	lda #$FF                                        ; Acknowledge any outstanding VIC-II interrupts
 	sta c64_vic_interrupt_status
 	; CIA chips
 	lda #$7F  ; Disable interrupts from CIA chips

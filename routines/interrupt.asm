@@ -6,10 +6,6 @@ irq subroutine
 	pha
 	tya
 	pha
-	; Acknowledge interrupt
-	lda #$FF
-	sta c64_vic_interrupt_status
-	;inc c64_border_color
 	; Call gui or world interrupt handeler
 	lda is_next_screen_interrupt_for_gui
 	beq .skip_gui_interrupt
@@ -18,6 +14,9 @@ irq subroutine
 .skip_gui_interrupt
 	jsr world_interrupt
 .end
+	; Acknowledge interrupt
+	lda #$FF
+	sta c64_vic_interrupt_status
 	; Pull a, x and y from stack
 	pla
 	tay
@@ -41,23 +40,28 @@ gui_interrupt subroutine
 	sta c64_vic_memory_layout
 	lda #(0 | C64_40_COLUMNS) ; No horizontal scroll, 40 columns, multicolor off
 	sta c64_screen_control_1
+	lda #0
+	sta c64_sprite_enables
 	; Return
 	rts
 
 world_interrupt subroutine
+	; Setup for GUI interrupt
+	lda #210                             ; Interrupt at line 210
+	sta c64_screen_interrupt_line
+	lda #1
+	sta is_next_screen_interrupt_for_gui
 	; Change graphics modes
-	lda world_background_color
+	lda #(3 | C64_25_ROWS | C64_SCREEN_ON)          ; No vertical scroll, 25 rows, text mode, extended background off, screen on
+	sta c64_screen_control_0
+
+	lda world_background_color                      ; Change background colors to the world background colors
 	sta c64_background_colors
 	lda #(4 << 1) | (1 << 4)                        ; Tile shapes at $2000-$27FF, tile selections at $0400-$0800
 	sta c64_vic_memory_layout
 	lda #(0 | C64_40_COLUMNS | C64_MULTICOLOR_MODE) ; No horizontal scroll, 40 columns, multicolor on
 	sta c64_screen_control_1
-	; Setup for GUI interrupt
-	lda #(3 | C64_SCREEN_ON | C64_25_ROWS) ; No vertical scroll, 25 rows, screen on, text mode, extended background off
-	sta c64_screen_control_0
-	lda #210                               ; Interrupt at line 210
-	sta c64_screen_interrupt_line
-	lda #1
-	sta is_next_screen_interrupt_for_gui
+	lda world_sprites_visable
+	sta c64_sprite_enables
 	; Return
 	rts

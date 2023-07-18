@@ -148,9 +148,14 @@ draw_metatile subroutine
 ; --- Corrupted ---
 ; y, lda_y_modable_0_address, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address
 draw_map subroutine
-	; Get the location that we should copy the map from (maps + a * 64)
 	tay
+	; Turn off screen
+	lda c64_screen_control_0
+	and #~C64_SCREEN_ON
+	sta c64_screen_control_0
+	; Get the location that we should copy the map from (maps + a * 64)
 	; Low byte
+	tya
 	asl
 	asl
 	asl
@@ -177,6 +182,23 @@ draw_map subroutine
 	sta sta_x_modable_1_address
 	lda #>c64_char_colors
 	sta sta_x_modable_1_address+1
+	; Load colors
+	ldy #50
+	jsr lda_y_modable_1
+	sta c64_border_color
+	lsr
+	lsr
+	lsr
+	lsr
+	sta world_background_color
+	iny
+	jsr lda_y_modable_1
+	sta c64_background_colors+1
+	lsr
+	lsr
+	lsr
+	lsr
+	sta c64_background_colors+2
 	; Set the index into the metatiles of the map to 0
 	ldy #0
 ; At the start or each time we finnish drawing a row of metatiles
@@ -231,23 +253,6 @@ draw_map subroutine
 	jmp .rows_loop
 ; One all tiles have been drawn
 .end
-	; Load colors
-	ldy #50
-	jsr lda_y_modable_1
-	sta c64_border_color
-	lsr
-	lsr
-	lsr
-	lsr
-	sta world_background_color
-	iny
-	jsr lda_y_modable_1
-	sta c64_background_colors+1
-	lsr
-	lsr
-	lsr
-	lsr
-	sta c64_background_colors+2
 	; Return
 	rts
 

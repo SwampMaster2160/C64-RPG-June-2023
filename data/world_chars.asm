@@ -25,20 +25,20 @@ world_chars subroutine
 	byte 255, 221, 255, 119, 255, 223, 247, 127 ; Grass 1
 	byte  48,  12,  48,  12,  48,  12,  48,  12 ; Gutter Vertical
 	byte   0, 204,  51, 204,  51, 204,  51,   0 ; Gutter Horizontal
-	byte  48, 204,  48, 204,  48, 204,  48,   0 ; Gutter up right
-	byte  48,  12,  51,  12,  51,  12,  51,   0 ; Gutter up left
+	byte  48, 204,  48, 204,  48, 204,  48,   0 ; Gutter up left
+	byte  48,  12,  51,  12,  51,  12,  51,   0 ; Gutter up right
 	byte   0, 204,  48, 204,  48, 204,  48,  12 ; Gutter down left
 	byte   0,  12,  51,  12,  51,  12,  51,  12 ; Gutter down right
-	byte 174, 187, 238, 186, 234, 187, 238, 171 ; Shallow water
-	byte 255, 255, 207,  51, 255, 243, 204, 255 ; Sand
-	byte 252, 124, 252, 220, 252, 252, 124, 255 ; Tree trunk left
-	byte  63,  55,  63,  63,  63,  61,  63, 255 ; Tree trunk right
-
+	byte  12,  51, 204,  48, 192,  51, 204,   3 ; Shallow water
+	byte 255, 255, 239, 187, 255, 251, 238, 255 ; Sand
+	byte 254, 126, 254, 222, 254, 254, 126, 255 ; Tree trunk left
+	byte 191, 183, 191, 191, 191, 189, 191, 255 ; Tree trunk right
+	
 	byte 253, 247, 221, 119, 221, 247, 221, 247 ; Tree canopy left
 	byte 223, 119, 223, 119, 221, 119, 223, 127 ; Tree canopy right
-	byte 255, 239, 187, 255, 255, 251, 238, 255 ; Water
-	byte 240, 124, 240, 192, 208, 252, 112, 240 ; Dirt path left
-	byte  48,   3, 192,  12,   0, 195,   0,  12 ; Dirt path
-	byte  15,  13,  63,  15,   1,  15,  55,  15 ; Dirt path right
-	byte 127, 247, 127, 253, 211,   0,   0,   0 ; Dirt path top
-	byte   0,   0,   0, 196, 223, 119, 255, 221 ; Dirt path bottom
+	byte 255, 207,  51, 255, 255, 243, 204, 255 ; Water
+	byte 250, 126, 250, 234, 218, 254, 122, 250 ; Dirt path left
+	byte 186, 171, 234, 174, 170, 235, 170, 174 ; Dirt path
+	byte 175, 173, 191, 175, 169, 175, 183, 175 ; Dirt path right
+	byte 127, 247, 127, 253, 219, 170, 170, 170 ; Dirt path top
+	byte 170, 170, 170, 230, 223, 119, 255, 221 ; Dirt path bottom

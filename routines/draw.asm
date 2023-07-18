@@ -21,10 +21,11 @@ draw_tile subroutine
 	sta lda_y_modable_0_address
 	; High byte
 	tya
-	ror
-	ror
-	ror
-	and #%00000111
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
 	plp
 	adc #>tiles
 	sta lda_y_modable_0_address+1
@@ -97,9 +98,12 @@ draw_metatile subroutine
 	sta lda_y_modable_0_address
 	; High byte
 	tya
-	ror
-	ror
-	and #%00000011
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
 	plp
 	adc #>metatiles
 	sta lda_y_modable_0_address+1
@@ -225,8 +229,26 @@ draw_map subroutine
 	sta sta_x_modable_1_address+1
 	; Continue on to draw next row
 	jmp .rows_loop
-; At the end return nothing
+; One all tiles have been drawn
 .end
+	; Load colors
+	ldy #50
+	jsr lda_y_modable_1
+	sta c64_border_color
+	lsr
+	lsr
+	lsr
+	lsr
+	sta world_background_color
+	iny
+	jsr lda_y_modable_1
+	sta c64_background_colors+1
+	lsr
+	lsr
+	lsr
+	lsr
+	sta c64_background_colors+2
+	; Return
 	rts
 
 ; Fills screen with tile 0 colored white

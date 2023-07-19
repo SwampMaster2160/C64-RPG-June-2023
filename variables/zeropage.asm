@@ -22,3 +22,8 @@ entity_discriminants ds 8
 entity_x_positions ds 8
 entity_y_positions ds 8
 entity_facing_directions_and_walk_offsets ds 8
+is_up_key_pressed ds 1
+is_right_key_pressed ds 1
+is_down_key_pressed ds 1
+is_left_key_pressed ds 1
+is_action_key_pressed ds 1

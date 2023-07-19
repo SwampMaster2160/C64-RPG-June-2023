@@ -4,3 +4,5 @@
 	include "constants/metatiles.asm"
 	include "constants/maps.asm"
 	include "constants/gui_chars.asm"
+	include "constants/entity_discriminants.asm"
+	include "constants/directions.asm"

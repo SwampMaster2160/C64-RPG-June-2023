@@ -32,6 +32,8 @@ basic_program subroutine
 	include "routines/interrupt.asm"
 	include "routines/math.asm"
 	include "routines/draw.asm"
+	include "routines/io.asm"
+	include "routines/world.asm"
 
 	include "data/tiles.asm"
 	include "data/metatiles.asm"

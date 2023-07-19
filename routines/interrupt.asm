@@ -51,6 +51,10 @@ world_interrupt subroutine
 	sta c64_screen_interrupt_line
 	lda #1
 	sta is_next_screen_interrupt_for_gui
+	;
+	jsr get_keys_pressed
+	;lda is_action_key_pressed
+	;sta c64_chars
 	; Change graphics modes
 	lda #(3 | C64_25_ROWS | C64_SCREEN_ON)          ; No vertical scroll, 25 rows, text mode, extended background off, screen on
 	sta c64_screen_control_0

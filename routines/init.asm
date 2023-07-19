@@ -16,7 +16,6 @@ init subroutine
 	lda #0                                          ; Disable sprites
 	sta c64_sprite_enables
 	lda #(4 << 1) | (1 << 4)                        ; Tile shapes at $2000-$27FF, tile selections at $0400-$0800
-	;lda #(5 << 1) | (1 << 4)                       ; Tile shapes at $27FF-$3000, tile selections at $0400-$0800
 	sta c64_vic_memory_layout
 	lda #1                                          ; Interrupt only when a set scanline is reached
 	sta c64_vic_interrupt_control
@@ -32,6 +31,10 @@ init subroutine
 	lda $DD0D
 	lda #3    ; VIC bank 0
 	sta $DD00
+	lda #%11111111
+	sta $DC02
+	lda #%00000000
+	sta $DC03
 	; Set interrupt handler
 	lda #<irq
 	sta $FFFE
@@ -70,16 +73,10 @@ init subroutine
 	lda #C64_COLOR_BLACK
 	sta gui_background_color
 
-	;lda #C64_COLOR_BLACK
-	;sta c64_background_colors
-	/*sta c64_border_color
-	jsr clear_screen
-	jsr display_all_chars*/
-	;jsr display_all_chars
-
 	lda #0
-	jsr draw_map
-	;jsr display_all_chars
+	jsr load_map
+	jsr init_player
+	jsr get_keys_pressed
 	lda #<(c64_chars+(20*40))
 	sta sta_x_modable_0_address
 	lda #>(c64_chars+(20*40))

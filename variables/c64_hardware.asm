@@ -32,6 +32,11 @@ c64_sprites_color_1 ds 1
 c64_sprites_color_2 ds 1
 c64_sprite_color_0s ds 8
 
+; CIA #1
+* = $DC00
+c64_keyboard_row_and_paddle_selection_and_port_2_joystick_buttons_pressed ds 1
+c64_keyboard_and_port_1_joystick_buttons_pressed ds 1
+
 ; Color RAM
 * = $D800
 c64_char_colors ds 1000

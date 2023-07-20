@@ -10,7 +10,7 @@ _6510_processor_port_out_bits ds 1
 ; VIC-II
 * = $D000
 c64_sprite_coordinates ds 16
-c64_sprite_y_heigh_bits ds 1
+c64_sprite_height_last_bits ds 1
 c64_screen_control_0 ds 1
 c64_screen_interrupt_line ds 1
 c64_light_pen_x ds 1

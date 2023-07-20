@@ -487,9 +487,81 @@ display_all_chars subroutine
 	rts
 
 update_sprite_graphics subroutine
+	; TODO: Add walk offset
+	stx byte_0
+	; Clear X pos high bit for sprite
+	lda #1
+	ldx #0
+.bit_loop_0
+	cpx byte_0
+	beq .bit_loop_0_end
+	inx
+	asl
+	jmp .bit_loop_0
+.bit_loop_0_end
+	eor #$FF
+	and c64_sprite_height_last_bits
+	sta c64_sprite_height_last_bits
+	ldx byte_0
+	; Calculate X position
+	; Low byte
+	lda entity_x_positions,x
+	asl
+	asl
+	asl
+	asl
+	clc
+	adc #24
+	php
+	tay
+	txa
+	asl
+	tax
+	tya
+	sta c64_sprite_coordinates,x
+	ldx byte_0
+	; High bit
+	lda entity_x_positions,x
+	lsr
+	lsr
+	lsr
+	lsr
+	plp
+	adc #0
+	; Shift high bit into the correct bit position for the sprite
+	ldx #0
+.bit_loop_1
+	cpx byte_0
+	beq .bit_loop_1_end
+	inx
+	asl
+	jmp .bit_loop_1
+.bit_loop_1_end
+	ora c64_sprite_height_last_bits
+	sta c64_sprite_height_last_bits
+	ldx byte_0
+	; Calculate Y position
+	lda entity_y_positions,x
+	asl
+	asl
+	asl
+	asl
+	clc
+	adc #50
+	pha
+	txa
+	asl
+	tax
+	pla
+	sta c64_sprite_coordinates+1,x
+	ldx byte_0
+	; Return
 	rts
 
 update_sprite_image_graphics subroutine
+	lda #$FF
+	sta sprite_shapes
+	; Return
 	rts
 
 update_graphics subroutine

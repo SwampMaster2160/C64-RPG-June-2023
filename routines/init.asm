@@ -13,8 +13,8 @@ init subroutine
 	sta c64_screen_interrupt_line
 	lda #(0 | C64_40_COLUMNS | C64_MULTICOLOR_MODE) ; No horizontal scroll, 40 columns, multicolor on
 	sta c64_screen_control_1
-	lda #0                                          ; Disable sprites
-	sta c64_sprite_enables
+	;lda #0                                          ; Disable sprites
+	;sta c64_sprite_enables
 	lda #(4 << 1) | (1 << 4)                        ; Tile shapes at $2000-$27FF, tile selections at $0400-$0800
 	sta c64_vic_memory_layout
 	lda #1                                          ; Interrupt only when a set scanline is reached
@@ -23,6 +23,26 @@ init subroutine
 	sta c64_sprite_enables
 	lda #$FF                                        ; Acknowledge any outstanding VIC-II interrupts
 	sta c64_vic_interrupt_status
+	lda #0                                          ; Sprites are single width and height
+	sta c64_sprite_double_heights
+	sta c64_sprite_double_widths
+	lda #0                                          ; Draw sprites infront of screen
+	sta c64_sprite_priorities
+	lda #$FF                                        ; Sprites are multicolor
+	sta c64_sprite_multicolors
+	lda #C64_COLOR_BLACK                            ; Extra sprite colors and black and light grey
+	sta c64_sprites_color_1
+	lda #C64_COLOR_LIGHT_GREY
+	sta c64_sprites_color_2
+	; Set sprite pointers
+	ldx #7
+	lda #($C0)+7
+.set_sprite_pointers_loop
+	sta c64_sprite_pointers,x
+	sec
+	sbc #1
+	dex
+	bpl .set_sprite_pointers_loop
 	; CIA chips
 	lda #$7F  ; Disable interrupts from CIA chips
 	sta $DC0D

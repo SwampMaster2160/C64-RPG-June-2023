@@ -43,3 +43,5 @@ basic_program subroutine
 	include "data/world_chars.asm"
 * = $2800
 	include "data/gui_chars.asm"
+* = $3000
+sprite_shapes ds 64 * 8

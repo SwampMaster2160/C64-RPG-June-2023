@@ -503,6 +503,27 @@ update_sprite_graphics subroutine
 	and c64_sprite_height_last_bits
 	sta c64_sprite_height_last_bits
 	ldx byte_0
+	; Get x walking/border offset
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags
+	and #%00000011
+	tay
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags
+	lsr
+	lsr
+	and #%00001111
+	sta byte_0
+	lda #24
+	cpy #DIRECTION_LEFT
+	bne .skip_add_x_walk_offset
+	clc
+	adc byte_0
+.skip_add_x_walk_offset
+	cpy #DIRECTION_RIGHT
+	bne .skip_sub_x_walk_offset
+	sec
+	sbc byte_0
+.skip_sub_x_walk_offset
+	sta byte_0
 	; Calculate X position
 	; Low byte
 	lda entity_x_positions,x
@@ -511,8 +532,9 @@ update_sprite_graphics subroutine
 	asl
 	asl
 	clc
-	adc #24
+	adc byte_0;#24
 	php
+	stx byte_0
 	tay
 	txa
 	asl
@@ -541,6 +563,16 @@ update_sprite_graphics subroutine
 	sta c64_sprite_height_last_bits
 	ldx byte_0
 	; Calculate Y position
+	; Get y walking offset
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags
+	and #%00000011
+	tay
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags
+	lsr
+	lsr
+	and #%00001111
+	sta byte_0
+	;
 	lda entity_y_positions,x
 	asl
 	asl
@@ -548,13 +580,25 @@ update_sprite_graphics subroutine
 	asl
 	clc
 	adc #50
+	cpy #DIRECTION_UP
+	bne .skip_add_y_walk_offset
+	clc
+	adc byte_0
+.skip_add_y_walk_offset
+	cpy #DIRECTION_DOWN
+	bne .skip_sub_y_walk_offset
+	sec
+	sbc byte_0
+.skip_sub_y_walk_offset
 	pha
 	txa
 	asl
 	tax
 	pla
 	sta c64_sprite_coordinates+1,x
-	ldx byte_0
+	txa
+	lsr
+	tax
 	; Return
 	rts
 

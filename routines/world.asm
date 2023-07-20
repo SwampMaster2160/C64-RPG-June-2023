@@ -42,7 +42,7 @@ init_player subroutine
 	lda #4
 	sta entity_y_positions
 	; Make the player face downwards and it needs to be redrawn and have its sprite image updated
-	lda #(DIRECTION_DOWN | ENTITY_NEEDS_REDRAW | ENTITY_IMAGE_CHANGE)
+	lda #(DIRECTION_DOWN | ENTITY_NEEDS_REDRAW | ENTITY_IMAGE_CHANGE | (0 << 2))
 	sta entity_facing_directions_and_walk_offsets_and_redraw_flags
 	; Return
 	rts

@@ -51,14 +51,13 @@ world_interrupt subroutine
 	sta c64_screen_interrupt_line
 	lda #1
 	sta is_next_screen_interrupt_for_gui
-	;
-	jsr get_keys_pressed
-	;lda is_action_key_pressed
-	;sta c64_chars
-	; Change graphics modes
+	; Change graphics mode 0
 	lda #(3 | C64_25_ROWS | C64_SCREEN_ON)          ; No vertical scroll, 25 rows, text mode, extended background off, screen on
 	sta c64_screen_control_0
-
+	; Game ticks
+	jsr get_keys_pressed
+	jsr world_tick
+	; Change other graphics modes
 	lda world_background_color                      ; Change background colors to the world background colors
 	sta c64_background_colors
 	lda #(4 << 1) | (1 << 4)                        ; Tile shapes at $2000-$27FF, tile selections at $0400-$0800

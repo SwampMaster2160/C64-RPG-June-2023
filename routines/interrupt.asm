@@ -54,9 +54,10 @@ world_interrupt subroutine
 	; Change graphics mode 0
 	lda #(3 | C64_25_ROWS | C64_SCREEN_ON)          ; No vertical scroll, 25 rows, text mode, extended background off, screen on
 	sta c64_screen_control_0
-	; Game ticks
-	jsr get_keys_pressed
+	; World ticks
 	jsr world_tick
+	; Update graphics each frame
+	jsr update_graphics
 	; Change other graphics modes
 	lda world_background_color                      ; Change background colors to the world background colors
 	sta c64_background_colors

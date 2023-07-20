@@ -485,3 +485,51 @@ display_all_chars subroutine
 	txa
 	bne .loop
 	rts
+
+update_sprite_graphics subroutine
+	rts
+
+update_sprite_image_graphics subroutine
+	rts
+
+update_graphics subroutine
+	; Redraw map if needed then set it to not need redrawing
+	lda does_map_need_redraw
+	beq .skip_map_redraw
+	lda #0
+	sta does_map_need_redraw
+	jsr draw_map
+.skip_map_redraw
+	; Calculate which entities should be visable
+	; An entity is visable if it is not a none entity
+	ldx #7
+	lda #0
+.entities_visable_loop
+	asl
+	ldy entity_discriminants,x
+	beq .entity_invisable
+	ora #%00000001
+.entity_invisable
+	dex
+	bpl .entities_visable_loop
+	sta world_sprites_visable
+	; Redraw the sprites if needed
+	ldx #7
+.sprite_redraw_loop
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+	and #ENTITY_NEEDS_REDRAW
+	beq .skip_sprite_redraw
+	jsr update_sprite_graphics
+.skip_sprite_redraw
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+	and #ENTITY_IMAGE_CHANGE
+	beq .skip_sprite_image_redraw
+	jsr update_sprite_image_graphics
+.skip_sprite_image_redraw
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+	and #!(ENTITY_NEEDS_REDRAW | ENTITY_IMAGE_CHANGE)
+	sta entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+	dex
+	bpl .sprite_redraw_loop
+	; Return
+	rts

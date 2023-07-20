@@ -1,12 +1,16 @@
-; Loads and draws a map
+; Loads a map
 ; --- Inputs ---
 ; a: The map ID to draw
 ; --- Corrupted ---
 ; y, lda_y_modable_0_address, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address
 load_map subroutine
+	; Set the current map id and clear non-player entities
 	sta current_map
-	jsr draw_map
 	jsr clear_entities
+	; Set the map to need redrawing
+	lda #1
+	sta does_map_need_redraw
+	; Return
 	rts
 
 ; Clears all entities by setting them to be none except the player entity in slot 0
@@ -38,25 +42,13 @@ init_player subroutine
 	lda #4
 	sta entity_y_positions
 	; Make the player face downwards and it needs to be redrawn and have its sprite image updated
-	lda #(DIRECTION_DOWN | ENTITY_CHANGE | ENTITY_IMAGE_CHANGE)
-	sta entity_facing_directions_and_walk_offsets
+	lda #(DIRECTION_DOWN | ENTITY_NEEDS_REDRAW | ENTITY_IMAGE_CHANGE)
+	sta entity_facing_directions_and_walk_offsets_and_redraw_flags
 	; Return
 	rts
 
 ; Called 50 times/second
 world_tick subroutine
-	; Calculate which entities should be visable
-	; An entity is visable if it is not a none entity
-	ldx #7
-	lda #0
-.entities_visable_loop
-	asl
-	ldy entity_discriminants,x
-	beq .entity_invisable
-	ora #%00000001
-.entity_invisable
-	dex
-	bpl .entities_visable_loop
-	sta world_sprites_visable
+	jsr get_keys_pressed
 	; Return
 	rts

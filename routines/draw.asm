@@ -604,7 +604,7 @@ update_sprite_graphics subroutine
 
 update_sprite_image_graphics subroutine
 	; Calculate pointer to the sprite once loaded
-	lda entity_discriminants,x
+	txa
 	asl
 	asl
 	asl
@@ -615,7 +615,7 @@ update_sprite_image_graphics subroutine
 	adc #<sprite_shapes
 	php
 	sta sta_x_modable_0_address
-	lda entity_discriminants,x
+	txa
 	lsr
 	lsr
 	plp
@@ -625,11 +625,75 @@ update_sprite_image_graphics subroutine
 	txa
 	pha
 	ldx #63
-	lda #0
+	lda #0;%00011011
 .clear_sprite_loop
 	jsr sta_x_modable_0
 	dex
 	bpl .clear_sprite_loop
+	pla
+	tax
+	; Calculate pointer to the data for the sprite
+	lda entity_discriminants,x
+	asl
+	asl
+	asl
+	clc
+	adc #<entities
+	php
+	sta lda_y_modable_0_address
+	lda entity_discriminants,x
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	plp
+	adc #>entities
+	sta lda_y_modable_0_address+1
+	; Sprite color
+	ldy #4
+	jsr lda_y_modable_0
+	sta c64_sprite_color_0s,x
+	; Get sprite image to use
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+	and #%00000011
+	tay
+	jsr lda_y_modable_0
+	; Calculate pointer to the sprite image to load
+	tay
+	asl
+	asl
+	asl
+	asl
+	asl
+	clc
+	adc #<entity_sprites
+	php
+	sta lda_y_modable_0_address
+	tya
+	lsr
+	lsr
+	lsr
+	plp
+	adc #>entity_sprites
+	sta lda_y_modable_0_address+1
+	; Copy sprite
+	txa
+	pha
+	ldx #0
+	ldy #0
+.sprite_copy_loop
+	jsr lda_y_modable_0
+	jsr sta_x_modable_0
+	inx
+	iny
+	jsr lda_y_modable_0
+	jsr sta_x_modable_0
+	inx
+	inx
+	iny
+	cpy #32
+	bne .sprite_copy_loop
 	pla
 	tax
 	; Return

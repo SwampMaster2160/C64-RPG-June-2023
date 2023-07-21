@@ -10,6 +10,17 @@ load_map subroutine
 	; Set the map to need redrawing
 	lda #1
 	sta does_map_need_redraw
+	;
+	lda #ENTITY_TEST
+	sta entity_discriminants+1
+	; With a pos at (1, 4)
+	lda #16
+	sta entity_x_positions+1
+	lda #5
+	sta entity_y_positions+1
+	; Make the test face downwards and it needs to be redrawn and have its sprite image updated
+	lda #(DIRECTION_DOWN | ENTITY_NEEDS_REDRAW | ENTITY_IMAGE_CHANGE | (0 << 2))
+	sta entity_facing_directions_and_walk_offsets_and_redraw_flags+1
 	; Return
 	rts
 

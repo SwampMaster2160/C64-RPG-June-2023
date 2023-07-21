@@ -1,0 +1,4 @@
+entities = entities_actual - 8
+
+entities_actual subroutine
+	byte ENTITY_SPRITE_PLAYER_UP, ENTITY_SPRITE_PLAYER_RIGHT, ENTITY_SPRITE_PLAYER_DOWN, ENTITY_SPRITE_PLAYER_LEFT, C64_COLOR_BLUE, 0, 0, 0 ; Player

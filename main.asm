@@ -38,6 +38,8 @@ basic_program subroutine
 	include "data/tiles.asm"
 	include "data/metatiles.asm"
 	include "data/maps.asm"
+	include "data/entities.asm"
+	include "data/entity_sprites.asm"
 
 * = $2000
 	include "data/world_chars.asm"

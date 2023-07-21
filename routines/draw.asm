@@ -603,8 +603,35 @@ update_sprite_graphics subroutine
 	rts
 
 update_sprite_image_graphics subroutine
-	lda #$FF
-	sta sprite_shapes
+	; Calculate pointer to the sprite once loaded
+	lda entity_discriminants,x
+	asl
+	asl
+	asl
+	asl
+	asl
+	asl
+	clc
+	adc #<sprite_shapes
+	php
+	sta sta_x_modable_0_address
+	lda entity_discriminants,x
+	lsr
+	lsr
+	plp
+	adc #>sprite_shapes
+	sta sta_x_modable_0_address+1
+	; Clear sprite
+	txa
+	pha
+	ldx #63
+	lda #0
+.clear_sprite_loop
+	jsr sta_x_modable_0
+	dex
+	bpl .clear_sprite_loop
+	pla
+	tax
 	; Return
 	rts
 

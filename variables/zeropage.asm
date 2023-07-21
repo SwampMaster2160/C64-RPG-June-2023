@@ -12,6 +12,7 @@ lda_y_modable_1 ds 1
 lda_y_modable_1_address ds 3
 last_rng ds 1
 byte_0 ds 1
+word_0 ds 2
 text_color ds 1
 world_background_color ds 1
 world_sprites_visable ds 1

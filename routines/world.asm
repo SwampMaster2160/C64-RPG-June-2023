@@ -58,8 +58,66 @@ init_player subroutine
 	; Return
 	rts
 
+make_entity_face_direction subroutine
+	sta byte_0
+	;lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+	;and #%00000011
+	;cmp byte_0
+	;beq .end
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+	and #%11111100
+	ora byte_0
+	ora #ENTITY_IMAGE_CHANGE
+	sta entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+.end
+	rts
+
+entity_tick subroutine
+	; Call the entities tick subroutine
+	lda entity_discriminants,x
+	asl
+	asl
+	asl
+	clc
+	adc #<(entities+6)
+	php
+	sta lda_y_modable_0_address
+	lda entity_discriminants,x
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	plp
+	adc #>(entities+6)
+	sta lda_y_modable_0_address+1
+	ldy #0
+	jsr lda_y_modable_0
+	sta word_0
+	iny
+	jsr lda_y_modable_0
+	sta word_0+1
+	lda #>(.entity_tick_subroutine_end-1)
+	pha
+	lda #<(.entity_tick_subroutine_end-1)
+	pha
+	jmp (word_0)
+.entity_tick_subroutine_end
+	; Return
+	rts
+
 ; Called 50 times/second
 world_tick subroutine
 	jsr get_keys_pressed
+	; Tick each non-null entity
+	ldx #0
+.entity_tick_loop
+	lda entity_discriminants,x
+	beq .dont_tick_entity
+	jsr entity_tick
+.dont_tick_entity
+	inx
+	cpx #8
+	bne .entity_tick_loop
 	; Return
 	rts

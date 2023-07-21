@@ -34,6 +34,7 @@ basic_program subroutine
 	include "routines/draw.asm"
 	include "routines/io.asm"
 	include "routines/world.asm"
+	include "routines/entity_tick.asm"
 
 	include "data/tiles.asm"
 	include "data/metatiles.asm"

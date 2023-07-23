@@ -73,6 +73,17 @@ make_entity_face_direction subroutine
 	rts
 
 entity_tick subroutine
+	; Move forward if walking
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+	and #%00111100
+	beq .skip_steping_forward
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+	sec
+	sbc #%00000100
+	ora #ENTITY_NEEDS_REDRAW
+	sta entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+	rts
+.skip_steping_forward
 	; Call the entities tick subroutine
 	lda entity_discriminants,x
 	asl
@@ -103,6 +114,45 @@ entity_tick subroutine
 	pha
 	jmp (word_0)
 .entity_tick_subroutine_end
+	; Return if the entity should do nothing
+	cpy #ENTITY_TICK_RETURN_NONE
+	bne .skip_none
+	rts
+.skip_none
+	; Calculate the tile pos the entity is facing
+	lda entity_x_positions,x
+	sta temp_x
+	lda entity_y_positions,x
+	sta temp_y
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+	and #%00000011
+	cmp #DIRECTION_UP
+	bne .skip_up
+	dec temp_y
+.skip_up
+	cmp #DIRECTION_RIGHT
+	bne .skip_right
+	inc temp_x
+.skip_right
+	cmp #DIRECTION_DOWN
+	bne .skip_down
+	inc temp_y
+.skip_down
+	cmp #DIRECTION_LEFT
+	bne .skip_left
+	dec temp_x
+.skip_left
+	; Try walk if the entity should walk
+	cpy #ENTITY_TICK_RETURN_TRY_WALK
+	bne .skip_walk
+	lda temp_x
+	sta entity_x_positions,x
+	lda temp_y
+	sta entity_y_positions,x
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+	ora #(%00111100 | ENTITY_NEEDS_REDRAW)
+	sta entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+.skip_walk
 	; Return
 	rts
 

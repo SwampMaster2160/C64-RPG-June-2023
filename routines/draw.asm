@@ -734,7 +734,7 @@ update_graphics subroutine
 	jsr update_sprite_image_graphics
 .skip_sprite_image_redraw
 	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
-	and #!(ENTITY_NEEDS_REDRAW | ENTITY_IMAGE_CHANGE)
+	and #~(ENTITY_NEEDS_REDRAW | ENTITY_IMAGE_CHANGE)
 	sta entity_facing_directions_and_walk_offsets_and_redraw_flags,x
 	dex
 	bpl .sprite_redraw_loop

@@ -95,10 +95,6 @@ init subroutine
 
 	lda #0
 	jsr load_map
-	lda #0
-	sta does_map_need_redraw
-	lda #0
-	jsr draw_map
 	jsr init_player
 	jsr get_keys_pressed
 	lda #<(c64_chars+(20*40))

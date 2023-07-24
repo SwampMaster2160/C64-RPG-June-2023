@@ -151,10 +151,13 @@ draw_metatile subroutine
 ; y, lda_y_modable_0_address, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address
 draw_map subroutine
 	tay
-	; Turn off screen
-	lda c64_screen_control_0
-	and #~C64_SCREEN_ON
+	; Setup for world interrupt
+	lda #((3 | C64_25_ROWS) | %10000000) ; No vertical scroll, 25 rows, screen on, text mode, extended background off
 	sta c64_screen_control_0
+	lda #32                                              ; Interrupt at line 288
+	sta c64_screen_interrupt_line
+	lda #0
+	sta is_next_screen_interrupt_for_gui
 	; Get the location that we should copy the map from (maps + a * 64)
 	; Low byte
 	tya
@@ -705,6 +708,7 @@ update_graphics subroutine
 	beq .skip_map_redraw
 	lda #0
 	sta does_map_need_redraw
+	lda current_map
 	jsr draw_map
 .skip_map_redraw
 	; Calculate which entities should be visable

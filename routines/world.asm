@@ -119,6 +119,26 @@ entity_tick subroutine
 	bne .skip_none
 	rts
 .skip_none
+	; Get the location of the map
+	; Low byte
+	lda current_map
+	asl
+	asl
+	asl
+	asl
+	asl
+	asl
+	clc
+	adc #<maps
+	php
+	sta lda_y_modable_1_address
+	; High byte
+	lda current_map
+	lsr
+	lsr
+	plp
+	adc #>maps
+	sta lda_y_modable_1_address+1
 	; Calculate the tile pos the entity is facing
 	lda entity_x_positions,x
 	sta temp_x
@@ -155,6 +175,9 @@ entity_tick subroutine
 	bne .skip_walk
 	lda #19
 	sta temp_x
+	ldy #55
+	jsr lda_y_modable_1
+	jsr load_map
 .skip_walk_left_off_map
 	lda temp_x
 	cmp #20
@@ -164,6 +187,9 @@ entity_tick subroutine
 	bne .skip_walk
 	lda #0
 	sta temp_x
+	ldy #53
+	jsr lda_y_modable_1
+	jsr load_map
 .skip_walk_right_off_map
 	lda temp_y
 	cmp #$FF
@@ -173,6 +199,9 @@ entity_tick subroutine
 	bne .skip_walk
 	lda #9
 	sta temp_y
+	ldy #52
+	jsr lda_y_modable_1
+	jsr load_map
 .skip_walk_up_off_map
 	lda temp_y
 	cmp #10
@@ -182,6 +211,9 @@ entity_tick subroutine
 	bne .skip_walk
 	lda #0
 	sta temp_y
+	ldy #54
+	jsr lda_y_modable_1
+	jsr load_map
 .skip_walk_down_off_map
 	; Skip if the entity wants to walk into a wall
 	jsr get_tile

@@ -143,8 +143,54 @@ entity_tick subroutine
 	dec temp_x
 .skip_left
 	; Try walk if the entity should walk
+	; Skip if the entity does not want to walk
 	cpy #ENTITY_TICK_RETURN_TRY_WALK
 	bne .skip_walk
+	; Walking off map
+	lda temp_x
+	cmp #$FF
+	bne .skip_walk_left_off_map
+	lda entity_discriminants,x
+	cmp #ENTITY_PLAYER
+	bne .skip_walk
+	lda #19
+	sta temp_x
+.skip_walk_left_off_map
+	lda temp_x
+	cmp #20
+	bne .skip_walk_right_off_map
+	lda entity_discriminants,x
+	cmp #ENTITY_PLAYER
+	bne .skip_walk
+	lda #0
+	sta temp_x
+.skip_walk_right_off_map
+	lda temp_y
+	cmp #$FF
+	bne .skip_walk_up_off_map
+	lda entity_discriminants,x
+	cmp #ENTITY_PLAYER
+	bne .skip_walk
+	lda #9
+	sta temp_y
+.skip_walk_up_off_map
+	lda temp_y
+	cmp #10
+	bne .skip_walk_down_off_map
+	lda entity_discriminants,x
+	cmp #ENTITY_PLAYER
+	bne .skip_walk
+	lda #0
+	sta temp_y
+.skip_walk_down_off_map
+	; Skip if the entity wants to walk into a wall
+	jsr get_tile
+	ldy #0
+	jsr get_tile_high_nibble
+	cmp #TILE_MOVEMENT_CLEAR
+	bne .skip_walk
+	; Walk
+.can_walk
 	lda temp_x
 	sta entity_x_positions,x
 	lda temp_y
@@ -154,6 +200,136 @@ entity_tick subroutine
 	sta entity_facing_directions_and_walk_offsets_and_redraw_flags,x
 .skip_walk
 	; Return
+	rts
+
+; Get the metatile ID of the metatile containing the tile at (temp_x, temp_y) of the currently loaded map
+; --- Inputs ---
+; temp_x, temp_y, current_map
+; --- Outputs ---
+; a: The metatile at the location
+; --- Corrupted ---
+; byte_0, lda_y_modable_1_address, y
+get_metatile subroutine
+	; Get the location of the map
+	; Low byte
+	lda current_map
+	asl
+	asl
+	asl
+	asl
+	asl
+	asl
+	clc
+	adc #<maps
+	php
+	sta lda_y_modable_1_address
+	; High byte
+	lda current_map
+	lsr
+	lsr
+	plp
+	adc #>maps
+	sta lda_y_modable_1_address+1
+	; Get metatile id
+	lda temp_y
+	pha
+	lsr
+	asl
+	sta temp_y
+	asl
+	asl
+	clc
+	adc temp_y
+	sta byte_0
+	pla
+	sta temp_y
+	lda temp_x
+	lsr
+	clc
+	adc byte_0
+	tay
+	jsr lda_y_modable_1
+	;sta c64_chars
+	rts
+
+; Get the tile ID of the tile at (temp_x, temp_y) of the currently loaded map
+; --- Inputs ---
+; temp_x, temp_y, current_map
+; --- Outputs ---
+; a: The tile at the location
+; --- Corrupted ---
+; byte_0, lda_y_modable_1_address, lda_y_modable_0_address, y
+get_tile subroutine
+	; Get location of the tiles
+	jsr get_metatile
+	tay
+	; Low byte
+	asl
+	asl
+	clc
+	adc #<metatiles
+	php
+	sta lda_y_modable_0_address
+	; High byte
+	tya
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	plp
+	adc #>metatiles
+	sta lda_y_modable_0_address+1
+	; Get tile
+	lda temp_y
+	and #%00000001
+	asl
+	sta byte_0
+	lda temp_x
+	and #%00000001
+	clc
+	adc byte_0
+	tay
+	jsr lda_y_modable_0
+	;sta c64_chars
+	rts
+
+; Get the high nibble #y of the tile
+; --- Inputs ---
+; a: The tile ID
+; y: The byte index - 4 of the tile's struct that we should get the high nibble from
+; --- Outputs ---
+; a: The high nibble
+; --- Corrupted ---
+; byte_0, lda_y_modable_0_address
+get_tile_high_nibble subroutine
+	; Get location of the tile's data
+	sta byte_0
+	; Low byte
+	asl
+	asl
+	asl
+	clc
+	adc #<(tiles+4)
+	php
+	sta lda_y_modable_0_address
+	; High byte
+	lda byte_0
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	plp
+	adc #>(tiles+4)
+	sta lda_y_modable_0_address+1
+	; Get nibble
+	jsr lda_y_modable_0
+	lsr
+	lsr
+	lsr
+	lsr
 	rts
 
 ; Called 50 times/second

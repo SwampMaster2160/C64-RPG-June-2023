@@ -9,3 +9,4 @@
 	include "constants/directions.asm"
 	include "constants/world.asm"
 	include "constants/entity_tick_return.asm"
+	include "constants/tile_movement.asm"

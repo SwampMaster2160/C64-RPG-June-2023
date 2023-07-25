@@ -1,5 +1,13 @@
 dummy_entity_tick subroutine
 	ldy #ENTITY_TICK_RETURN_NONE
+	jsr generate_random
+	and #%11110000
+	bne .do_not_walk
+	jsr generate_random
+	and #%00000011
+	jsr make_entity_face_direction
+	ldy #ENTITY_TICK_RETURN_TRY_WALK
+.do_not_walk
 	rts
 
 player_tick subroutine

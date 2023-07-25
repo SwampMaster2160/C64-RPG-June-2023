@@ -507,10 +507,10 @@ update_sprite_graphics subroutine
 	sta c64_sprite_height_last_bits
 	ldx byte_0
 	; Get x walking/border offset
-	lda entity_facing_directions_and_walk_offsets_and_redraw_flags
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
 	and #%00000011
 	tay
-	lda entity_facing_directions_and_walk_offsets_and_redraw_flags
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
 	lsr
 	lsr
 	and #%00001111
@@ -567,10 +567,10 @@ update_sprite_graphics subroutine
 	ldx byte_0
 	; Calculate Y position
 	; Get y walking offset
-	lda entity_facing_directions_and_walk_offsets_and_redraw_flags
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
 	and #%00000011
 	tay
-	lda entity_facing_directions_and_walk_offsets_and_redraw_flags
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
 	lsr
 	lsr
 	and #%00001111

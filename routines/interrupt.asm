@@ -54,6 +54,15 @@ world_interrupt subroutine
 	; Change graphics mode 0
 	lda #(3 | C64_25_ROWS | C64_SCREEN_ON)          ; No vertical scroll, 25 rows, text mode, extended background off, screen on
 	sta c64_screen_control_0
+	; Change other graphics modes
+	lda world_background_color                      ; Change background colors to the world background colors
+	sta c64_background_colors
+	lda #(4 << 1) | (1 << 4)                        ; Tile shapes at $2000-$27FF, tile selections at $0400-$0800
+	sta c64_vic_memory_layout
+	lda #(0 | C64_40_COLUMNS | C64_MULTICOLOR_MODE) ; No horizontal scroll, 40 columns, multicolor on
+	sta c64_screen_control_1
+	lda world_sprites_visable
+	sta c64_sprite_enables
 	; World ticks
 	jsr world_tick
 	; Update graphics each frame

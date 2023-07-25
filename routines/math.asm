@@ -4,7 +4,7 @@
 ; --- Outputs ---
 ; a:        The random number generated (last_rng * 5 + 1)
 ; last_rng: Also the random number generated
-rng subroutine
+generate_random subroutine
 	; Calculate last_rng * 5 + 1
 	lda last_rng
 	asl

@@ -72,6 +72,42 @@ make_entity_face_direction subroutine
 .end
 	rts
 
+; Checks if an entity can walk to a tile that is not offscreen
+is_onscreen_tile_clear subroutine
+	; Collision with walls
+	jsr get_tile
+	ldy #0
+	jsr get_tile_high_nibble
+	cmp #TILE_MOVEMENT_CLEAR
+	bne .not_clear
+	; Collision with other entities
+	; Loop through all entities
+	ldy #8
+.entity_collision_check_loop
+	dey
+	; If we have looped through all entities then the tile is clear
+	bmi .entity_collision_check_loop_end
+	; Skip entity if it is a none entity
+	lda entity_discriminants,y
+	cmp #ENTITY_NONE
+	beq .entity_collision_check_loop
+	; Skip entity if its x pos is not equal to temp_x
+	lda temp_x
+	cmp entity_x_positions,y
+	bne .entity_collision_check_loop
+	; Skip entity if its y pos is not equal to temp_y
+	lda temp_y
+	cmp entity_y_positions,y
+	bne .entity_collision_check_loop
+	; Otherwise the tile is not clear
+	jmp .not_clear
+.entity_collision_check_loop_end
+	lda #TILE_MOVEMENT_CLEAR
+	rts
+.not_clear
+	lda #TILE_MOVEMENT_WALL
+	rts
+
 entity_tick subroutine
 	; Move forward if walking
 	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
@@ -166,7 +202,7 @@ entity_tick subroutine
 	; Skip if the entity does not want to walk
 	cpy #ENTITY_TICK_RETURN_TRY_WALK
 	bne .skip_walk
-	; Walking off map
+	; If the entity wants to walk off the map then warp to the map connected to that side if it is a player, otherwise do not let the entity walk offscreen.
 	lda temp_x
 	cmp #$FF
 	bne .skip_walk_left_off_map
@@ -215,12 +251,10 @@ entity_tick subroutine
 	jsr lda_y_modable_1
 	jsr load_map
 .skip_walk_down_off_map
-	; Skip if the entity wants to walk into a wall
-	jsr get_tile
-	ldy #0
-	jsr get_tile_high_nibble
-	cmp #TILE_MOVEMENT_CLEAR
-	bne .skip_walk
+	; If the entity is walking onto a tile that is onscreen then check that it can do so
+	jsr is_onscreen_tile_clear
+	cmp #TILE_MOVEMENT_WALL
+	beq .skip_walk
 	; Walk
 .can_walk
 	lda temp_x

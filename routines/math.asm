@@ -77,3 +77,53 @@ load_metatile_data_pointer subroutine
 	sta lda_y_modable_0_address+1
 	; Return
 	rts
+
+; Sets lda_y_modable_0_address to point to the data for the tile
+; --- Inputs ---
+; a: The tile whos data we should point to
+; --- Outputs ---
+; lda_y_modable_0_address: The tile data pointer (tiles + a * 8)
+; --- Corrupted ---
+; a, byte_1
+load_tile_data_pointer subroutine
+	sta byte_1
+	; Low byte
+	asl
+	asl
+	asl
+	clc
+	adc #<tiles
+	php
+	sta lda_y_modable_0_address
+	; High byte
+	lda byte_1
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	plp
+	adc #>tiles
+	sta lda_y_modable_0_address+1
+	; Return
+	rts
+
+sta_x_modable_0 subroutine
+	byte $9D, 0, 0
+	rts
+
+sta_x_modable_1 subroutine
+	byte $9D, 0, 0
+	rts
+
+lda_x_modable subroutine
+	byte $BD, 0, 0
+	rts
+
+lda_y_modable_0 subroutine
+	byte $B9, 0, 0
+	rts
+
+lda_y_modable_1 subroutine
+	byte $B9, 0, 0
+	rts

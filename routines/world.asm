@@ -2,7 +2,7 @@
 ; --- Inputs ---
 ; a: The map ID to load
 ; --- Corrupted ---
-; y, lda_y_modable_0_address, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address
+; a, x
 load_map subroutine
 	; Set the current map id and clear non-player entities
 	sta current_map
@@ -10,7 +10,7 @@ load_map subroutine
 	; Set the map to need redrawing
 	lda #1
 	sta does_map_need_redraw
-	;
+	; Test entity
 	lda #ENTITY_TEST
 	sta entity_discriminants+1
 	; With a pos at (1, 4)
@@ -58,6 +58,12 @@ init_player subroutine
 	; Return
 	rts
 
+; Sets entity x to face a direction
+; --- Inputs ---
+; a: The direction to face
+; x: The index of the entity
+; --- Corrupted ---
+; a
 make_entity_face_direction subroutine
 	sta byte_0
 	;lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
@@ -73,10 +79,17 @@ make_entity_face_direction subroutine
 	rts
 
 ; Checks if an entity can walk to a tile that is not offscreen
+; --- Inputs ---
+; x:                The index of the entity
+; (temp_x, temp_y): The position that we want to check
+; --- Outputs ---
+; a: Can we walk to this tile
+; --- Corrupted ---
+; y
 is_onscreen_tile_clear subroutine
 	; Collision with walls
 	jsr get_tile
-	ldy #0
+	ldy #4
 	jsr get_tile_high_nibble
 	cmp #TILE_MOVEMENT_CLEAR
 	bne .not_clear
@@ -108,6 +121,11 @@ is_onscreen_tile_clear subroutine
 	lda #TILE_MOVEMENT_WALL
 	rts
 
+; Checks if an entity can walk to a tile that is not offscreen
+; --- Inputs ---
+; x: The index of the entity
+; --- Corrupted ---
+; a, y, word_0, byte_0, byte_1, temp_x, temp_y
 entity_tick subroutine
 	; Move forward if walking
 	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
@@ -328,32 +346,14 @@ get_tile subroutine
 ; Get the high nibble #y of the tile
 ; --- Inputs ---
 ; a: The tile ID
-; y: The byte index - 4 of the tile's struct that we should get the high nibble from
+; y: The byte index of the tile's struct that we should get the high nibble from
 ; --- Outputs ---
 ; a: The high nibble
 ; --- Corrupted ---
-; byte_0, lda_y_modable_0_address
+; byte_1, lda_y_modable_0_address
 get_tile_high_nibble subroutine
 	; Get location of the tile's data
-	sta byte_0
-	; Low byte
-	asl
-	asl
-	asl
-	clc
-	adc #<(tiles+4)
-	php
-	sta lda_y_modable_0_address
-	; High byte
-	lda byte_0
-	lsr
-	lsr
-	lsr
-	lsr
-	lsr
-	plp
-	adc #>(tiles+4)
-	sta lda_y_modable_0_address+1
+	jsr load_tile_data_pointer
 	; Get nibble
 	jsr lda_y_modable_0
 	lsr

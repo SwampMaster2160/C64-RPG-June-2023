@@ -7,30 +7,12 @@
 ; sta_x_modable_0_address: The address of the top left char on the screen that should be drawn over
 ; sta_x_modable_1_address: The address of the top left char's color on the screen that should be drawn over
 ; --- Corrupted ---
-; y, lda_y_modable_0_address
+; y, lda_y_modable_0_address, byte_1
 ; --- Outputs ---
 ; x: Has 41 added
 draw_tile subroutine
 	; Get location of where the tile should be copied from (tiles + a * 8)
-	tay
-	; Low byte
-	asl
-	asl
-	asl
-	clc
-	adc #<tiles
-	php
-	sta lda_y_modable_0_address
-	; High byte
-	tya
-	lsr
-	lsr
-	lsr
-	lsr
-	lsr
-	plp
-	adc #>tiles
-	sta lda_y_modable_0_address+1
+	jsr load_tile_data_pointer
 	; Copy chars to screen
 	ldy #0
 	jsr lda_y_modable_0
@@ -85,7 +67,7 @@ draw_tile subroutine
 ; sta_x_modable_0_address: The address of the top left char on the screen that should be drawn over
 ; sta_x_modable_1_address: The address of the top left char's color on the screen that should be drawn over
 ; --- Corrupted ---
-; y, lda_y_modable_0_address
+; y, lda_y_modable_0_address, byte_1
 ; --- Outputs ---
 ; x: Has 123 added
 draw_metatile subroutine
@@ -128,7 +110,7 @@ draw_metatile subroutine
 
 ; Redraws the map
 ; --- Corrupted ---
-; a, x, y, lda_y_modable_0_address, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address
+; a, x, y, lda_y_modable_0_address, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address, byte_1
 redraw_map subroutine
 	; Setup for world interrupt
 	lda #((3 | C64_25_ROWS) | %10000000) ; No vertical scroll, 25 rows, screen on, text mode, extended background off
@@ -678,7 +660,7 @@ redraw_entity_image subroutine
 
 ; Updates anything onscreen that should be redrawn
 ; --- Corrupted ---
-; a, x, y, lda_y_modable_0_address, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address
+; a, x, y, lda_y_modable_0_address, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address, byte_1
 redraw subroutine
 	; Redraw map if needed then set it to not need redrawing
 	lda does_map_need_redraw

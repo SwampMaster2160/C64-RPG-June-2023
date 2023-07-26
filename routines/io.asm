@@ -1,5 +1,6 @@
 ; I/O operations that are not video related
 
+; Get which keys are pressed
 get_keys_pressed subroutine
 	; Get which keyboard keys are pressed
 	; Row 0

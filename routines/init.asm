@@ -60,31 +60,6 @@ init subroutine
 	sta $FFFE
 	lda #>irq
 	sta $FFFF
-	; Setup sta_x_modable_0
-	lda #$9D            ; sta #$XXXX,x
-	sta sta_x_modable_0
-	lda #$60            ; rts
-	sta sta_x_modable_0+3
-	; Setup sta_x_modable_1
-	lda #$9D            ; sta #$XXXX,x
-	sta sta_x_modable_1
-	lda #$60            ; rts
-	sta sta_x_modable_1+3
-	; Setup lda_x_modable
-	lda #$BD            ; lda #$XXXX,x
-	sta lda_x_modable
-	lda #$60            ; rts
-	sta lda_x_modable+3
-	; Setup lda_y_modable_0
-	lda #$B9            ; lda #$XXXX,y
-	sta lda_y_modable_0
-	lda #$60            ; rts
-	sta lda_y_modable_0+3
-	; Setup lda_y_modable_1
-	lda #$B9            ; lda #$XXXX,y
-	sta lda_y_modable_1
-	lda #$60            ; rts
-	sta lda_y_modable_1+3
 	; Init vars
 	lda #0
 	sta is_next_screen_interrupt_for_gui

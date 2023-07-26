@@ -1,6 +1,6 @@
 ; Loads a map
 ; --- Inputs ---
-; a: The map ID to draw
+; a: The map ID to load
 ; --- Corrupted ---
 ; y, lda_y_modable_0_address, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address
 load_map subroutine
@@ -276,26 +276,8 @@ entity_tick subroutine
 ; --- Corrupted ---
 ; byte_0, lda_y_modable_1_address, y
 get_metatile subroutine
-	; Get the location of the map
-	; Low byte
-	lda current_map
-	asl
-	asl
-	asl
-	asl
-	asl
-	asl
-	clc
-	adc #<maps
-	php
-	sta lda_y_modable_1_address
-	; High byte
-	lda current_map
-	lsr
-	lsr
-	plp
-	adc #>maps
-	sta lda_y_modable_1_address+1
+	; Get the location of the map data
+	jsr load_map_data_pointer
 	; Get metatile id
 	lda temp_y
 	pha
@@ -328,25 +310,7 @@ get_metatile subroutine
 get_tile subroutine
 	; Get location of the tiles
 	jsr get_metatile
-	tay
-	; Low byte
-	asl
-	asl
-	clc
-	adc #<metatiles
-	php
-	sta lda_y_modable_0_address
-	; High byte
-	tya
-	lsr
-	lsr
-	lsr
-	lsr
-	lsr
-	lsr
-	plp
-	adc #>metatiles
-	sta lda_y_modable_0_address+1
+	jsr load_metatile_data_pointer
 	; Get tile
 	lda temp_y
 	and #%00000001

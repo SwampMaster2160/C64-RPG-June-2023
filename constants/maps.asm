@@ -1,7 +1,8 @@
 ; World maps
 	newEnum
-	enumVariant TOWN_0
-	enumVariant ROAD_0
-	enumVariant ROAD_1
-	enumVariant ROAD_2
-	enumVariant ROAD_3
+	enumVariant MAP_NULL
+	enumVariant MAP_TOWN_0
+	enumVariant MAP_ROAD_0
+	enumVariant MAP_ROAD_1
+	enumVariant MAP_ROAD_2
+	enumVariant MAP_ROAD_3

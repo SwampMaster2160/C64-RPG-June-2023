@@ -17,3 +17,10 @@
 	enumVariant TILE_TOWN_PATH_BOTTOM_LEFT
 	enumVariant TILE_TOWN_PATH_BOTTOM_RIGHT
 	enumVariant TILE_TREE
+	enumVariant TILE_WATER
+	enumVariant TILE_SHALLOW_WATER
+	enumVariant TILE_SAND
+	enumVariant TILE_DIRT_PATH_LEFT
+	enumVariant TILE_DIRT_PATH_RIGHT
+	enumVariant TILE_DIRT_PATH_TOP
+	enumVariant TILE_DIRT_PATH_BOTTOM

@@ -8,3 +8,8 @@ metatiles subroutine
 	byte TILE_TOWN_PATH_TOP, TILE_TOWN_PATH_TOP, TILE_TOWN_PATH_BOTTOM, TILE_TOWN_PATH_BOTTOM                                     ; Path town horizontal
 	byte TILE_TOWN_PATH_TOP_LEFT, TILE_TOWN_PATH_TOP_RIGHT, TILE_TOWN_PATH_BOTTOM_LEFT, TILE_TOWN_PATH_BOTTOM_RIGHT               ; Path town cross
 	byte TILE_TREE, TILE_TREE, TILE_TREE, TILE_TREE                                                                               ; Trees
+	byte TILE_WATER, TILE_WATER, TILE_WATER, TILE_WATER                                                                           ; Water
+	byte TILE_SHALLOW_WATER, TILE_SHALLOW_WATER, TILE_SHALLOW_WATER, TILE_SHALLOW_WATER                                           ; Shallow water
+	byte TILE_SAND, TILE_SAND, TILE_SAND, TILE_SAND                                                                               ; Sand
+	byte TILE_DIRT_PATH_LEFT, TILE_DIRT_PATH_RIGHT, TILE_DIRT_PATH_LEFT, TILE_DIRT_PATH_RIGHT                                     ; Dirt path vertical
+	byte TILE_DIRT_PATH_TOP, TILE_DIRT_PATH_TOP, TILE_DIRT_PATH_BOTTOM, TILE_DIRT_PATH_BOTTOM                                     ; Dirt path horizontal

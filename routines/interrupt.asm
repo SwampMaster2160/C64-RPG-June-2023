@@ -66,7 +66,7 @@ world_interrupt subroutine
 	; World ticks
 	jsr world_tick
 	; Update graphics each frame
-	jsr update_graphics
+	jsr redraw
 	; Change other graphics modes
 	lda world_background_color                      ; Change background colors to the world background colors
 	sta c64_background_colors

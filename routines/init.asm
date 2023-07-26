@@ -93,7 +93,7 @@ init subroutine
 	lda #C64_COLOR_BLACK
 	sta gui_background_color
 
-	lda #0
+	lda #MAP_TOWN_0
 	jsr load_map
 	jsr init_player
 	jsr get_keys_pressed

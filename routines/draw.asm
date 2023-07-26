@@ -89,26 +89,8 @@ draw_tile subroutine
 ; --- Outputs ---
 ; x: Has 123 added
 draw_metatile subroutine
-	; Get location to copy metatile from (metatiles + a * 4)
-	tay
-	; Low byte
-	asl
-	asl
-	clc
-	adc #<metatiles
-	php
-	sta lda_y_modable_0_address
-	; High byte
-	tya
-	lsr
-	lsr
-	lsr
-	lsr
-	lsr
-	lsr
-	plp
-	adc #>metatiles
-	sta lda_y_modable_0_address+1
+	; Get location to copy metatile from
+	jsr load_metatile_data_pointer
 	; Get tiles
 	ldy #3
 	jsr lda_y_modable_0
@@ -144,40 +126,19 @@ draw_metatile subroutine
 	; Return
 	rts
 
-; Draws a map
-; --- Inputs ---
-; a: The map ID to draw
+; Redraws the map
 ; --- Corrupted ---
-; y, lda_y_modable_0_address, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address
-draw_map subroutine
-	tay
+; a, x, y, lda_y_modable_0_address, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address
+redraw_map subroutine
 	; Setup for world interrupt
 	lda #((3 | C64_25_ROWS) | %10000000) ; No vertical scroll, 25 rows, screen on, text mode, extended background off
 	sta c64_screen_control_0
-	lda #32                                              ; Interrupt at line 288
+	lda #32                              ; Interrupt at line 288
 	sta c64_screen_interrupt_line
 	lda #0
 	sta is_next_screen_interrupt_for_gui
-	; Get the location that we should copy the map from (maps + a * 64)
-	; Low byte
-	tya
-	asl
-	asl
-	asl
-	asl
-	asl
-	asl
-	clc
-	adc #<maps
-	php
-	sta lda_y_modable_1_address
-	; High byte
-	tya
-	lsr
-	lsr
-	plp
-	adc #>maps
-	sta lda_y_modable_1_address+1
+	; Get the location that we should copy the map from
+	jsr load_map_data_pointer
 	; Get the locations of the chars and colors that we should copy to for the first row
 	lda #<c64_chars
 	sta sta_x_modable_0_address
@@ -187,7 +148,7 @@ draw_map subroutine
 	sta sta_x_modable_1_address
 	lda #>c64_char_colors
 	sta sta_x_modable_1_address+1
-	; Load colors
+	; Load map colors
 	ldy #50
 	jsr lda_y_modable_1
 	sta c64_border_color
@@ -262,6 +223,8 @@ draw_map subroutine
 	rts
 
 ; Fills screen with tile 0 colored white
+; --- Corrupted ---
+; a, x
 clear_screen subroutine
 	; Clear the first 3 pages of the screen
 	ldx #$00
@@ -456,6 +419,8 @@ draw_textbox_colors_row subroutine
 	rts
 
 ; Display all 256 chars in the top left as a 16x16 box
+; --- Corrupted ---
+; sta_x_modable_0_address, x, a
 display_all_chars subroutine
 	; Load $0400 into sta_x_modable_address
 	lda #<c64_chars
@@ -489,8 +454,12 @@ display_all_chars subroutine
 	bne .loop
 	rts
 
-update_sprite_graphics subroutine
-	; TODO: Add walk offset
+; Changes the position of sprite x to where entity x is
+; --- Inputs ---
+; x: The entity that we should update the position of
+; --- Corrupted ---
+; a, byte_0
+redraw_entity_position subroutine
 	stx byte_0
 	; Clear X pos high bit for sprite
 	lda #1
@@ -535,7 +504,7 @@ update_sprite_graphics subroutine
 	asl
 	asl
 	clc
-	adc byte_0;#24
+	adc byte_0
 	php
 	stx byte_0
 	tay
@@ -605,7 +574,12 @@ update_sprite_graphics subroutine
 	; Return
 	rts
 
-update_sprite_image_graphics subroutine
+; Changes the image of sprite x to be the image that entity x should have
+; --- Inputs ---
+; x: The entity that we should update the image of
+; --- Corrupted ---
+; a, sta_x_modable_0_address, y
+redraw_entity_image subroutine
 	; Calculate pointer to the sprite once loaded
 	txa
 	asl
@@ -702,14 +676,17 @@ update_sprite_image_graphics subroutine
 	; Return
 	rts
 
-update_graphics subroutine
+; Updates anything onscreen that should be redrawn
+; --- Corrupted ---
+; a, x, y, lda_y_modable_0_address, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address
+redraw subroutine
 	; Redraw map if needed then set it to not need redrawing
 	lda does_map_need_redraw
 	beq .skip_map_redraw
 	lda #0
 	sta does_map_need_redraw
 	lda current_map
-	jsr draw_map
+	jsr redraw_map
 .skip_map_redraw
 	; Calculate which entities should be visable
 	; An entity is visable if it is not a none entity
@@ -730,12 +707,12 @@ update_graphics subroutine
 	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
 	and #ENTITY_NEEDS_REDRAW
 	beq .skip_sprite_redraw
-	jsr update_sprite_graphics
+	jsr redraw_entity_position
 .skip_sprite_redraw
 	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
 	and #ENTITY_IMAGE_CHANGE
 	beq .skip_sprite_image_redraw
-	jsr update_sprite_image_graphics
+	jsr redraw_entity_image
 .skip_sprite_image_redraw
 	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
 	and #~(ENTITY_NEEDS_REDRAW | ENTITY_IMAGE_CHANGE)

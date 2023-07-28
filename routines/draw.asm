@@ -562,7 +562,7 @@ redraw_entity_position subroutine
 ; --- Corrupted ---
 ; a, sta_x_modable_0_address, y
 redraw_entity_image subroutine
-	; Calculate pointer to the sprite once loaded
+	; Calculate pointer to the sprite shape once loaded
 	txa
 	asl
 	asl
@@ -580,17 +580,6 @@ redraw_entity_image subroutine
 	plp
 	adc #>sprite_shapes
 	sta sta_x_modable_0_address+1
-	; Clear sprite
-	txa
-	pha
-	ldx #63
-	lda #0;%00011011
-.clear_sprite_loop
-	jsr sta_x_modable_0
-	dex
-	bpl .clear_sprite_loop
-	pla
-	tax
 	; Calculate pointer to the data for the sprite
 	lda entity_discriminants,x
 	asl

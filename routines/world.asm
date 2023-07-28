@@ -2,26 +2,34 @@
 ; --- Inputs ---
 ; a: The map ID to load
 ; --- Corrupted ---
-; a, x
+; a
 load_map subroutine
 	; Set the current map id and clear non-player entities
 	sta current_map
+	txa
+	pha
+	lda temp_x
+	pha
+	lda temp_y
+	pha
 	jsr clear_entities
 	; Set the map to need redrawing
 	lda #1
 	sta does_map_need_redraw
 	; Test entity
-	lda #ENTITY_TEST
-	sta entity_discriminants+1
-	; With a pos at (1, 4)
 	lda #16
-	sta entity_x_positions+1
+	sta temp_x
 	lda #5
-	sta entity_y_positions+1
-	; Make the test face downwards and it needs to be redrawn and have its sprite image updated
-	lda #(DIRECTION_DOWN | ENTITY_NEEDS_REDRAW | ENTITY_IMAGE_CHANGE | (0 << 2))
-	sta entity_facing_directions_and_walk_offsets_and_redraw_flags+1
+	sta temp_y
+	lda #ENTITY_TEST
+	jsr spawn_entity
 	; Return
+	pla
+	sta temp_y
+	pla
+	sta temp_x
+	pla
+	tax
 	rts
 
 ; Clears all entities by setting them to be none except the player entity in slot 0
@@ -55,6 +63,38 @@ init_player subroutine
 	; Make the player face downwards and it needs to be redrawn and have its sprite image updated
 	lda #(DIRECTION_DOWN | ENTITY_NEEDS_REDRAW | ENTITY_IMAGE_CHANGE | (0 << 2))
 	sta entity_facing_directions_and_walk_offsets_and_redraw_flags
+	; Return
+	rts
+
+; Spawns an entity in the entity slot that has the lowest index and is empty. Will fail if all 8 slots are fill and do nothing.
+; --- Inputs ---
+; a:                The entity ID to load
+; (temp_x, temp_y): The pos to spawn the entity at
+; --- Corrupted ---
+; a, x
+spawn_entity subroutine
+	; Find the slot to put the entity into or return if all slots are full, preserve a.
+	pha
+	ldx #$FF
+.find_empty_entity_slot_loop
+	inx
+	cpx #8
+	bne .skip_return
+	rts
+.skip_return
+	lda entity_discriminants,x
+	cmp #ENTITY_NONE
+	bne .find_empty_entity_slot_loop
+	pla
+	; Set discriminant and position of entity
+	sta entity_discriminants,x
+	lda temp_x
+	sta entity_x_positions,x
+	lda temp_y
+	sta entity_y_positions,x
+	; Make the entity faces downwards and it needs to be redrawn and have its sprite image updated
+	lda #(DIRECTION_DOWN | ENTITY_NEEDS_REDRAW | ENTITY_IMAGE_CHANGE | (0 << 2))
+	sta entity_facing_directions_and_walk_offsets_and_redraw_flags,x
 	; Return
 	rts
 

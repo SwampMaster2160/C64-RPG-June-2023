@@ -43,6 +43,15 @@ init subroutine
 	sbc #1
 	dex
 	bpl .set_sprite_pointers_loop
+	; Clear sprite images
+	ldx #$FF
+	lda #0
+.clear_sprite_loop
+	dex
+	sta sprite_shapes,x
+	sta sprite_shapes+$0100,x
+	cpx #$FF
+	bne .clear_sprite_loop
 	; CIA chips
 	lda #$7F  ; Disable interrupts from CIA chips
 	sta $DC0D
@@ -68,9 +77,9 @@ init subroutine
 	lda #C64_COLOR_BLACK
 	sta gui_background_color
 
+	jsr init_player
 	lda #MAP_NEWTOWN
 	jsr load_map
-	jsr init_player
 	jsr get_keys_pressed
 	lda #<(c64_chars+(20*40))
 	sta sta_x_modable_0_address

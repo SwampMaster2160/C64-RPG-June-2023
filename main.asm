@@ -41,6 +41,7 @@ basic_program subroutine
 	include "data/maps.asm"
 	include "data/entities.asm"
 	include "data/entity_sprites.asm"
+	include "data/map_feature_scripts.asm"
 
 * = $2000
 	include "data/world_chars.asm"

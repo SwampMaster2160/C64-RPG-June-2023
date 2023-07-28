@@ -2,10 +2,12 @@
 ; --- Inputs ---
 ; a: The map ID to load
 ; --- Corrupted ---
-; a
+; a, lda_y_modable_1_address, lda_x_modable_address
 load_map subroutine
 	; Set the current map id and clear non-player entities
 	sta current_map
+	tya
+	pha
 	txa
 	pha
 	lda temp_x
@@ -16,13 +18,15 @@ load_map subroutine
 	; Set the map to need redrawing
 	lda #1
 	sta does_map_need_redraw
-	; Test entity
-	lda #16
-	sta temp_x
-	lda #5
-	sta temp_y
-	lda #ENTITY_TEST
-	jsr spawn_entity
+	; Map features
+	jsr load_map_data_pointer
+	ldy #56
+	jsr lda_y_modable_1
+	sta lda_x_modable_address
+	iny
+	jsr lda_y_modable_1
+	sta lda_x_modable_address+1
+	jsr execute_map_feature_script
 	; Return
 	pla
 	sta temp_y
@@ -30,7 +34,45 @@ load_map subroutine
 	sta temp_x
 	pla
 	tax
+	pla
+	tay
 	rts
+
+; Execute the a map feature
+; --- Inputs ---
+; a:                       The map ID to load
+; lda_x_modable_address: A pointer to the map script
+; --- Corrupted ---
+; a, x, y
+execute_map_feature_script subroutine
+	ldx #0
+.loop
+	jsr lda_x_modable
+	cmp #MAP_FEATURE_END
+	bne .skip_end
+	rts
+.skip_end
+	cmp #MAP_FEATURE_ENTITY
+	bne .skip_entity
+	inx
+	jsr lda_x_modable
+	tay
+	inx
+	jsr lda_x_modable
+	sta temp_x
+	inx
+	jsr lda_x_modable
+	sta temp_y
+	inx
+	txa
+	pha
+	tya
+	jsr spawn_entity
+	pla
+	tax
+	jmp .loop
+.skip_entity
+	jmp .loop
 
 ; Clears all entities by setting them to be none except the player entity in slot 0
 ; --- Corrupted ---
@@ -161,7 +203,7 @@ is_onscreen_tile_clear subroutine
 	lda #TILE_MOVEMENT_WALL
 	rts
 
-; Checks if an entity can walk to a tile that is not offscreen
+; Entity tick
 ; --- Inputs ---
 ; x: The index of the entity
 ; --- Corrupted ---

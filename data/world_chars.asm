@@ -55,3 +55,8 @@ world_chars subroutine
 	byte 251, 187, 235, 250, 251, 187, 250, 235 ; Boardwalk hozizontal
 	byte 170, 251, 187, 250, 187, 235, 187, 251 ; Boardwalk top
 	byte 251, 251, 187, 250, 251, 187, 251, 170 ; Boardwalk bottom
+
+	byte 238, 187, 234, 171, 238, 186, 254, 234 ; Rocks top left
+	byte 238, 187, 235, 187, 238, 251, 190, 239 ; Rocks top right
+	byte 250, 238, 234, 235, 190, 186, 239, 186 ; Rocks bottom left
+	byte 174, 175, 186, 175, 174, 187, 238, 187 ; Rocks bottom right

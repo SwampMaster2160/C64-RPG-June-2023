@@ -20,3 +20,4 @@ metatiles subroutine
 	byte TILE_DIRT_PATH_TOP_LEFT, TILE_DIRT_PATH_TOP_RIGHT, TILE_DIRT_PATH_BOTTOM_LEFT,          TILE_DIRT_PATH_BOTTOM_RIGHT            ; Dirt path cross
 	byte TILE_BOARDWALK_LEFT,     TILE_BOARDWALK_RIGHT,     TILE_BOARDWALK_LEFT,                 TILE_BOARDWALK_RIGHT                   ; Boardwalk vertical
 	byte TILE_BOARDWALK_TOP,      TILE_BOARDWALK_TOP,       TILE_BOARDWALK_BOTTOM,               TILE_BOARDWALK_BOTTOM                  ; Boardwalk horizontal
+	byte TILE_ROCKS,              TILE_ROCKS,               TILE_ROCKS,                          TILE_ROCKS                             ; Rocks

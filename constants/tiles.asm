@@ -32,3 +32,4 @@
 	enumVariant TILE_BOARDWALK_RIGHT
 	enumVariant TILE_BOARDWALK_TOP
 	enumVariant TILE_BOARDWALK_BOTTOM
+	enumVariant TILE_ROCKS

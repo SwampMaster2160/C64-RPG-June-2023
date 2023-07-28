@@ -9,3 +9,4 @@
 	enumVariant MAP_TWO_ISLANDS_PATH_2
 	enumVariant MAP_TWO_ISLANDS_PATH_3
 	enumVariant MAP_TWO_ISLANDS_PATH_4
+	enumVariant MAP_LITTLE_LAKE

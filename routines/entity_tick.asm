@@ -10,7 +10,46 @@ dummy_entity_tick subroutine
 .do_not_walk
 	rts
 
-player_tick subroutine
+block_entity_vertical_tick subroutine
+	; Find player index and load into y
+	txa
+	pha
+	lda #ENTITY_PLAYER
+	jsr find_entity_index
+	txa
+	tay
+	pla
+	pha
+	tax
+	;
+	lda entity_y_positions,x
+	cmp entity_y_positions,y
+	beq .skip_moving_vertically
+	bpl .skip_moving_up
+	tya
+	tax
+	lda #DIRECTION_UP
+	jsr make_entity_face_direction
+	ldy #ENTITY_TICK_RETURN_TRY_WALK
+	pla
+	tax
+	rts
+.skip_moving_up
+	tya
+	tax
+	lda #DIRECTION_DOWN
+	jsr make_entity_face_direction
+	pla
+	tax
+	rts
+.skip_moving_vertically
+	; Return
+	ldy #ENTITY_TICK_RETURN_NONE
+	pla
+	tax
+	rts
+
+player_entity_tick subroutine
 	ldy #ENTITY_TICK_RETURN_NONE
 	; Rotation
 	lda is_up_key_pressed

@@ -140,6 +140,24 @@ spawn_entity subroutine
 	; Return
 	rts
 
+; Get the entity slot of the first entity that has an matching ID
+; --- Inputs ---
+; a: The entity ID to search for
+; --- Outputs ---
+; x: The entity slot index of the matching entity with the lowest index or $FF if the entity was not found
+find_entity_index subroutine
+	ldx #$FF
+.loop
+	inx
+	cpx #8
+	bne .skip_entity_not_found
+	ldx #$FF
+	rts
+.skip_entity_not_found
+	cmp entity_discriminants,x
+	bne .loop
+	rts
+
 ; Sets entity x to face a direction
 ; --- Inputs ---
 ; a: The direction to face

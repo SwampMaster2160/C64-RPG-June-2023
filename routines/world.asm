@@ -97,8 +97,8 @@ init_player subroutine
 	; Set slot 0 to be a player
 	lda #ENTITY_PLAYER
 	sta entity_discriminants
-	; With a pos at (1, 4)
-	lda #1
+	; With a pos at (9, 4)
+	lda #9
 	sta entity_x_positions
 	lda #4
 	sta entity_y_positions

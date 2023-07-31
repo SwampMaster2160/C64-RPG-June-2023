@@ -19,34 +19,73 @@ block_entity_vertical_tick subroutine
 	txa
 	tay
 	pla
-	pha
 	tax
-	;
+	; Move vertically towards the player if they are above or below
 	lda entity_y_positions,x
 	cmp entity_y_positions,y
 	beq .skip_moving_vertically
-	bpl .skip_moving_up
-	tya
-	tax
+	bmi .skip_moving_up
 	lda #DIRECTION_UP
 	jsr make_entity_face_direction
 	ldy #ENTITY_TICK_RETURN_TRY_WALK
-	pla
-	tax
 	rts
 .skip_moving_up
-	tya
-	tax
 	lda #DIRECTION_DOWN
 	jsr make_entity_face_direction
-	pla
-	tax
+	ldy #ENTITY_TICK_RETURN_TRY_WALK
 	rts
+	; Else look towards player if they are at the same y pos
 .skip_moving_vertically
-	; Return
+	lda entity_x_positions,x
+	cmp entity_x_positions,y
+	bmi .skip_moving_left
+	lda #DIRECTION_LEFT
+	jsr make_entity_face_direction
 	ldy #ENTITY_TICK_RETURN_NONE
+	rts
+.skip_moving_left
+	lda #DIRECTION_RIGHT
+	jsr make_entity_face_direction
+	ldy #ENTITY_TICK_RETURN_NONE
+	rts
+
+block_entity_horizontal_tick subroutine
+	; Find player index and load into y
+	txa
+	pha
+	lda #ENTITY_PLAYER
+	jsr find_entity_index
+	txa
+	tay
 	pla
 	tax
+	; Move horizontally towards the player if they are to the left or right
+	lda entity_x_positions,x
+	cmp entity_x_positions,y
+	beq .skip_moving_horizontally
+	bmi .skip_moving_left
+	lda #DIRECTION_LEFT
+	jsr make_entity_face_direction
+	ldy #ENTITY_TICK_RETURN_TRY_WALK
+	rts
+.skip_moving_left
+	lda #DIRECTION_RIGHT
+	jsr make_entity_face_direction
+	ldy #ENTITY_TICK_RETURN_TRY_WALK
+	rts
+	; Else look towards player if they are at the same x pos
+.skip_moving_horizontally
+	lda entity_y_positions,x
+	cmp entity_y_positions,y
+	bmi .skip_moving_up
+	lda #DIRECTION_UP
+	jsr make_entity_face_direction
+	ldy #ENTITY_TICK_RETURN_NONE
+	rts
+.skip_moving_up
+	lda #DIRECTION_DOWN
+	jsr make_entity_face_direction
+	ldy #ENTITY_TICK_RETURN_NONE
 	rts
 
 player_entity_tick subroutine

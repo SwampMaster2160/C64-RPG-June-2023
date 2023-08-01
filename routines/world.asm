@@ -27,6 +27,9 @@ load_map subroutine
 	jsr lda_y_modable_1
 	sta lda_x_modable_address+1
 	jsr execute_map_feature_script
+	; Set HUD to need redrawing
+	lda #1
+	sta does_hud_need_redraw
 	; Return
 	pla
 	sta temp_y
@@ -246,7 +249,7 @@ entity_tick subroutine
 	clc
 	adc #<(entities+6)
 	php
-	sta lda_y_modable_0_address
+	sta word_0
 	lda entity_discriminants,x
 	lsr
 	lsr
@@ -255,18 +258,18 @@ entity_tick subroutine
 	lsr
 	plp
 	adc #>(entities+6)
-	sta lda_y_modable_0_address+1
-	ldy #0
-	jsr lda_y_modable_0
-	sta word_0
-	iny
-	jsr lda_y_modable_0
 	sta word_0+1
+	ldy #0
+	lda (word_0),y
+	sta word_1
+	iny
+	lda (word_0),y
+	sta word_1+1
 	lda #>(.entity_tick_subroutine_end-1)
 	pha
 	lda #<(.entity_tick_subroutine_end-1)
 	pha
-	jmp (word_0)
+	jmp (word_1)
 .entity_tick_subroutine_end
 	; Return if the entity should do nothing
 	cpy #ENTITY_TICK_RETURN_NONE
@@ -424,7 +427,7 @@ get_metatile subroutine
 ; --- Outputs ---
 ; a: The tile at the location
 ; --- Corrupted ---
-; byte_0, lda_y_modable_1_address, lda_y_modable_0_address, y
+; byte_0, lda_y_modable_1_address, word_0, y
 get_tile subroutine
 	; Get location of the tiles
 	jsr get_metatile
@@ -439,7 +442,7 @@ get_tile subroutine
 	clc
 	adc byte_0
 	tay
-	jsr lda_y_modable_0
+	lda (word_0),y
 	;sta c64_chars
 	rts
 
@@ -450,12 +453,12 @@ get_tile subroutine
 ; --- Outputs ---
 ; a: The high nibble
 ; --- Corrupted ---
-; byte_1, lda_y_modable_0_address
+; byte_1, word_0
 get_tile_high_nibble subroutine
 	; Get location of the tile's data
 	jsr load_tile_data_pointer
 	; Get nibble
-	jsr lda_y_modable_0
+	lda (word_0),y
 	lsr
 	lsr
 	lsr

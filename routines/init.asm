@@ -81,15 +81,8 @@ init subroutine
 	lda #MAP_NEWTOWN
 	jsr load_map
 	jsr get_keys_pressed
-	lda #<(c64_chars+(20*40))
-	sta sta_x_modable_0_address
-	lda #>(c64_chars+(20*40))
-	sta sta_x_modable_0_address+1
-	lda #C64_COLOR_WHITE
-	sta text_color
-	ldx #40
-	ldy #5
-	jsr draw_textbox
+	lda #1
+	sta does_hud_need_redraw
 	
 	; Loop untill interrupt
 	cli

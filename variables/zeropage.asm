@@ -5,6 +5,7 @@ byte_1 ds 1
 temp_x ds 1
 temp_y ds 1
 word_0 ds 2
+word_1 ds 2
 text_color ds 1
 world_background_color ds 1
 world_sprites_visable ds 1
@@ -21,3 +22,4 @@ is_right_key_pressed ds 1
 is_down_key_pressed ds 1
 is_left_key_pressed ds 1
 is_action_key_pressed ds 1
+does_hud_need_redraw ds 1

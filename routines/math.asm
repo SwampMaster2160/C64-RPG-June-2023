@@ -48,11 +48,11 @@ load_map_data_pointer subroutine
 	; Return
 	rts
 
-; Sets lda_y_modable_0_address to point to the data for the metatile
+; Sets word_0 to point to the data for the metatile
 ; --- Inputs ---
 ; a: The metatile whos data we should point to
 ; --- Outputs ---
-; lda_y_modable_0_address: The metatile data pointer (metatiles + a * 4)
+; word_0: The metatile data pointer (metatiles + a * 4)
 ; --- Corrupted ---
 ; a
 load_metatile_data_pointer subroutine
@@ -63,7 +63,7 @@ load_metatile_data_pointer subroutine
 	clc
 	adc #<metatiles
 	php
-	sta lda_y_modable_0_address
+	sta word_0
 	; High byte
 	tya
 	lsr
@@ -74,15 +74,15 @@ load_metatile_data_pointer subroutine
 	lsr
 	plp
 	adc #>metatiles
-	sta lda_y_modable_0_address+1
+	sta word_0+1
 	; Return
 	rts
 
-; Sets lda_y_modable_0_address to point to the data for the tile
+; Sets word_0 to point to the data for the tile
 ; --- Inputs ---
 ; a: The tile whos data we should point to
 ; --- Outputs ---
-; lda_y_modable_0_address: The tile data pointer (tiles + a * 8)
+; word_0: The tile data pointer (tiles + a * 8)
 ; --- Corrupted ---
 ; a, byte_1
 load_tile_data_pointer subroutine
@@ -94,7 +94,7 @@ load_tile_data_pointer subroutine
 	clc
 	adc #<tiles
 	php
-	sta lda_y_modable_0_address
+	sta word_0
 	; High byte
 	lda byte_1
 	lsr
@@ -104,7 +104,7 @@ load_tile_data_pointer subroutine
 	lsr
 	plp
 	adc #>tiles
-	sta lda_y_modable_0_address+1
+	sta word_0+1
 	; Return
 	rts
 
@@ -118,10 +118,6 @@ sta_x_modable_1 subroutine
 
 lda_x_modable subroutine
 	byte $BD, 0, 0
-	rts
-
-lda_y_modable_0 subroutine
-	byte $B9, 0, 0
 	rts
 
 lda_y_modable_1 subroutine

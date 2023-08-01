@@ -7,7 +7,7 @@
 ; sta_x_modable_0_address: The address of the top left char on the screen that should be drawn over
 ; sta_x_modable_1_address: The address of the top left char's color on the screen that should be drawn over
 ; --- Corrupted ---
-; y, lda_y_modable_0_address, byte_1
+; y, word_0, byte_1
 ; --- Outputs ---
 ; x: Has 41 added
 draw_tile subroutine
@@ -15,11 +15,11 @@ draw_tile subroutine
 	jsr load_tile_data_pointer
 	; Copy chars to screen
 	ldy #0
-	jsr lda_y_modable_0
+	lda (word_0),y
 	jsr sta_x_modable_0
 	iny
 	inx
-	jsr lda_y_modable_0
+	lda (word_0),y
 	jsr sta_x_modable_0
 	; Next row
 	iny
@@ -27,11 +27,11 @@ draw_tile subroutine
 	clc
 	adc #39
 	tax
-	jsr lda_y_modable_0
+	lda (word_0),y
 	jsr sta_x_modable_0
 	iny
 	inx
-	jsr lda_y_modable_0
+	lda (word_0),y
 	jsr sta_x_modable_0
 	; Copy colors to screen
 	iny
@@ -39,11 +39,11 @@ draw_tile subroutine
 	sec
 	sbc #41
 	tax
-	jsr lda_y_modable_0
+	lda (word_0),y
 	jsr sta_x_modable_1
 	iny
 	inx
-	jsr lda_y_modable_0
+	lda (word_0),y
 	jsr sta_x_modable_1
 	; Next row
 	iny
@@ -51,11 +51,11 @@ draw_tile subroutine
 	clc
 	adc #39
 	tax
-	jsr lda_y_modable_0
+	lda (word_0),y
 	jsr sta_x_modable_1
 	iny
 	inx
-	jsr lda_y_modable_0
+	lda (word_0),y
 	jsr sta_x_modable_1
 	; Return nothing
 	rts
@@ -67,7 +67,7 @@ draw_tile subroutine
 ; sta_x_modable_0_address: The address of the top left char on the screen that should be drawn over
 ; sta_x_modable_1_address: The address of the top left char's color on the screen that should be drawn over
 ; --- Corrupted ---
-; y, lda_y_modable_0_address, byte_1
+; y, word_0, byte_1
 ; --- Outputs ---
 ; x: Has 123 added
 draw_metatile subroutine
@@ -75,16 +75,16 @@ draw_metatile subroutine
 	jsr load_metatile_data_pointer
 	; Get tiles
 	ldy #3
-	jsr lda_y_modable_0
+	lda (word_0),y
 	pha
 	dey
-	jsr lda_y_modable_0
+	lda (word_0),y
 	pha
 	dey
-	jsr lda_y_modable_0
+	lda (word_0),y
 	pha
 	dey
-	jsr lda_y_modable_0
+	lda (word_0),y
 	; Draw tiles
 	jsr draw_tile
 	txa
@@ -110,7 +110,7 @@ draw_metatile subroutine
 
 ; Redraws the map
 ; --- Corrupted ---
-; a, x, y, lda_y_modable_0_address, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address, byte_1
+; a, x, y, word_0, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address, byte_1
 redraw_map subroutine
 	; Setup for world interrupt
 	lda #((3 | C64_25_ROWS) | %10000000) ; No vertical scroll, 25 rows, screen on, text mode, extended background off
@@ -588,7 +588,7 @@ redraw_entity_image subroutine
 	clc
 	adc #<entities
 	php
-	sta lda_y_modable_0_address
+	sta word_0
 	lda entity_discriminants,x
 	lsr
 	lsr
@@ -597,16 +597,16 @@ redraw_entity_image subroutine
 	lsr
 	plp
 	adc #>entities
-	sta lda_y_modable_0_address+1
+	sta word_0+1
 	; Sprite color
 	ldy #4
-	jsr lda_y_modable_0
+	lda (word_0),y
 	sta c64_sprite_color_0s,x
 	; Get sprite image to use
 	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
 	and #%00000011
 	tay
-	jsr lda_y_modable_0
+	lda (word_0),y
 	; Calculate pointer to the sprite image to load
 	tay
 	asl
@@ -617,25 +617,25 @@ redraw_entity_image subroutine
 	clc
 	adc #<entity_sprites
 	php
-	sta lda_y_modable_0_address
+	sta word_0
 	tya
 	lsr
 	lsr
 	lsr
 	plp
 	adc #>entity_sprites
-	sta lda_y_modable_0_address+1
+	sta word_0+1
 	; Copy sprite
 	txa
 	pha
 	ldx #0
 	ldy #0
 .sprite_copy_loop
-	jsr lda_y_modable_0
+	lda (word_0),y
 	jsr sta_x_modable_0
 	inx
 	iny
-	jsr lda_y_modable_0
+	lda (word_0),y
 	jsr sta_x_modable_0
 	inx
 	inx
@@ -649,7 +649,7 @@ redraw_entity_image subroutine
 
 ; Updates anything onscreen that should be redrawn
 ; --- Corrupted ---
-; a, x, y, lda_y_modable_0_address, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address, byte_1
+; a, x, y, word_0, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address, byte_1
 redraw subroutine
 	; Redraw map if needed then set it to not need redrawing
 	lda does_map_need_redraw
@@ -690,5 +690,32 @@ redraw subroutine
 	sta entity_facing_directions_and_walk_offsets_and_redraw_flags,x
 	dex
 	bpl .sprite_redraw_loop
+	; Redraw HUD
+	lda does_hud_need_redraw
+	beq .skip_hud_redraw
+	jsr redraw_hud
+.skip_hud_redraw
 	; Return
+	rts
+
+; Redraw the HUD at the bottom of the screen
+redraw_hud subroutine
+	; Set hud to no longer need redrawing
+	lda #0
+	sta does_hud_need_redraw
+	; Text box
+	lda #<(c64_chars+(20*40))
+	sta sta_x_modable_0_address
+	lda #>(c64_chars+(20*40))
+	sta sta_x_modable_0_address+1
+	lda #C64_COLOR_WHITE
+	sta text_color
+	ldx #40
+	ldy #5
+	jsr draw_textbox
+	; Map name
+	lda #GUI_CHAR_LOCATION_PIN
+	sta c64_chars+21*40+1
+	lda #C64_COLOR_RED
+	sta c64_char_colors+21*40+1
 	rts

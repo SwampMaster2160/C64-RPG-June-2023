@@ -2,7 +2,7 @@
 ; --- Inputs ---
 ; a: The map ID to load
 ; --- Corrupted ---
-; a, lda_y_modable_1_address, lda_x_modable_address
+; a, word_1, word_0
 load_map subroutine
 	; Set the current map id and clear non-player entities
 	sta current_map
@@ -21,11 +21,11 @@ load_map subroutine
 	; Map features
 	jsr load_map_data_pointer
 	ldy #56
-	jsr lda_y_modable_1
-	sta lda_x_modable_address
+	lda (word_1),y
+	sta word_0
 	iny
-	jsr lda_y_modable_1
-	sta lda_x_modable_address+1
+	lda (word_1),y
+	sta word_0+1
 	jsr execute_map_feature_script
 	; Set HUD to need redrawing
 	lda #1
@@ -44,35 +44,35 @@ load_map subroutine
 ; Execute the a map feature
 ; --- Inputs ---
 ; a:                       The map ID to load
-; lda_x_modable_address: A pointer to the map script
+; word_0: A pointer to the map script
 ; --- Corrupted ---
 ; a, x, y
 execute_map_feature_script subroutine
-	ldx #0
+	ldy #0
 .loop
-	jsr lda_x_modable
+	lda (word_0),y
 	cmp #MAP_FEATURE_END
 	bne .skip_end
 	rts
 .skip_end
 	cmp #MAP_FEATURE_ENTITY
 	bne .skip_entity
-	inx
-	jsr lda_x_modable
-	tay
-	inx
-	jsr lda_x_modable
+	iny
+	lda (word_0),y
+	tax
+	iny
+	lda (word_0),y
 	sta temp_x
-	inx
-	jsr lda_x_modable
+	iny
+	lda (word_0),y
 	sta temp_y
-	inx
-	txa
-	pha
+	iny
 	tya
+	pha
+	txa
 	jsr spawn_entity
 	pla
-	tax
+	tay
 	jmp .loop
 .skip_entity
 	jmp .loop
@@ -288,14 +288,14 @@ entity_tick subroutine
 	clc
 	adc #<maps
 	php
-	sta lda_y_modable_1_address
+	sta word_1
 	; High byte
 	lda current_map
 	lsr
 	lsr
 	plp
 	adc #>maps
-	sta lda_y_modable_1_address+1
+	sta word_1+1
 	; Calculate the tile pos the entity is facing
 	lda entity_x_positions,x
 	sta temp_x
@@ -333,7 +333,7 @@ entity_tick subroutine
 	lda #19
 	sta temp_x
 	ldy #55
-	jsr lda_y_modable_1
+	lda (word_1),y
 	jsr load_map
 .skip_walk_left_off_map
 	lda temp_x
@@ -345,7 +345,7 @@ entity_tick subroutine
 	lda #0
 	sta temp_x
 	ldy #53
-	jsr lda_y_modable_1
+	lda (word_1),y
 	jsr load_map
 .skip_walk_right_off_map
 	lda temp_y
@@ -357,7 +357,7 @@ entity_tick subroutine
 	lda #9
 	sta temp_y
 	ldy #52
-	jsr lda_y_modable_1
+	lda (word_1),y
 	jsr load_map
 .skip_walk_up_off_map
 	lda temp_y
@@ -369,7 +369,7 @@ entity_tick subroutine
 	lda #0
 	sta temp_y
 	ldy #54
-	jsr lda_y_modable_1
+	lda (word_1),y
 	jsr load_map
 .skip_walk_down_off_map
 	; If the entity is walking onto a tile that is onscreen then check that it can do so
@@ -395,7 +395,7 @@ entity_tick subroutine
 ; --- Outputs ---
 ; a: The metatile at the location
 ; --- Corrupted ---
-; byte_0, lda_y_modable_1_address, y
+; byte_0, word_1, y
 get_metatile subroutine
 	; Get the location of the map data
 	jsr load_map_data_pointer
@@ -417,7 +417,7 @@ get_metatile subroutine
 	clc
 	adc byte_0
 	tay
-	jsr lda_y_modable_1
+	lda (word_1),y
 	;sta c64_chars
 	rts
 
@@ -427,7 +427,7 @@ get_metatile subroutine
 ; --- Outputs ---
 ; a: The tile at the location
 ; --- Corrupted ---
-; byte_0, lda_y_modable_1_address, word_0, y
+; byte_0, word_1, word_0, y
 get_tile subroutine
 	; Get location of the tiles
 	jsr get_metatile

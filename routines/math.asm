@@ -18,11 +18,11 @@ generate_random subroutine
 	; Return the number generated
 	rts
 
-; Sets lda_y_modable_1_address to point to the data for the current map
+; Sets word_1 to point to the data for the current map
 ; --- Inputs ---
 ; current_map: The map to point to
 ; --- Outputs ---
-; lda_y_modable_1_address: The map data pointer (maps + current_map * 64)
+; word_1: The map data pointer (maps + current_map * 64)
 ; --- Corrupted ---
 ; a
 load_map_data_pointer subroutine
@@ -37,14 +37,14 @@ load_map_data_pointer subroutine
 	clc
 	adc #<maps
 	php
-	sta lda_y_modable_1_address
+	sta word_1
 	; High byte
 	lda current_map
 	lsr
 	lsr
 	plp
 	adc #>maps
-	sta lda_y_modable_1_address+1
+	sta word_1+1
 	; Return
 	rts
 
@@ -114,12 +114,4 @@ sta_x_modable_0 subroutine
 
 sta_x_modable_1 subroutine
 	byte $9D, 0, 0
-	rts
-
-lda_x_modable subroutine
-	byte $BD, 0, 0
-	rts
-
-lda_y_modable_1 subroutine
-	byte $B9, 0, 0
 	rts

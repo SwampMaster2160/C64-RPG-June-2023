@@ -110,7 +110,7 @@ draw_metatile subroutine
 
 ; Redraws the map
 ; --- Corrupted ---
-; a, x, y, word_0, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address, byte_1
+; a, x, y, word_0, word_1, sta_x_modable_0_address, sta_x_modable_1_address, byte_1
 redraw_map subroutine
 	; Setup for world interrupt
 	lda #((3 | C64_25_ROWS) | %10000000) ; No vertical scroll, 25 rows, screen on, text mode, extended background off
@@ -132,7 +132,7 @@ redraw_map subroutine
 	sta sta_x_modable_1_address+1
 	; Load map colors
 	ldy #50
-	jsr lda_y_modable_1
+	lda (word_1),y
 	sta c64_border_color
 	lsr
 	lsr
@@ -140,7 +140,7 @@ redraw_map subroutine
 	lsr
 	sta world_background_color
 	iny
-	jsr lda_y_modable_1
+	lda (word_1),y
 	sta c64_background_colors+1
 	lsr
 	lsr
@@ -160,7 +160,7 @@ redraw_map subroutine
 	; Draw metatile
 	tya
 	pha
-	jsr lda_y_modable_1
+	lda (word_1),y
 	jsr draw_metatile
 	pla
 	tay
@@ -649,7 +649,7 @@ redraw_entity_image subroutine
 
 ; Updates anything onscreen that should be redrawn
 ; --- Corrupted ---
-; a, x, y, word_0, lda_y_modable_1_address, sta_x_modable_0_address, sta_x_modable_1_address, byte_1
+; a, x, y, word_0, word_1, sta_x_modable_0_address, sta_x_modable_1_address, byte_1
 redraw subroutine
 	; Redraw map if needed then set it to not need redrawing
 	lda does_map_need_redraw

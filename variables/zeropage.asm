@@ -6,6 +6,7 @@ temp_x ds 1
 temp_y ds 1
 word_0 ds 2
 word_1 ds 2
+word_2 ds 2
 text_color ds 1
 world_background_color ds 1
 world_sprites_visable ds 1

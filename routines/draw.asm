@@ -2,9 +2,9 @@
 
 ; Draws a 2x2 char tile on screen
 ; --- Inputs ---
-; a:                       The tile ID to draw
-; x:                       The drawing offset
-; sta_x_modable_address: The address of the top left char on the screen that should be drawn over
+; a:      The tile ID to draw
+; x:      The drawing offset
+; word_2: The address of the top left char on the screen that should be drawn over
 ; --- Corrupted ---
 ; y, word_0, byte_1
 ; --- Outputs ---
@@ -15,65 +15,97 @@ draw_tile subroutine
 	; Copy chars to screen
 	ldy #0
 	lda (word_0),y
-	jsr sta_x_modable
-	iny
+	pha
+	txa
+	tay
+	pla
+	sta (word_2),y
+	ldy #1
 	inx
 	lda (word_0),y
-	jsr sta_x_modable
+	pha
+	txa
+	tay
+	pla
+	sta (word_2),y
 	; Next row
-	iny
+	ldy #2
 	txa
 	clc
 	adc #39
 	tax
 	lda (word_0),y
-	jsr sta_x_modable
-	iny
+	pha
+	txa
+	tay
+	pla
+	sta (word_2),y
+	ldy #3
 	inx
 	lda (word_0),y
-	jsr sta_x_modable
+	pha
+	txa
+	tay
+	pla
+	sta (word_2),y
 	; Copy colors to screen
-	lda sta_x_modable_address+1
+	lda word_2+1
 	clc
 	adc #>(c64_char_colors-c64_chars)
-	sta sta_x_modable_address+1
+	sta word_2+1
 	;
-	iny
+	ldy #4
 	txa
 	sec
 	sbc #41
 	tax
 	lda (word_0),y
-	jsr sta_x_modable
-	iny
+	pha
+	txa
+	tay
+	pla
+	sta (word_2),y
+	ldy #5
 	inx
 	lda (word_0),y
-	jsr sta_x_modable
+	pha
+	txa
+	tay
+	pla
+	sta (word_2),y
 	; Next row
-	iny
+	ldy #6
 	txa
 	clc
 	adc #39
 	tax
 	lda (word_0),y
-	jsr sta_x_modable
-	iny
+	pha
+	txa
+	tay
+	pla
+	sta (word_2),y
+	ldy #7
 	inx
 	lda (word_0),y
-	jsr sta_x_modable
+	pha
+	txa
+	tay
+	pla
+	sta (word_2),y
 	;
-	lda sta_x_modable_address+1
+	lda word_2+1
 	sec
 	sbc #>(c64_char_colors-c64_chars)
-	sta sta_x_modable_address+1
+	sta word_2+1
 	; Return nothing
 	rts
 
 ; Draws a 4x4 char metatile on screen
 ; --- Inputs ---
-; a:                       The metatile ID to draw
-; x:                       The drawing offset
-; sta_x_modable_address: The address of the top left char on the screen that should be drawn over
+; a:      The metatile ID to draw
+; x:      The drawing offset
+; word_2: The address of the top left char on the screen that should be drawn over
 ; --- Corrupted ---
 ; y, word_0, byte_1
 ; --- Outputs ---
@@ -118,7 +150,7 @@ draw_metatile subroutine
 
 ; Redraws the map
 ; --- Corrupted ---
-; a, x, y, word_0, word_1, sta_x_modable_address, byte_1
+; a, x, y, word_0, word_1, word_2, byte_1
 redraw_map subroutine
 	; Setup for world interrupt
 	lda #((3 | C64_25_ROWS) | %10000000) ; No vertical scroll, 25 rows, screen on, text mode, extended background off
@@ -131,9 +163,9 @@ redraw_map subroutine
 	jsr load_map_data_pointer
 	; Get the locations of the chars and colors that we should copy to for the first row
 	lda #<c64_chars
-	sta sta_x_modable_address
+	sta word_2
 	lda #>c64_chars
-	sta sta_x_modable_address+1
+	sta word_2+1
 	; Load map colors
 	ldy #50
 	lda (word_1),y
@@ -187,13 +219,13 @@ redraw_map subroutine
 	cmp #10
 	bne .row_loop
 	; If we have drawn 10 tiles then move the screen char and color pointers to point one metatile down
-	lda sta_x_modable_address
+	lda word_2
 	clc
 	adc #160
-	sta sta_x_modable_address
-	lda sta_x_modable_address+1
+	sta word_2
+	lda word_2+1
 	adc #0
-	sta sta_x_modable_address+1
+	sta word_2+1
 	; Continue on to draw next row
 	jmp .rows_loop
 ; One all tiles have been drawn
@@ -556,7 +588,7 @@ redraw_entity_position subroutine
 ; --- Inputs ---
 ; x: The entity that we should update the image of
 ; --- Corrupted ---
-; a, sta_x_modable_address, y
+; a, word_2, y
 redraw_entity_image subroutine
 	; Calculate pointer to the sprite shape once loaded
 	txa
@@ -651,7 +683,7 @@ redraw_entity_image subroutine
 
 ; Updates anything onscreen that should be redrawn
 ; --- Corrupted ---
-; a, x, y, word_0, word_1, sta_x_modable_address, byte_1
+; a, x, y, word_0, word_1, word_2, byte_1
 redraw subroutine
 	; Redraw map if needed then set it to not need redrawing
 	lda does_map_need_redraw

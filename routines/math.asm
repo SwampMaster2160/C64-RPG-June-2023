@@ -108,10 +108,6 @@ load_tile_data_pointer subroutine
 	; Return
 	rts
 
-sta_x_modable_0 subroutine
-	byte $9D, 0, 0
-	rts
-
-sta_x_modable_1 subroutine
+sta_x_modable subroutine
 	byte $9D, 0, 0
 	rts

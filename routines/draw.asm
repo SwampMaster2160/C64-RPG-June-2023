@@ -4,8 +4,7 @@
 ; --- Inputs ---
 ; a:                       The tile ID to draw
 ; x:                       The drawing offset
-; sta_x_modable_0_address: The address of the top left char on the screen that should be drawn over
-; sta_x_modable_1_address: The address of the top left char's color on the screen that should be drawn over
+; sta_x_modable_address: The address of the top left char on the screen that should be drawn over
 ; --- Corrupted ---
 ; y, word_0, byte_1
 ; --- Outputs ---
@@ -16,11 +15,11 @@ draw_tile subroutine
 	; Copy chars to screen
 	ldy #0
 	lda (word_0),y
-	jsr sta_x_modable_0
+	jsr sta_x_modable
 	iny
 	inx
 	lda (word_0),y
-	jsr sta_x_modable_0
+	jsr sta_x_modable
 	; Next row
 	iny
 	txa
@@ -28,23 +27,28 @@ draw_tile subroutine
 	adc #39
 	tax
 	lda (word_0),y
-	jsr sta_x_modable_0
+	jsr sta_x_modable
 	iny
 	inx
 	lda (word_0),y
-	jsr sta_x_modable_0
+	jsr sta_x_modable
 	; Copy colors to screen
+	lda sta_x_modable_address+1
+	clc
+	adc #>(c64_char_colors-c64_chars)
+	sta sta_x_modable_address+1
+	;
 	iny
 	txa
 	sec
 	sbc #41
 	tax
 	lda (word_0),y
-	jsr sta_x_modable_1
+	jsr sta_x_modable
 	iny
 	inx
 	lda (word_0),y
-	jsr sta_x_modable_1
+	jsr sta_x_modable
 	; Next row
 	iny
 	txa
@@ -52,11 +56,16 @@ draw_tile subroutine
 	adc #39
 	tax
 	lda (word_0),y
-	jsr sta_x_modable_1
+	jsr sta_x_modable
 	iny
 	inx
 	lda (word_0),y
-	jsr sta_x_modable_1
+	jsr sta_x_modable
+	;
+	lda sta_x_modable_address+1
+	sec
+	sbc #>(c64_char_colors-c64_chars)
+	sta sta_x_modable_address+1
 	; Return nothing
 	rts
 
@@ -64,8 +73,7 @@ draw_tile subroutine
 ; --- Inputs ---
 ; a:                       The metatile ID to draw
 ; x:                       The drawing offset
-; sta_x_modable_0_address: The address of the top left char on the screen that should be drawn over
-; sta_x_modable_1_address: The address of the top left char's color on the screen that should be drawn over
+; sta_x_modable_address: The address of the top left char on the screen that should be drawn over
 ; --- Corrupted ---
 ; y, word_0, byte_1
 ; --- Outputs ---
@@ -110,7 +118,7 @@ draw_metatile subroutine
 
 ; Redraws the map
 ; --- Corrupted ---
-; a, x, y, word_0, word_1, sta_x_modable_0_address, sta_x_modable_1_address, byte_1
+; a, x, y, word_0, word_1, sta_x_modable_address, byte_1
 redraw_map subroutine
 	; Setup for world interrupt
 	lda #((3 | C64_25_ROWS) | %10000000) ; No vertical scroll, 25 rows, screen on, text mode, extended background off
@@ -123,13 +131,9 @@ redraw_map subroutine
 	jsr load_map_data_pointer
 	; Get the locations of the chars and colors that we should copy to for the first row
 	lda #<c64_chars
-	sta sta_x_modable_0_address
+	sta sta_x_modable_address
 	lda #>c64_chars
-	sta sta_x_modable_0_address+1
-	lda #<c64_char_colors
-	sta sta_x_modable_1_address
-	lda #>c64_char_colors
-	sta sta_x_modable_1_address+1
+	sta sta_x_modable_address+1
 	; Load map colors
 	ldy #50
 	lda (word_1),y
@@ -183,20 +187,13 @@ redraw_map subroutine
 	cmp #10
 	bne .row_loop
 	; If we have drawn 10 tiles then move the screen char and color pointers to point one metatile down
-	lda sta_x_modable_0_address
+	lda sta_x_modable_address
 	clc
 	adc #160
-	sta sta_x_modable_0_address
-	lda sta_x_modable_0_address+1
+	sta sta_x_modable_address
+	lda sta_x_modable_address+1
 	adc #0
-	sta sta_x_modable_0_address+1
-	lda sta_x_modable_1_address
-	clc
-	adc #160
-	sta sta_x_modable_1_address
-	lda sta_x_modable_1_address+1
-	adc #0
-	sta sta_x_modable_1_address+1
+	sta sta_x_modable_address+1
 	; Continue on to draw next row
 	jmp .rows_loop
 ; One all tiles have been drawn
@@ -235,78 +232,77 @@ clear_screen subroutine
 
 ; Draws a textbox
 ; --- Inputs ---
-; sta_x_modable_0_address: The address to draw the textbox at
+; word_0: The address to draw the textbox at
 ; text_color:              The color to draw the textbox in
-; x:                       The width of the textbox
-; y:                       The height of the textbox
+; y:                       The width of the textbox
+; x:                       The height of the textbox
 ; --- Corrupted ---
-; sta_x_modable_1_address, a
+; word_1, a
 draw_textbox subroutine
 	; Push x to stack
-	dex
-	txa
+	dey
+	tya
 	pha
 	; Calculate the pointer to the textbox's color area
-	lda sta_x_modable_0_address
-	sta sta_x_modable_1_address
-	lda sta_x_modable_0_address+1
+	lda word_0
+	sta word_1
+	lda word_0+1
 	clc
 	adc #>(c64_char_colors - c64_chars)
-	sta sta_x_modable_1_address+1
+	sta word_1+1
 	; Draw first row
 	jsr draw_textbox_top_chars_row
 	pla
 	pha
-	tax
+	tay
 	jsr draw_textbox_colors_row
 	;
-	dey
+	dex
 .loop
-	dey
+	dex
 	beq .loop_end
 	; Move char and color pointers to the next row
-	lda sta_x_modable_0_address
+	lda word_0
 	clc
 	adc #40
-	sta sta_x_modable_0_address
-	sta sta_x_modable_1_address
-	lda sta_x_modable_0_address+1
+	sta word_0
+	sta word_1
+	lda word_0+1
 	adc #0
-	sta sta_x_modable_0_address+1
+	sta word_0+1
 	clc
 	adc #>(c64_char_colors - c64_chars)
-	sta sta_x_modable_1_address+1
-	; Draw middle rows
+	sta word_1+1
 	pla
 	pha
-	tax
+	tay
 	jsr draw_textbox_middle_chars_row
 	pla
 	pha
-	tax
+	tay
 	jsr draw_textbox_colors_row
 	jmp .loop
 .loop_end
 	; Move char and color pointers to the next row
-	lda sta_x_modable_0_address
+	lda word_0
 	clc
 	adc #40
-	sta sta_x_modable_0_address
-	sta sta_x_modable_1_address
-	lda sta_x_modable_0_address+1
+	sta word_0
+	sta word_1
+	lda word_0+1
 	adc #0
-	sta sta_x_modable_0_address+1
+	sta word_0+1
 	clc
 	adc #>(c64_char_colors - c64_chars)
-	sta sta_x_modable_1_address+1
+	sta word_1+1
 	; Draw last row
 	pla
 	pha
-	tax
+	tay
 	jsr draw_textbox_bottom_chars_row
 	pla
 	pha
-	tax
+	tay
 	jsr draw_textbox_colors_row
 	; Restore stack and return
 	pla
@@ -314,125 +310,125 @@ draw_textbox subroutine
 
 ; Draws the top row of a textbox
 ; --- Inputs ---
-; sta_x_modable_0_address: The address to draw the textbox at
-; x:                       The width of the textbox - 1
+; word_0: The address to draw the textbox at
+; y:      The width of the textbox - 1
 ; --- Corrupted ---
 ; a
 draw_textbox_top_chars_row subroutine
 	; Draw rightmost char
 	lda #GUI_CHAR_LINE_DOWN_LEFT
-	jsr sta_x_modable_0
+	sta (word_0),y
 	; Draw middle chars
 	lda #GUI_CHAR_LINE_HORIZONTAL
 .loop
-	dex
+	dey
 	beq .loop_end
-	jsr sta_x_modable_0
+	sta (word_0),y
 	jmp .loop
 .loop_end
 	; Draw leftmost char
 	lda #GUI_CHAR_LINE_RIGHT_DOWN
-	jsr sta_x_modable_0
+	sta (word_0),y
 	; Return
 	rts
 
 ; Draws a middle row of a textbox
 ; --- Inputs ---
-; sta_x_modable_0_address: The address to draw the textbox at
-; x:                       The width of the textbox - 1
+; word_0: The address to draw the textbox at
+; y:      The width of the textbox - 1
 ; --- Corrupted ---
 ; a
 draw_textbox_middle_chars_row subroutine
 	; Draw rightmost char
 	lda #GUI_CHAR_LINE_VERTICAL
-	jsr sta_x_modable_0
+	sta (word_0),y
 	; Draw middle chars
 	lda '  ; Space
 .loop
-	dex
+	dey
 	beq .loop_end
-	jsr sta_x_modable_0
+	sta (word_0),y
 	jmp .loop
 .loop_end
 	; Draw leftmost char
 	lda #GUI_CHAR_LINE_VERTICAL
-	jsr sta_x_modable_0
+	sta (word_0),y
 	; Return
 	rts
 
 ; Draws the bottom row of a textbox
 ; --- Inputs ---
-; sta_x_modable_0_address: The address to draw the textbox at
-; x:                       The width of the textbox - 1
+; word_0: The address to draw the textbox at
+; y:      The width of the textbox - 1
 ; --- Corrupted ---
 ; a
 draw_textbox_bottom_chars_row subroutine
 	; Draw rightmost char
 	lda #GUI_CHAR_LINE_UP_LEFT
-	jsr sta_x_modable_0
+	sta (word_0),y
 	; Draw middle chars
 	lda #GUI_CHAR_LINE_HORIZONTAL
 .loop
-	dex
+	dey
 	beq .loop_end
-	jsr sta_x_modable_0
+	sta (word_0),y
 	jmp .loop
 .loop_end
 	; Draw leftmost char
 	lda #GUI_CHAR_LINE_UP_RIGHT
-	jsr sta_x_modable_0
+	sta (word_0),y
 	; Return
 	rts
 
 ; Draw a color row of a textbox
 ; --- Inputs ---
-; sta_x_modable_1_address: The address to draw the textbox at
-; x:                       The width of the textbox - 1
+; word_1: The address to draw the textbox at
+; y:      The width of the textbox - 1
 ; --- Corrupted ---
 ; a
 draw_textbox_colors_row subroutine
 	lda text_color
 .loop
-	jsr sta_x_modable_1
-	dex
+	sta (word_1),y
+	dey
 	bmi .loop_end
-	jsr .loop
+	jmp .loop
 .loop_end
 	rts
 
 ; Display all 256 chars in the top left as a 16x16 box
 ; --- Corrupted ---
-; sta_x_modable_0_address, x, a
+; word_0, y, a
 display_all_chars subroutine
-	; Load $0400 into sta_x_modable_address
+	; Load $0400 into word_0
 	lda #<c64_chars
-	sta sta_x_modable_0_address
+	sta word_0
 	lda #>c64_chars
-	sta sta_x_modable_0_address+1
+	sta word_0+1
 	; Start with tile 0
-	ldx #0
+	ldy #0
 .loop
 	; Draw tile
-	txa
-	jsr sta_x_modable_0
+	tya
+	sta (word_0),y
 	; Increment tile count
-	inx
+	iny
 	; Check if we should go to the next row (if the tile id is a multiple of 16)
-	txa
+	tya
 	and #%00001111 ; a %= 16
 	bne .skip_next_row
-	; If so add (40-16) to sta_x_modable's address
-	lda sta_x_modable_0_address
+	; If so add (40-16) to word_0's address
+	lda word_0
 	clc
 	adc #(40-16)
-	sta sta_x_modable_0_address
-	lda sta_x_modable_0_address+1
+	sta word_0
+	lda word_0+1
 	adc #0
-	sta sta_x_modable_0_address+1
+	sta word_0+1
 	; If not then we will skip to here
 .skip_next_row
 	; If the tile number overflows to 0 then we have drawn all tiles so return
-	txa
+	tya
 	bne .loop
 	rts
 
@@ -560,7 +556,7 @@ redraw_entity_position subroutine
 ; --- Inputs ---
 ; x: The entity that we should update the image of
 ; --- Corrupted ---
-; a, sta_x_modable_0_address, y
+; a, sta_x_modable_address, y
 redraw_entity_image subroutine
 	; Calculate pointer to the sprite shape once loaded
 	txa
@@ -573,13 +569,13 @@ redraw_entity_image subroutine
 	clc
 	adc #<sprite_shapes
 	php
-	sta sta_x_modable_0_address
+	sta word_1
 	txa
 	lsr
 	lsr
 	plp
 	adc #>sprite_shapes
-	sta sta_x_modable_0_address+1
+	sta word_1+1
 	; Calculate pointer to the data for the sprite
 	lda entity_discriminants,x
 	asl
@@ -628,19 +624,25 @@ redraw_entity_image subroutine
 	; Copy sprite
 	txa
 	pha
-	ldx #0
-	ldy #0
+	lda #0
+	sta byte_0
+	sta byte_1
 .sprite_copy_loop
+	ldy byte_0
 	lda (word_0),y
-	jsr sta_x_modable_0
-	inx
-	iny
+	ldy byte_1
+	sta (word_1),y
+	inc byte_0
+	inc byte_1
+	ldy byte_0
 	lda (word_0),y
-	jsr sta_x_modable_0
-	inx
-	inx
-	iny
-	cpy #32
+	ldy byte_1
+	sta (word_1),y
+	inc byte_0
+	inc byte_1
+	inc byte_1
+	lda byte_0
+	cmp #32
 	bne .sprite_copy_loop
 	pla
 	tax
@@ -649,7 +651,7 @@ redraw_entity_image subroutine
 
 ; Updates anything onscreen that should be redrawn
 ; --- Corrupted ---
-; a, x, y, word_0, word_1, sta_x_modable_0_address, sta_x_modable_1_address, byte_1
+; a, x, y, word_0, word_1, sta_x_modable_address, byte_1
 redraw subroutine
 	; Redraw map if needed then set it to not need redrawing
 	lda does_map_need_redraw
@@ -705,13 +707,13 @@ redraw_hud subroutine
 	sta does_hud_need_redraw
 	; Text box
 	lda #<(c64_chars+(20*40))
-	sta sta_x_modable_0_address
+	sta word_0
 	lda #>(c64_chars+(20*40))
-	sta sta_x_modable_0_address+1
+	sta word_0+1
 	lda #C64_COLOR_WHITE
 	sta text_color
-	ldx #40
-	ldy #5
+	ldy #40
+	ldx #5
 	jsr draw_textbox
 	; Map name
 	lda #GUI_CHAR_LOCATION_PIN

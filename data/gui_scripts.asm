@@ -13,5 +13,33 @@ newtown_name subroutine
 	byte "Newtown"
 	byte SCRIPT_END
 
+midland_path_name subroutine
+	byte "Midland Path"
+	byte SCRIPT_END
+
+two_islands_path_name subroutine
+	byte "Two Islands Path"
+	byte SCRIPT_END
+
+bayswater_beach_name subroutine
+	byte "Bayswater Beach"
+	byte SCRIPT_END
+
+warf_path_name subroutine
+	byte "Warf Path"
+	byte SCRIPT_END
+
+little_lake_name subroutine
+	byte "Little Lake"
+	byte SCRIPT_END
+
+bayswater_peninsula_name subroutine
+	byte "Bayswater Peninsula"
+	byte SCRIPT_END
+
+twin_warfs_name subroutine
+	byte "Twin Warfs"
+	byte SCRIPT_END
+
 blank_string subroutine
 	byte SCRIPT_END

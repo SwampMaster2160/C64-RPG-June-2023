@@ -264,10 +264,10 @@ clear_screen subroutine
 
 ; Draws a textbox
 ; --- Inputs ---
-; word_0: The address to draw the textbox at
-; text_color:              The color to draw the textbox in
-; y:                       The width of the textbox
-; x:                       The height of the textbox
+; text_cursor_address: The address to draw the textbox at
+; text_color:          The color to draw the textbox in
+; y:                   The width of the textbox
+; x:                   The height of the textbox
 ; --- Corrupted ---
 ; word_1, a
 draw_textbox subroutine
@@ -276,9 +276,9 @@ draw_textbox subroutine
 	tya
 	pha
 	; Calculate the pointer to the textbox's color area
-	lda word_0
+	lda text_cursor_address
 	sta word_1
-	lda word_0+1
+	lda text_cursor_address+1
 	clc
 	adc #>(c64_char_colors - c64_chars)
 	sta word_1+1
@@ -294,14 +294,14 @@ draw_textbox subroutine
 	dex
 	beq .loop_end
 	; Move char and color pointers to the next row
-	lda word_0
+	lda text_cursor_address
 	clc
 	adc #40
-	sta word_0
+	sta text_cursor_address
 	sta word_1
-	lda word_0+1
+	lda text_cursor_address+1
 	adc #0
-	sta word_0+1
+	sta text_cursor_address+1
 	clc
 	adc #>(c64_char_colors - c64_chars)
 	sta word_1+1
@@ -316,14 +316,14 @@ draw_textbox subroutine
 	jmp .loop
 .loop_end
 	; Move char and color pointers to the next row
-	lda word_0
+	lda text_cursor_address
 	clc
 	adc #40
-	sta word_0
+	sta text_cursor_address
 	sta word_1
-	lda word_0+1
+	lda text_cursor_address+1
 	adc #0
-	sta word_0+1
+	sta text_cursor_address+1
 	clc
 	adc #>(c64_char_colors - c64_chars)
 	sta word_1+1
@@ -342,79 +342,79 @@ draw_textbox subroutine
 
 ; Draws the top row of a textbox
 ; --- Inputs ---
-; word_0: The address to draw the textbox at
-; y:      The width of the textbox - 1
+; text_cursor_address: The address to draw the textbox at
+; y:                   The width of the textbox - 1
 ; --- Corrupted ---
 ; a
 draw_textbox_top_chars_row subroutine
 	; Draw rightmost char
 	lda #GUI_CHAR_LINE_DOWN_LEFT
-	sta (word_0),y
+	sta (text_cursor_address),y
 	; Draw middle chars
 	lda #GUI_CHAR_LINE_HORIZONTAL
 .loop
 	dey
 	beq .loop_end
-	sta (word_0),y
+	sta (text_cursor_address),y
 	jmp .loop
 .loop_end
 	; Draw leftmost char
 	lda #GUI_CHAR_LINE_RIGHT_DOWN
-	sta (word_0),y
+	sta (text_cursor_address),y
 	; Return
 	rts
 
 ; Draws a middle row of a textbox
 ; --- Inputs ---
-; word_0: The address to draw the textbox at
-; y:      The width of the textbox - 1
+; text_cursor_address: The address to draw the textbox at
+; y:                   The width of the textbox - 1
 ; --- Corrupted ---
 ; a
 draw_textbox_middle_chars_row subroutine
 	; Draw rightmost char
 	lda #GUI_CHAR_LINE_VERTICAL
-	sta (word_0),y
+	sta (text_cursor_address),y
 	; Draw middle chars
 	lda '  ; Space
 .loop
 	dey
 	beq .loop_end
-	sta (word_0),y
+	sta (text_cursor_address),y
 	jmp .loop
 .loop_end
 	; Draw leftmost char
 	lda #GUI_CHAR_LINE_VERTICAL
-	sta (word_0),y
+	sta (text_cursor_address),y
 	; Return
 	rts
 
 ; Draws the bottom row of a textbox
 ; --- Inputs ---
-; word_0: The address to draw the textbox at
-; y:      The width of the textbox - 1
+; text_cursor_address: The address to draw the textbox at
+; y:                   The width of the textbox - 1
 ; --- Corrupted ---
 ; a
 draw_textbox_bottom_chars_row subroutine
 	; Draw rightmost char
 	lda #GUI_CHAR_LINE_UP_LEFT
-	sta (word_0),y
+	sta (text_cursor_address),y
 	; Draw middle chars
 	lda #GUI_CHAR_LINE_HORIZONTAL
 .loop
 	dey
 	beq .loop_end
-	sta (word_0),y
+	sta (text_cursor_address),y
 	jmp .loop
 .loop_end
 	; Draw leftmost char
 	lda #GUI_CHAR_LINE_UP_RIGHT
-	sta (word_0),y
+	sta (text_cursor_address),y
 	; Return
 	rts
 
 ; Draw a color row of a textbox
 ; --- Inputs ---
-; word_1: The address to draw the textbox at
+; word_1: The address of the row's color ram to color
 ; y:      The width of the textbox - 1
 ; --- Corrupted ---
 ; a
@@ -738,7 +738,7 @@ redraw_hud subroutine
 	lda #0
 	sta does_hud_need_redraw
 	; Text box
-	lda #<(c64_chars+(20*40))
+	/*lda #<(c64_chars+(20*40))
 	sta word_0
 	lda #>(c64_chars+(20*40))
 	sta word_0+1
@@ -751,5 +751,19 @@ redraw_hud subroutine
 	lda #GUI_CHAR_LOCATION_PIN
 	sta c64_chars+21*40+1
 	lda #C64_COLOR_RED
-	sta c64_char_colors+21*40+1
+	sta c64_char_colors+21*40+1*/
+	lda #<(c64_chars+(20*40))
+	sta text_cursor_address
+	lda #>(c64_chars+(20*40))
+	sta text_cursor_address+1
+	lda #C64_COLOR_WHITE
+	sta text_color
+	;ldy #40
+	;ldx #5
+	;jsr draw_textbox
+	lda <#draw_hud
+	sta script_address
+	lda >#draw_hud
+	sta script_address+1
+	jsr execute_feature_script
 	rts

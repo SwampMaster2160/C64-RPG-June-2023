@@ -1,3 +1,8 @@
+	newEnum
+	enumVariant SCRIPT_END           ; End of script
+	enumVariant SCRIPT_DRAW_TEXT_BOX ; Draw a text box
+	enumVariant SCRIPT_SPAWN_ENTITY  ; Spawn an entity
+
 ; GUI Chars
 	enumFrom $80
 	enumVariant GUI_CHAR_LINE_NONE

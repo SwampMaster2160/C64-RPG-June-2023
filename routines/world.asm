@@ -22,11 +22,11 @@ load_map subroutine
 	jsr load_map_data_pointer
 	ldy #56
 	lda (word_1),y
-	sta word_0
+	sta script_address
 	iny
 	lda (word_1),y
-	sta word_0+1
-	jsr execute_map_feature_script
+	sta script_address+1
+	jsr execute_feature_script
 	; Set HUD to need redrawing
 	lda #1
 	sta does_hud_need_redraw
@@ -40,42 +40,6 @@ load_map subroutine
 	pla
 	tay
 	rts
-
-; Execute the a map feature
-; --- Inputs ---
-; a:                       The map ID to load
-; word_0: A pointer to the map script
-; --- Corrupted ---
-; a, x, y
-execute_map_feature_script subroutine
-	ldy #0
-.loop
-	lda (word_0),y
-	cmp #MAP_FEATURE_END
-	bne .skip_end
-	rts
-.skip_end
-	cmp #MAP_FEATURE_ENTITY
-	bne .skip_entity
-	iny
-	lda (word_0),y
-	tax
-	iny
-	lda (word_0),y
-	sta temp_x
-	iny
-	lda (word_0),y
-	sta temp_y
-	iny
-	tya
-	pha
-	txa
-	jsr spawn_entity
-	pla
-	tay
-	jmp .loop
-.skip_entity
-	jmp .loop
 
 ; Clears all entities by setting them to be none except the player entity in slot 0
 ; --- Corrupted ---

@@ -35,6 +35,7 @@ basic_program subroutine
 	include "routines/io.asm"
 	include "routines/world.asm"
 	include "routines/entity_tick.asm"
+	include "routines/script.asm"
 
 	include "data/tiles.asm"
 	include "data/metatiles.asm"
@@ -42,6 +43,7 @@ basic_program subroutine
 	include "data/entities.asm"
 	include "data/entity_sprites.asm"
 	include "data/map_feature_scripts.asm"
+	include "data/gui_scripts.asm"
 
 * = $2000
 	include "data/world_chars.asm"

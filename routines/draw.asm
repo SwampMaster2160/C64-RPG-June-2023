@@ -737,3 +737,15 @@ redraw subroutine
 .skip_hud_redraw
 	; Return
 	rts
+
+draw_map_name subroutine
+	;inc c64_border_color
+	jsr load_map_data_pointer
+	ldy #58
+	lda (word_1),y
+	sta script_address
+	iny
+	lda (word_1),y
+	sta script_address+1
+	jsr execute_script
+	rts

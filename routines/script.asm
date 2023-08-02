@@ -46,6 +46,31 @@ execute_script subroutine
 	ldy #1
 	jmp .loop
 .skip_char_draw
+	; Call machine code subroutine
+	cmp #SCRIPT_CALL_MACHINE_SUBROUTINE
+	bne .skip_call_machine_subroutine
+	lda script_address
+	pha
+	lda script_address+1
+	pha
+	lda (script_address),y
+	sta word_1
+	iny
+	lda (script_address),y
+	sta word_1+1
+	lda #>(.call_machine_code_subroutine_end-1)
+	pha
+	lda #<(.call_machine_code_subroutine_end-1)
+	pha
+	jmp (word_1)
+.call_machine_code_subroutine_end
+	pla
+	sta script_address+1
+	pla
+	sta script_address
+	ldy #3
+	jmp .loop
+.skip_call_machine_subroutine
 	; Spawn entity opcode
 	cmp #SCRIPT_SPAWN_ENTITY
 	bne .skip_entity

@@ -727,43 +727,13 @@ redraw subroutine
 	; Redraw HUD
 	lda does_hud_need_redraw
 	beq .skip_hud_redraw
-	jsr redraw_hud
-.skip_hud_redraw
-	; Return
-	rts
-
-; Redraw the HUD at the bottom of the screen
-redraw_hud subroutine
-	; Set hud to no longer need redrawing
 	lda #0
 	sta does_hud_need_redraw
-	; Text box
-	/*lda #<(c64_chars+(20*40))
-	sta word_0
-	lda #>(c64_chars+(20*40))
-	sta word_0+1
-	lda #C64_COLOR_WHITE
-	sta text_color
-	ldy #40
-	ldx #5
-	jsr draw_textbox
-	; Map name
-	lda #GUI_CHAR_LOCATION_PIN
-	sta c64_chars+21*40+1
-	lda #C64_COLOR_RED
-	sta c64_char_colors+21*40+1*/
-	lda #<(c64_chars+(20*40))
-	sta text_cursor_address
-	lda #>(c64_chars+(20*40))
-	sta text_cursor_address+1
-	lda #C64_COLOR_WHITE
-	sta text_color
-	;ldy #40
-	;ldx #5
-	;jsr draw_textbox
 	lda <#draw_hud
 	sta script_address
 	lda >#draw_hud
 	sta script_address+1
-	jsr execute_feature_script
+	jsr execute_script
+.skip_hud_redraw
+	; Return
 	rts

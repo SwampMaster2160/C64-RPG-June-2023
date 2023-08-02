@@ -3,15 +3,50 @@
 ; script_address: A pointer to the map script
 ; --- Corrupted ---
 ; a, x, y, script_address
-execute_feature_script subroutine
+execute_script subroutine
 	ldy #0
 .loop
+	; Increment script_address by y
+	tya
+	clc
+	adc script_address
+	sta script_address
+	lda script_address+1
+	sta script_address+1
+	ldy #0
+	; Get opcode
 	lda (script_address),y
 	iny
+	; Script end opcode
 	cmp #SCRIPT_END
 	bne .skip_end
 	rts
 .skip_end
+	; Draw char
+	cmp #32
+	bcc .skip_char_draw
+	ldy #0
+	sta (text_cursor_address),y
+	lda text_cursor_address+1
+	clc
+	adc #>(c64_char_colors-c64_chars)
+	sta text_cursor_address+1
+	lda text_color
+	ldy #0
+	sta (text_cursor_address),y
+	lda text_cursor_address
+	clc
+	adc #1
+	sta text_cursor_address
+	lda text_cursor_address+1
+	adc #0
+	sec
+	sbc #>(c64_char_colors-c64_chars)
+	sta text_cursor_address+1
+	ldy #1
+	jmp .loop
+.skip_char_draw
+	; Spawn entity opcode
 	cmp #SCRIPT_SPAWN_ENTITY
 	bne .skip_entity
 	lda (script_address),y
@@ -31,7 +66,43 @@ execute_feature_script subroutine
 	tay
 	jmp .loop
 .skip_entity
-	cmp #SCRIPT_DRAW_TEXT_BOX
+	; Draw textbox
+	cmp #SCRIPT_DRAW_TEXTBOX
 	bne .skip_text_box
+	lda (script_address),y
+	pha
+	iny
+	lda (script_address),y
+	tax
+	pla
+	tay
+	jsr draw_textbox
+	ldy #3
+	jmp .loop
 .skip_text_box
+	; Change text color
+	cmp #SCRIPT_CHANGE_TEXT_COLOR
+	bne .skip_color_change
+	lda (script_address),y
+	iny
+	sta text_color
+	jmp .loop
+.skip_color_change
+	; Change text cursor pointer
+	pha
+	and #%11111100
+	cmp #SCRIPT_CHANGE_TEXT_CURSOR_POINTER
+	bne .skip_change_text_cursor_pointer
+	pla
+	and #%00000011
+	clc
+	adc #>c64_chars
+	sta text_cursor_address+1
+	lda (script_address),y
+	iny
+	sta text_cursor_address
+	jmp .loop
+.skip_change_text_cursor_pointer
+	pla
+	; Next instruction
 	jmp .loop

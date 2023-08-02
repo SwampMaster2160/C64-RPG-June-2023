@@ -26,7 +26,7 @@ load_map subroutine
 	iny
 	lda (word_1),y
 	sta script_address+1
-	jsr execute_feature_script
+	jsr execute_script
 	; Set HUD to need redrawing
 	lda #1
 	sta does_hud_need_redraw

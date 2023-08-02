@@ -1,7 +1,11 @@
 	newEnum
-	enumVariant SCRIPT_END           ; End of script
-	enumVariant SCRIPT_DRAW_TEXT_BOX ; Draw a text box
-	enumVariant SCRIPT_SPAWN_ENTITY  ; Spawn an entity
+	enumVariant SCRIPT_END                        ; End of script
+	enumVariant SCRIPT_DRAW_TEXTBOX               ; Draw a text box
+	enumVariant SCRIPT_CHANGE_TEXT_COLOR          ; Change text color
+	enumFrom 4
+	enumVariant SCRIPT_CHANGE_TEXT_CURSOR_POINTER ; Change the text cursor pointer
+	enumFrom SCRIPT_CHANGE_TEXT_CURSOR_POINTER+4
+	enumVariant SCRIPT_SPAWN_ENTITY               ; Spawn an entity
 
 ; GUI Chars
 	enumFrom $80

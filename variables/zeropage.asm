@@ -26,3 +26,6 @@ is_action_key_pressed ds 1
 does_hud_need_redraw ds 1
 text_cursor_address ds 2
 script_address ds 2
+tile_event_discriminants ds MAX_TILE_EVENTS
+tile_event_x_positions ds MAX_TILE_EVENTS
+tile_event_y_positions ds MAX_TILE_EVENTS

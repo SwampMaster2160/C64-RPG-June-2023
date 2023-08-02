@@ -15,6 +15,7 @@ load_map subroutine
 	lda temp_y
 	pha
 	jsr clear_entities
+	jsr clear_tile_events
 	; Set the map to need redrawing
 	lda #1
 	sta does_map_need_redraw
@@ -442,5 +443,39 @@ world_tick subroutine
 	inx
 	cpx #8
 	bne .entity_tick_loop
+	; Return
+	rts
+
+; Clears all tile events, setting them to have #TILE_EVENT_NONE as a discriminant
+; --- Corrupted ---
+; a, x
+clear_tile_events subroutine
+	ldx #MAX_TILE_EVENTS - 1
+	lda #TILE_EVENT_NONE
+.loop
+	sta tile_event_discriminants,x
+	dex
+	bpl .loop
+	rts
+
+; Spawns a tile event, placing it in the lowest indexed slot that is clear
+; --- Inputs ---
+; a:                The tile event discriminant
+; (temp_x, temp_y): The pos to spawn the entity at
+; --- Corrupted ---
+; a, x, y
+spawn_tile_event subroutine
+	; Search for an empty slot and load empty slot index into x
+	ldx #$FF
+.find_empty_slot_loop
+	inx
+	ldy tile_event_discriminants,x
+	bne .find_empty_slot_loop ; TILE_EVENT_NONE is 0
+	; Spawn entity
+	sta tile_event_discriminants,x
+	lda temp_x
+	sta tile_event_x_positions,x
+	lda temp_y
+	sta tile_event_y_positions,x
 	; Return
 	rts

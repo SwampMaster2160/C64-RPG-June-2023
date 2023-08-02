@@ -6,6 +6,7 @@
 	enumVariant SCRIPT_CHANGE_TEXT_CURSOR_POINTER ; Change the text cursor pointer
 	enumFrom SCRIPT_CHANGE_TEXT_CURSOR_POINTER+4
 	enumVariant SCRIPT_SPAWN_ENTITY               ; Spawn an entity
+	enumVariant SCRIPT_SPAWN_TILE_EVENT           ; Spawn a tile event
 
 ; GUI Chars
 	enumFrom $80

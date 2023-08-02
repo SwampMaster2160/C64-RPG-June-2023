@@ -6,12 +6,13 @@
 execute_script subroutine
 	ldy #0
 .loop
-	; Increment script_address by y
+	; Increment script_address by y and set y to 0
 	tya
 	clc
 	adc script_address
 	sta script_address
 	lda script_address+1
+	adc #0
 	sta script_address+1
 	ldy #0
 	; Get opcode
@@ -27,21 +28,21 @@ execute_script subroutine
 	bcc .skip_char_draw
 	ldy #0
 	sta (text_cursor_address),y
+	lda text_cursor_address
+	sta word_1
 	lda text_cursor_address+1
 	clc
 	adc #>(c64_char_colors-c64_chars)
-	sta text_cursor_address+1
+	sta word_1+1
 	lda text_color
 	ldy #0
-	sta (text_cursor_address),y
+	sta (word_1),y
 	lda text_cursor_address
 	clc
 	adc #1
 	sta text_cursor_address
 	lda text_cursor_address+1
 	adc #0
-	sec
-	sbc #>(c64_char_colors-c64_chars)
 	sta text_cursor_address+1
 	ldy #1
 	jmp .loop
@@ -91,6 +92,26 @@ execute_script subroutine
 	tay
 	jmp .loop
 .skip_entity
+	; Spawn tile event opcode
+	cmp #SCRIPT_SPAWN_TILE_EVENT
+	bne .skip_tile_event
+	lda (script_address),y
+	tax
+	iny
+	lda (script_address),y
+	sta temp_x
+	iny
+	lda (script_address),y
+	sta temp_y
+	iny
+	tya
+	pha
+	txa
+	jsr spawn_tile_event
+	pla
+	tay
+	jmp .loop
+.skip_tile_event
 	; Draw textbox
 	cmp #SCRIPT_DRAW_TEXTBOX
 	bne .skip_text_box

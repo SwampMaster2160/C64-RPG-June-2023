@@ -189,6 +189,28 @@ is_onscreen_tile_clear subroutine
 	lda #TILE_MOVEMENT_WALL
 	rts
 
+; Called whenever an entity finnishes walking from a tile to another and lands on a tile
+; --- Inputs ---
+; x: The index of the entity
+; --- Corrupted ---
+; a, y
+entity_lands_on_tile subroutine
+	; Check which tile events the entity has landed on a tile
+	ldy #$FF
+.next_tile_event
+	iny
+	cpy #MAX_TILE_EVENTS
+	beq .tile_event_loop_end
+	; Skip null tile events
+	lda tile_event_discriminants,y
+	beq .next_tile_event
+	; Skip if player X is not on the tile event
+	; Next tile event
+	jmp .next_tile_event
+.tile_event_loop_end
+	; Return
+	rts
+
 ; Entity tick
 ; --- Inputs ---
 ; x: The index of the entity
@@ -204,6 +226,11 @@ entity_tick subroutine
 	sbc #%00000100
 	ora #ENTITY_NEEDS_REDRAW
 	sta entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+	and #%00111100
+	beq .landing_on_tile
+	rts
+.landing_on_tile
+	jsr entity_lands_on_tile
 	rts
 .skip_steping_forward
 	; Call the entities tick subroutine

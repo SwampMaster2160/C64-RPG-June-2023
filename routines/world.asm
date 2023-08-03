@@ -266,7 +266,39 @@ entity_lands_on_tile subroutine
 	cmp #0
 	beq .next_tile_event
 	; If we are on the tile event
-	inc c64_chars
+	lda tile_event_discriminants,y
+	asl
+	asl
+	clc
+	adc #<tile_events
+	sta word_0
+	php
+	lda tile_event_discriminants,y
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	plp
+	adc #>tile_events
+	sta word_0+1
+	tya
+	pha
+	ldy #0
+	lda (word_0),y
+	sta word_1
+	iny
+	lda (word_0),y
+	sta word_1+1
+	pla
+	tay
+	lda #>(.tile_event_subroutine_end-1)
+	pha
+	lda #<(.tile_event_subroutine_end-1)
+	pha
+	jmp (word_1)
+.tile_event_subroutine_end
 	; Next tile event
 	jmp .next_tile_event
 .tile_event_loop_end

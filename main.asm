@@ -36,6 +36,7 @@ basic_program subroutine
 	include "routines/world.asm"
 	include "routines/entity_tick.asm"
 	include "routines/script.asm"
+	include "routines/tile_events_steped_on.asm"
 
 	include "data/tiles.asm"
 	include "data/metatiles.asm"
@@ -44,6 +45,7 @@ basic_program subroutine
 	include "data/entity_sprites.asm"
 	include "data/map_feature_scripts.asm"
 	include "data/gui_scripts.asm"
+	include "data/tile_events.asm"
 
 * = $2000
 	include "data/world_chars.asm"

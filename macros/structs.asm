@@ -12,3 +12,8 @@
 	byte {1}, {2}, {3}, {4}, {5}, 0
 	word {6}
 	endm
+
+	; Start x, start y, end x, end y
+	mac tileEventPos
+	byte {1} | (({3} - {1}) << 5), {2} | ({4} << 4)
+	endm

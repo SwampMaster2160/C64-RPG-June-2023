@@ -189,11 +189,64 @@ is_onscreen_tile_clear subroutine
 	lda #TILE_MOVEMENT_WALL
 	rts
 
+; Check if a position is inside a event script's area
+; --- Inputs ---
+; y:                The index of the event script
+; (temp_x, temp_y): The position to check
+; --- Outputs ---
+; a: Is the pos inside the script area (bool)
+is_pos_on_tile_event subroutine
+	; Return false if entity X is not on the tile event
+	lda tile_event_x_positions,y
+	cmp #$FF
+	beq .entity_does_x_overlap
+	and #%00011111
+	sta byte_0
+	sec
+	sbc #1
+	cmp temp_x
+	bpl .not_on_tile_event
+	lda tile_event_x_positions,y
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	clc
+	adc byte_0
+	cmp temp_x
+	bmi .not_on_tile_event
+.entity_does_x_overlap
+	; Return false if entity Y is not on the tile event
+	lda tile_event_y_positions,y
+	cmp #$FF
+	beq .entity_does_y_overlap
+	and #%00001111
+	sec
+	sbc #1
+	cmp temp_y
+	bpl .not_on_tile_event
+	lda tile_event_y_positions,y
+	lsr
+	lsr
+	lsr
+	lsr
+	cmp temp_y
+	bmi .not_on_tile_event
+.entity_does_y_overlap
+	; Return true
+	lda #1
+	rts
+.not_on_tile_event
+	; Return false
+	lda #0
+	rts
+
 ; Called whenever an entity finnishes walking from a tile to another and lands on a tile
 ; --- Inputs ---
 ; x: The index of the entity
 ; --- Corrupted ---
-; a, y
+; a, y, temp_x, temp_y
 entity_lands_on_tile subroutine
 	; Check which tile events the entity has landed on a tile
 	ldy #$FF
@@ -204,7 +257,16 @@ entity_lands_on_tile subroutine
 	; Skip null tile events
 	lda tile_event_discriminants,y
 	beq .next_tile_event
-	; Skip if player X is not on the tile event
+	; Is the entity standing on the tile event? Skip if not.
+	lda entity_x_positions,x
+	sta temp_x
+	lda entity_y_positions,x
+	sta temp_y
+	jsr is_pos_on_tile_event
+	cmp #0
+	beq .next_tile_event
+	; If we are on the tile event
+	inc c64_chars
 	; Next tile event
 	jmp .next_tile_event
 .tile_event_loop_end

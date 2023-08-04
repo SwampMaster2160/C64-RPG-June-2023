@@ -43,3 +43,9 @@ bayswater_beach_6_map_feature_script subroutine
 warf_path_map_feature_script subroutine
 	byte SCRIPT_SPAWN_ENTITY, ENTITY_BLOCK_HORIZONTAL, 9, 0
 	byte SCRIPT_END
+
+newtown_house_0_map_feature_script subroutine
+	byte SCRIPT_SPAWN_TILE_EVENT, TILE_EVENT_WARP_DOOR_INSIDE
+	tileEventPos 8, 10, 9, 10
+	byte 3, MAP_NEWTOWN, 0, 4
+	byte SCRIPT_END

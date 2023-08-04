@@ -315,7 +315,63 @@ entity_lands_on_tile subroutine
 	; Return
 	rts
 
+; Called whenever an entity trys to walk to a tile, executes map scripts on said tile
+; --- Inputs ---
+; x:                The index of the entity
+; (temp_x, temp_y): The location the player is trying to walk to
+; --- Corrupted ---
+; a, y, word_0, word_2
 do_tile_events_looked_at subroutine
+	ldy #$FF
+.next_tile_event
+	iny
+	cpy #MAX_TILE_EVENTS
+	beq .tile_event_loop_end
+	; Skip null tile events
+	lda tile_event_discriminants,y
+	beq .next_tile_event
+	; Does entity want to move to tile event tile event? Skip if not.
+	jsr is_pos_on_tile_event
+	cmp #0
+	beq .next_tile_event
+	; If we are on the tile event
+	lda tile_event_discriminants,y
+	asl
+	asl
+	clc
+	adc #<tile_events
+	sta word_0
+	php
+	lda tile_event_discriminants,y
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	plp
+	adc #>tile_events
+	sta word_0+1
+	tya
+	pha
+	ldy #2
+	lda (word_0),y
+	sta word_2
+	iny
+	lda (word_0),y
+	sta word_2+1
+	pla
+	tay
+	lda #>(.tile_event_subroutine_end-1)
+	pha
+	lda #<(.tile_event_subroutine_end-1)
+	pha
+	jmp (word_2)
+.tile_event_subroutine_end
+	; Next tile event
+	jmp .next_tile_event
+.tile_event_loop_end
+	; Return
 	rts
 
 ; Entity tick

@@ -107,3 +107,14 @@ load_tile_data_pointer subroutine
 	sta word_0+1
 	; Return
 	rts
+
+; Allocates memory that gets freed when a new map gets loaded
+; --- Inputs ---
+; a: The amount of bytes to allocate
+; --- Corrupted ---
+; a
+map_heap_allocate subroutine
+	clc
+	adc map_heap_size
+	sta map_heap_size
+	rts

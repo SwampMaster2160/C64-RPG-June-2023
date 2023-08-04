@@ -95,21 +95,7 @@ execute_script subroutine
 	; Spawn tile event opcode
 	cmp #SCRIPT_SPAWN_TILE_EVENT
 	bne .skip_tile_event
-	lda (script_address),y
-	tax
-	iny
-	lda (script_address),y
-	sta temp_x
-	iny
-	lda (script_address),y
-	sta temp_y
-	iny
-	tya
-	pha
-	txa
 	jsr spawn_tile_event
-	pla
-	tay
 	jmp .loop
 .skip_tile_event
 	; Draw textbox

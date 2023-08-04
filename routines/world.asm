@@ -1,11 +1,10 @@
 ; Loads a map
 ; --- Inputs ---
-; a: The map ID to load
+; current_map: The map ID to load
 ; --- Corrupted ---
 ; a, word_1, word_0
 load_map subroutine
 	; Set the current map id and clear non-player entities
-	sta current_map
 	tya
 	pha
 	txa
@@ -16,7 +15,11 @@ load_map subroutine
 	pha
 	jsr clear_entities
 	jsr clear_tile_events
-	; Set the map to need redrawing
+	lda #0
+	sta map_heap_size
+	; Set the map to need redrawing but not need reloading
+	lda #0
+	sta does_map_need_reload
 	lda #1
 	sta does_map_need_redraw
 	; Map features
@@ -408,7 +411,9 @@ entity_tick subroutine
 	; Try walk if the entity should walk
 	; Skip if the entity does not want to walk
 	cpy #ENTITY_TICK_RETURN_TRY_WALK
-	bne .skip_walk
+	beq .do_walk
+	rts
+.do_walk
 	; If the entity wants to walk off the map then warp to the map connected to that side if it is a player, otherwise do not let the entity walk offscreen.
 	lda temp_x
 	cmp #$FF
@@ -420,7 +425,10 @@ entity_tick subroutine
 	sta temp_x
 	ldy #55
 	lda (word_1),y
-	jsr load_map
+	sta current_map
+	lda #1
+	sta does_map_need_reload
+	jmp .can_walk
 .skip_walk_left_off_map
 	lda temp_x
 	cmp #20
@@ -432,7 +440,10 @@ entity_tick subroutine
 	sta temp_x
 	ldy #53
 	lda (word_1),y
-	jsr load_map
+	sta current_map
+	lda #1
+	sta does_map_need_reload
+	jmp .can_walk
 .skip_walk_right_off_map
 	lda temp_y
 	cmp #$FF
@@ -444,7 +455,10 @@ entity_tick subroutine
 	sta temp_y
 	ldy #52
 	lda (word_1),y
-	jsr load_map
+	sta current_map
+	lda #1
+	sta does_map_need_reload
+	jmp .can_walk
 .skip_walk_up_off_map
 	lda temp_y
 	cmp #10
@@ -456,7 +470,10 @@ entity_tick subroutine
 	sta temp_y
 	ldy #54
 	lda (word_1),y
-	jsr load_map
+	sta current_map
+	lda #1
+	sta does_map_need_reload
+	jmp .can_walk
 .skip_walk_down_off_map
 	; If the entity is walking onto a tile that is onscreen then check that it can do so
 	jsr is_onscreen_tile_clear
@@ -564,6 +581,11 @@ world_tick subroutine
 	inx
 	cpx #8
 	bne .entity_tick_loop
+	; Reload map if needed
+	lda does_map_need_reload
+	beq .map_does_not_need_reloading
+	jsr load_map
+.map_does_not_need_reloading
 	; Return
 	rts
 
@@ -579,24 +601,51 @@ clear_tile_events subroutine
 	bpl .loop
 	rts
 
-; Spawns a tile event, placing it in the lowest indexed slot that is clear
-; --- Inputs ---
-; a:                The tile event discriminant
-; (temp_x, temp_y): The pos to spawn the entity at
+; Spawns a tile event, placing it in the lowest indexed slot that is clear, the entity is loaded from a script
 ; --- Corrupted ---
-; a, x, y
+; a, x
 spawn_tile_event subroutine
 	; Search for an empty slot and load empty slot index into x
 	ldx #$FF
 .find_empty_slot_loop
 	inx
-	ldy tile_event_discriminants,x
+	lda tile_event_discriminants,x
 	bne .find_empty_slot_loop ; TILE_EVENT_NONE is 0
 	; Spawn entity
+	lda (script_address),y
+	iny
 	sta tile_event_discriminants,x
-	lda temp_x
+	lda (script_address),y
+	iny
 	sta tile_event_x_positions,x
-	lda temp_y
+	lda (script_address),y
+	iny
 	sta tile_event_y_positions,x
+	lda map_heap_size
+	sta tile_event_extra_bytes,x
+	tax
+	lda (script_address),y
+	sta byte_0
+	iny
+	jsr map_heap_allocate
+	; Increment script_address by y and set y to 0
+	tya
+	clc
+	adc script_address
+	sta script_address
+	lda script_address+1
+	adc #0
+	sta script_address+1
+	ldy #0
+	; Copy extra data
+.copy_loop
+	cpy byte_0
+	beq .copy_loop_end
+	lda (script_address),y
+	sta map_heap,x
+	iny
+	inx
+	jmp .copy_loop
+.copy_loop_end
 	; Return
 	rts

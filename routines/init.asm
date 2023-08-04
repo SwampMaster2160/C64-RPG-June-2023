@@ -79,6 +79,7 @@ init subroutine
 
 	jsr init_player
 	lda #MAP_NEWTOWN
+	sta current_map
 	jsr load_map
 	jsr get_keys_pressed
 	lda #1

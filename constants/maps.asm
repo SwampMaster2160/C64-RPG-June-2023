@@ -23,3 +23,4 @@
 	enumVariant MAP_LITTLE_LAKE
 	enumVariant MAP_BAYSWATER_PENINSULA
 	enumVariant MAP_TWIN_WARFS_WEST
+	enumVariant MAP_NEWTOWN_HOUSE_0

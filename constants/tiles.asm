@@ -33,3 +33,7 @@
 	enumVariant TILE_BOARDWALK_TOP
 	enumVariant TILE_BOARDWALK_BOTTOM
 	enumVariant TILE_ROCKS
+	enumVariant TILE_INSIDE_WALL
+	enumVariant TILE_INSIDE_FLOOR
+	enumVariant TILE_MAT_RED_LEFT
+	enumVariant TILE_MAT_RED_RIGHT

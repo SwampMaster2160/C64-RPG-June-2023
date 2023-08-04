@@ -60,3 +60,12 @@ world_chars subroutine
 	byte 238, 187, 235, 187, 238, 251, 190, 239 ; Rocks top right
 	byte 250, 238, 234, 235, 190, 186, 239, 186 ; Rocks bottom left
 	byte 174, 175, 186, 175, 174, 187, 238, 187 ; Rocks bottom right
+
+	byte  86, 170, 101, 170,  86, 170, 101, 170 ; Inside wall
+	byte  85, 106,  85, 106,  85, 106,  85, 106 ; Inside floor
+	byte 255, 213, 221, 215, 221, 215, 221, 215 ; Mat top left
+	byte 221, 215, 221, 215, 221, 215, 213, 255 ; Mat bottom left
+	byte 255,  85, 221, 119, 221, 119, 221, 119 ; Mat top
+	byte 221, 119, 221, 119, 221, 119,  85, 255 ; Mat bottom
+	byte 255,  87, 215, 119, 215, 119, 215, 119 ; Mat top right
+	byte 215, 119, 215, 119, 215, 119,  87, 255 ; Mat bottom right

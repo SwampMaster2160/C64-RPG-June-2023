@@ -162,8 +162,15 @@ is_onscreen_tile_clear subroutine
 	jsr get_tile
 	ldy #4
 	jsr get_tile_high_nibble
-	cmp #TILE_MOVEMENT_CLEAR
+	cmp #TILE_MOVEMENT_WALL
+	beq .not_clear
+	; Player only tiles
+	cmp #TILE_MOVEMENT_PLAYER_ONLY
+	bne .skip_player_only_movment
+	lda entity_discriminants,x
+	cmp #ENTITY_PLAYER
 	bne .not_clear
+.skip_player_only_movment
 	; Collision with other entities
 	; Loop through all entities
 	ldy #8
@@ -420,12 +427,15 @@ entity_tick subroutine
 	bne .skip_walk_left_off_map
 	lda entity_discriminants,x
 	cmp #ENTITY_PLAYER
-	bne .skip_walk
-	lda #19
-	sta temp_x
+	beq .skip_return_0
+	rts
+.skip_return_0
 	ldy #55
 	lda (word_1),y
+	beq .skip_walk
 	sta current_map
+	lda #19
+	sta temp_x
 	lda #1
 	sta does_map_need_reload
 	jmp .can_walk
@@ -436,11 +446,12 @@ entity_tick subroutine
 	lda entity_discriminants,x
 	cmp #ENTITY_PLAYER
 	bne .skip_walk
-	lda #0
-	sta temp_x
 	ldy #53
 	lda (word_1),y
+	beq .skip_walk
 	sta current_map
+	lda #0
+	sta temp_x
 	lda #1
 	sta does_map_need_reload
 	jmp .can_walk
@@ -451,11 +462,12 @@ entity_tick subroutine
 	lda entity_discriminants,x
 	cmp #ENTITY_PLAYER
 	bne .skip_walk
-	lda #9
-	sta temp_y
 	ldy #52
 	lda (word_1),y
+	beq .skip_walk
 	sta current_map
+	lda #9
+	sta temp_y
 	lda #1
 	sta does_map_need_reload
 	jmp .can_walk
@@ -466,11 +478,12 @@ entity_tick subroutine
 	lda entity_discriminants,x
 	cmp #ENTITY_PLAYER
 	bne .skip_walk
-	lda #0
-	sta temp_y
 	ldy #54
 	lda (word_1),y
+	beq .skip_walk
 	sta current_map
+	lda #0
+	sta temp_y
 	lda #1
 	sta does_map_need_reload
 	jmp .can_walk

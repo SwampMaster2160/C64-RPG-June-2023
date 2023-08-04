@@ -4,8 +4,8 @@ blank_map_feature_script subroutine
 newtown_map_feature_script subroutine
 	byte SCRIPT_SPAWN_ENTITY, ENTITY_TEST, 16, 5
 	byte SCRIPT_SPAWN_TILE_EVENT, TILE_EVENT_WARP_DOOR_OUTSIDE
-	tileEventPos 0, 4, 0, 4;5, 4, 7, 5
-	byte 3, MAP_LITTLE_LAKE, 2, 5
+	tileEventPos 0, 3, 0, 3
+	byte 3, MAP_NEWTOWN_HOUSE_0, 8, 9
 	byte SCRIPT_END
 
 midland_path_1_map_feature_script subroutine

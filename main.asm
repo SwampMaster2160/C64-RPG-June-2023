@@ -37,6 +37,7 @@ basic_program subroutine
 	include "routines/entity_tick.asm"
 	include "routines/script.asm"
 	include "routines/tile_events_steped_on.asm"
+	include "routines/tile_events_try_walk_towards.asm"
 
 	include "data/tiles.asm"
 	include "data/metatiles.asm"

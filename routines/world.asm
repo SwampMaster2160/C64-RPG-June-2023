@@ -315,6 +315,9 @@ entity_lands_on_tile subroutine
 	; Return
 	rts
 
+do_tile_events_looked_at subroutine
+	rts
+
 ; Entity tick
 ; --- Inputs ---
 ; x: The index of the entity
@@ -421,6 +424,8 @@ entity_tick subroutine
 	beq .do_walk
 	rts
 .do_walk
+	; Call tile events that should be called when the player thys to walk towards them
+	jsr do_tile_events_looked_at
 	; If the entity wants to walk off the map then warp to the map connected to that side if it is a player, otherwise do not let the entity walk offscreen.
 	lda temp_x
 	cmp #$FF

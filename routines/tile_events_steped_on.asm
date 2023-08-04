@@ -1,6 +1,9 @@
 ; x: Entity
 ; y: Tile event
 
+dummy_steped_on
+	rts
+
 door_outside_warp_tile_event_steped_on subroutine
 	tya
 	pha

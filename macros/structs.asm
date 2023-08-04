@@ -19,6 +19,5 @@
 	endm
 
 	mac tileEventData
-	word {1}
-	byte 0, 0
+	word {1}, {2}
 	endm

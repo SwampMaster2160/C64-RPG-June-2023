@@ -3,9 +3,19 @@ blank_map_feature_script subroutine
 
 newtown_map_feature_script subroutine
 	byte SCRIPT_SPAWN_ENTITY, ENTITY_TEST, 16, 5
+
 	byte SCRIPT_SPAWN_TILE_EVENT, TILE_EVENT_WARP_DOOR_OUTSIDE
 	tileEventPos 0, 3, 0, 3
 	byte 3, MAP_NEWTOWN_HOUSE_0, 8, 9
+
+	byte SCRIPT_SPAWN_TILE_EVENT, TILE_EVENT_WARP_DOOR_OUTSIDE
+	tileEventPos 4, 3, 4, 3
+	byte 3, MAP_NEWTOWN_BUILDING_0, 8, 9
+
+	byte SCRIPT_SPAWN_TILE_EVENT, TILE_EVENT_WARP_DOOR_OUTSIDE
+	tileEventPos 18, 3, 18, 3
+	byte 3, MAP_NEWTOWN_BUILDING_1, 8, 9
+
 	byte SCRIPT_END
 
 midland_path_1_map_feature_script subroutine
@@ -48,4 +58,16 @@ newtown_house_0_map_feature_script subroutine
 	byte SCRIPT_SPAWN_TILE_EVENT, TILE_EVENT_WARP_DOOR_INSIDE
 	tileEventPos 8, 10, 9, 10
 	byte 3, MAP_NEWTOWN, 0, 4
+	byte SCRIPT_END
+
+newtown_building_0_map_feature_script subroutine
+	byte SCRIPT_SPAWN_TILE_EVENT, TILE_EVENT_WARP_DOOR_INSIDE
+	tileEventPos 8, 10, 9, 10
+	byte 3, MAP_NEWTOWN, 4, 4
+	byte SCRIPT_END
+
+newtown_building_1_map_feature_script subroutine
+	byte SCRIPT_SPAWN_TILE_EVENT, TILE_EVENT_WARP_DOOR_INSIDE
+	tileEventPos 8, 10, 9, 10
+	byte 3, MAP_NEWTOWN, 18, 4
 	byte SCRIPT_END

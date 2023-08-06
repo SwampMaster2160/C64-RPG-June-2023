@@ -7,7 +7,7 @@ dummy_looked_at subroutine
 door_inside_warp_tile_event_looked_at subroutine
 	tya
 	pha
-	lda tile_event_extra_bytes
+	lda tile_event_extra_bytes,y
 	tay
 	lda map_heap,y
 	sta current_map

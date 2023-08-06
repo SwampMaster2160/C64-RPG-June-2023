@@ -1,6 +1,6 @@
 ; World chars
 world_chars subroutine
-	byte   0,   0,   0,   0,   0,   0,   0,   0 ; Blank
+	byte 255, 255, 255, 255, 255, 255, 255, 255 ; Blank
 
 	byte  40,  40,  34,  34,  10,  10,  42,  42 ; House roof bottom left
 	byte   0, 238, 187, 238, 187, 238, 187, 238 ; Flat roof top
@@ -12,9 +12,9 @@ world_chars subroutine
 	byte   0,  42,  42,  32,  35,  32,  35,  32 ; Door top left with roof above and left wall
 	byte  34,  34,  34,  34,  34,  34,  34,   0 ; Door bottom left with floor and left wall
 	byte 247, 124, 240, 208, 200, 200,  40,  40 ; House roof top left
-	byte 248, 168, 188, 168, 248, 168, 188,   0 ; Building bricks with floor and right wall
+	byte 252, 168, 188, 168, 252, 168, 188,   0 ; Building bricks with floor and right wall
 	byte 162, 162, 178, 162, 162, 162, 162,   0 ; Door bottom right with floor
-	byte 190, 170, 239, 170, 190, 170, 239,   0 ; Building bricks with floor
+	byte 254, 170, 191, 170, 254, 170, 191,   0 ; Building bricks with floor
 	byte   0, 170, 170,   2,  50,   2,  50,   2 ; Door top right with roof above
 	byte   0, 200, 200,   8, 200, 200,   8, 168 ; Window right with right wall
 	byte   0,  46,  59,  46,  59,  46,  59,  46 ; Flat roof top left
@@ -22,7 +22,7 @@ world_chars subroutine
 	byte   0, 236, 184, 236, 184, 236, 184, 236 ; Flat roof top right
 	byte 187, 238, 187, 238, 187, 238, 187, 238 ; Flat roof
 
-	byte 253, 223, 247, 127, 255, 221, 255, 127 ; Grass 0
+	byte 255, 221, 255, 223, 119, 255, 223, 247 ; Grass 0
 	byte 255, 221, 255, 119, 255, 223, 247, 127 ; Grass 1
 	byte  48,  12,  48,  12,  48,  12,  48,  12 ; Gutter Vertical
 	byte   0, 204,  51, 204,  51, 204,  51,   0 ; Gutter Horizontal
@@ -69,3 +69,8 @@ world_chars subroutine
 	byte 221, 119, 221, 119, 221, 119,  85, 255 ; Mat bottom
 	byte 255,  87, 215, 119, 215, 119, 215, 119 ; Mat top right
 	byte 215, 119, 215, 119, 215, 119,  87, 255 ; Mat bottom right
+
+	byte 0,   12,  12,  0,   12,  12,    0, 42  ; Window left with left wall
+	byte 62,  42,  63,  42,  62,  42,   63, 0   ; Building bricks with floor and left wall
+	byte 237, 170, 170, 111, 231, 170, 170, 231 ; Fence bottom
+	byte 223, 247, 127, 231, 111, 170, 170, 231 ; Fence top

@@ -7,7 +7,7 @@ dummy_steped_on
 door_outside_warp_tile_event_steped_on subroutine
 	tya
 	pha
-	lda tile_event_extra_bytes
+	lda tile_event_extra_bytes,y
 	tay
 	lda map_heap,y
 	sta current_map

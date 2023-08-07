@@ -79,3 +79,4 @@ world_chars subroutine
 	byte 254, 254, 254, 254, 254, 250, 250, 234 ; Right tunnel entrance bottom
 	byte 171, 175, 175, 191, 191, 191, 191, 191 ; Left tunnel entrance top
 	byte 191, 191, 191, 191, 191, 175, 175, 171 ; Left tunnel entrance bottom
+	byte 170, 234, 174, 170, 234, 174, 170, 186 ; Rock floor

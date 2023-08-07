@@ -20,7 +20,10 @@
 	enumVariant MAP_BAYSWATER_BEACH_5
 	enumVariant MAP_BAYSWATER_BEACH_6
 	enumVariant MAP_TUNNEL_PATH_0
+	enumVariant MAP_TUNNEL_PATH_1
 	enumVariant MAP_TANUKI_TUNNEL_0
+	enumVariant MAP_TANUKI_TUNNEL_1
+	enumVariant MAP_TANUKI_TUNNEL_2
 	enumVariant MAP_WARF_PATH
 	enumVariant MAP_LITTLE_LAKE
 	enumVariant MAP_BAYSWATER_PENINSULA

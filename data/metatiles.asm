@@ -32,3 +32,4 @@ metatiles subroutine
 	byte TILE_ROCKS,                           TILE_LEFT_TUNNEL_ENTRANCE_TOP_DARK,  TILE_ROCKS,                              TILE_LEFT_TUNNEL_ENTRANCE_BOTTOM_DARK  ; Left tunnel entrance dark
 	byte TILE_RIGHT_TUNNEL_ENTRANCE_TOP_LIGHT, TILE_ROCKS,                          TILE_RIGHT_TUNNEL_ENTRANCE_BOTTOM_LIGHT, TILE_ROCKS                             ; Right tunnel entrance light
 	byte TILE_ROCKS,                           TILE_LEFT_TUNNEL_ENTRANCE_TOP_LIGHT, TILE_ROCKS,                              TILE_LEFT_TUNNEL_ENTRANCE_BOTTOM_LIGHT ; Left tunnel entrance light
+	byte TILE_ROCK_FLOOR,                      TILE_ROCK_FLOOR,                     TILE_ROCK_FLOOR,                         TILE_ROCK_FLOOR                        ; Rock floor

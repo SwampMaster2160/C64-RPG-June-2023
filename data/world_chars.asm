@@ -74,3 +74,8 @@ world_chars subroutine
 	byte 62,  42,  63,  42,  62,  42,   63, 0   ; Building bricks with floor and left wall
 	byte 237, 170, 170, 111, 231, 170, 170, 231 ; Fence bottom
 	byte 223, 247, 127, 231, 111, 170, 170, 231 ; Fence top
+
+	byte 234, 250, 250, 254, 254, 254, 254, 254 ; Right tunnel entrance top
+	byte 254, 254, 254, 254, 254, 250, 250, 234 ; Right tunnel entrance bottom
+	byte 171, 175, 175, 191, 191, 191, 191, 191 ; Left tunnel entrance top
+	byte 191, 191, 191, 191, 191, 175, 175, 171 ; Left tunnel entrance bottom

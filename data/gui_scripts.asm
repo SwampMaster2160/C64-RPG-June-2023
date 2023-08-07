@@ -41,5 +41,9 @@ twin_warfs_name subroutine
 	byte "Twin Warfs"
 	byte SCRIPT_END
 
+tunnel_path_name subroutine
+	byte "Tunnel Path"
+	byte SCRIPT_END
+
 blank_string subroutine
 	byte SCRIPT_END

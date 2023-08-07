@@ -26,3 +26,5 @@ metatiles subroutine
 	byte TILE_INSIDE_WALL,        TILE_INSIDE_WALL,         TILE_INSIDE_WALL,                      TILE_INSIDE_WALL                       ; Inside wall
 	byte TILE_INSIDE_FLOOR,       TILE_INSIDE_FLOOR,        TILE_INSIDE_FLOOR,                     TILE_INSIDE_FLOOR                      ; Inside floor
 	byte TILE_INSIDE_FLOOR,       TILE_INSIDE_FLOOR,        TILE_MAT_RED_LEFT,                     TILE_MAT_RED_RIGHT                     ; Inside floor with red mat below
+	byte TILE_FENCE,              TILE_FENCE,               TILE_GRASS,                            TILE_GRASS                             ; Grass with fence above
+	byte TILE_GRASS,              TILE_GRASS,               TILE_FENCE,                            TILE_FENCE                             ; Grass with fence below

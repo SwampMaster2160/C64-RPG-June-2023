@@ -38,3 +38,4 @@
 	enumVariant TILE_INSIDE_FLOOR
 	enumVariant TILE_MAT_RED_LEFT
 	enumVariant TILE_MAT_RED_RIGHT
+	enumVariant TILE_FENCE

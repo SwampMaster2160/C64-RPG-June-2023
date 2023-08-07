@@ -20,8 +20,6 @@ newtown_map_feature_script subroutine
 
 midland_path_1_map_feature_script subroutine
 	byte SCRIPT_SPAWN_ENTITY, ENTITY_BLOCK_HORIZONTAL, 9, 0
-	byte SCRIPT_SPAWN_ENTITY, ENTITY_BLOCK_VERTICAL, 19, 2
-	byte SCRIPT_SPAWN_ENTITY, ENTITY_BLOCK_VERTICAL, 19, 7
 	byte SCRIPT_END
 
 midland_path_2_map_feature_script subroutine

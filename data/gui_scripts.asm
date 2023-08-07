@@ -45,5 +45,9 @@ tunnel_path_name subroutine
 	byte "Tunnel Path"
 	byte SCRIPT_END
 
+tanuki_tunnel_name subroutine
+	byte "Tanuki Tunnel"
+	byte SCRIPT_END
+
 blank_string subroutine
 	byte SCRIPT_END

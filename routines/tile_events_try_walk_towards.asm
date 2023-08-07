@@ -20,7 +20,7 @@ door_inside_warp_tile_event_looked_at subroutine
 	lda #1
 	sta does_map_need_reload
 	lda #(DIRECTION_DOWN | ENTITY_NEEDS_REDRAW | ENTITY_IMAGE_CHANGE | (15 << 2))
-	sta entity_facing_directions_and_walk_offsets_and_redraw_flags
+	sta entity_facing_directions_and_walk_offsets_and_redraw_flags,x
 	pla
 	tay
 	rts

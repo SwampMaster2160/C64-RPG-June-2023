@@ -4,6 +4,11 @@
 	enumVariant MAP_NEWTOWN
 	enumVariant MAP_LONGTOWN_0
 	enumVariant MAP_LONGTOWN_1
+	enumVariant MAP_CITYTONBERG_0
+	enumVariant MAP_CITYTONBERG_1
+	enumVariant MAP_CITYTONBERG_2
+	enumVariant MAP_CITYTONBERG_3
+	enumVariant MAP_CITYTONBERG_4
 	enumVariant MAP_MIDLAND_PATH_1
 	enumVariant MAP_MIDLAND_PATH_2
 	enumVariant MAP_MIDLAND_PATH_3
@@ -41,8 +46,12 @@
 	enumVariant MAP_LENIN_LAKE
 	enumVariant MAP_LITTLE_LAKE
 	enumVariant MAP_BAYSWATER_PENINSULA
+	enumVariant MAP_TWIN_WARFS_EAST
 	enumVariant MAP_TWIN_WARFS_WEST
 	enumVariant MAP_WIDEWATER_RIVER
+	enumVariant MAP_L_WARF_0
+	enumVariant MAP_L_WARF_1
+	enumVariant MAP_L_WARF_2
 	enumVariant MAP_NEWTOWN_HOUSE_0
 	enumVariant MAP_NEWTOWN_BUILDING_0
 	enumVariant MAP_NEWTOWN_BUILDING_1

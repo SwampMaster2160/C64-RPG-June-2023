@@ -39,7 +39,6 @@ two_islands_path_4_map_feature_script subroutine
 	byte SCRIPT_END
 
 bayswater_beach_6_map_feature_script subroutine
-	byte SCRIPT_SPAWN_ENTITY, ENTITY_BLOCK_VERTICAL, 19, 3
 	byte SCRIPT_END
 
 warf_path_map_feature_script subroutine

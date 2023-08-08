@@ -61,5 +61,13 @@ riverside_path_name subroutine
 	byte "Riverside Path"
 	byte SCRIPT_END
 
+lenin_lake_name subroutine
+	byte "Lenin Lake"
+	byte SCRIPT_END
+
+marx_beach_name subroutine
+	byte "Marx Beach"
+	byte SCRIPT_END
+
 blank_string subroutine
 	byte SCRIPT_END

@@ -31,8 +31,12 @@
 	enumVariant MAP_RIVERSIDE_PATH_2
 	enumVariant MAP_RIVERSIDE_PATH_3
 	enumVariant MAP_WARF_PATH
+	enumVariant MAP_MARX_BEACH_0
+	enumVariant MAP_MARX_BEACH_1
+	enumVariant MAP_MARX_BEACH_2
 	enumVariant MAP_GRAND_LAKE_0
 	enumVariant MAP_GRAND_LAKE_1
+	enumVariant MAP_LENIN_LAKE
 	enumVariant MAP_LITTLE_LAKE
 	enumVariant MAP_BAYSWATER_PENINSULA
 	enumVariant MAP_TWIN_WARFS_WEST

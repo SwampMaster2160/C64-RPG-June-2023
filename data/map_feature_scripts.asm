@@ -23,17 +23,12 @@ midland_path_1_map_feature_script subroutine
 	byte SCRIPT_END
 
 midland_path_2_map_feature_script subroutine
-	byte SCRIPT_SPAWN_ENTITY, ENTITY_BLOCK_VERTICAL, 0, 7
 	byte SCRIPT_END
 
 two_islands_path_1_map_feature_script subroutine
-	byte SCRIPT_SPAWN_ENTITY, ENTITY_BLOCK_HORIZONTAL, 2, 0
-	byte SCRIPT_SPAWN_ENTITY, ENTITY_BLOCK_HORIZONTAL, 19, 0
 	byte SCRIPT_END
 
 two_islands_path_2_map_feature_script subroutine
-	byte SCRIPT_SPAWN_ENTITY, ENTITY_BLOCK_HORIZONTAL, 0, 0
-	byte SCRIPT_SPAWN_ENTITY, ENTITY_BLOCK_HORIZONTAL, 17, 0
 	byte SCRIPT_END
 
 two_islands_path_0_map_feature_script subroutine

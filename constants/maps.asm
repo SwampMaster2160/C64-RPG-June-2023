@@ -24,7 +24,15 @@
 	enumVariant MAP_TANUKI_TUNNEL_0
 	enumVariant MAP_TANUKI_TUNNEL_1
 	enumVariant MAP_TANUKI_TUNNEL_2
+	enumVariant MAP_COMMIE_PATH_0
+	enumVariant MAP_COMMIE_PATH_1
+	enumVariant MAP_RIVERSIDE_PATH_0
+	enumVariant MAP_RIVERSIDE_PATH_1
+	enumVariant MAP_RIVERSIDE_PATH_2
+	enumVariant MAP_RIVERSIDE_PATH_3
 	enumVariant MAP_WARF_PATH
+	enumVariant MAP_GRAND_LAKE_0
+	enumVariant MAP_GRAND_LAKE_1
 	enumVariant MAP_LITTLE_LAKE
 	enumVariant MAP_BAYSWATER_PENINSULA
 	enumVariant MAP_TWIN_WARFS_WEST

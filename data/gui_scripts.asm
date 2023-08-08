@@ -49,5 +49,17 @@ tanuki_tunnel_name subroutine
 	byte "Tanuki Tunnel"
 	byte SCRIPT_END
 
+commie_path_name subroutine
+	byte "Commie Path"
+	byte SCRIPT_END
+
+grand_lake_name subroutine
+	byte "Grand Lake"
+	byte SCRIPT_END
+
+riverside_path_name subroutine
+	byte "Riverside Path"
+	byte SCRIPT_END
+
 blank_string subroutine
 	byte SCRIPT_END

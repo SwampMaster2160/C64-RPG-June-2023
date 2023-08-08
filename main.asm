@@ -39,6 +39,11 @@ basic_program subroutine
 	include "routines/tile_events_steped_on.asm"
 	include "routines/tile_events_try_walk_towards.asm"
 
+* = $2000
+	include "data/world_chars.asm"
+* = $2800
+	include "data/gui_chars.asm"
+* = $3000 + (64 * 8)
 	include "data/tiles.asm"
 	include "data/metatiles.asm"
 	include "data/maps.asm"
@@ -47,8 +52,3 @@ basic_program subroutine
 	include "data/map_feature_scripts.asm"
 	include "data/gui_scripts.asm"
 	include "data/tile_events.asm"
-
-* = $2000
-	include "data/world_chars.asm"
-* = $2800
-	include "data/gui_chars.asm"

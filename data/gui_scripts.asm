@@ -69,5 +69,21 @@ marx_beach_name subroutine
 	byte "Marx Beach"
 	byte SCRIPT_END
 
+longtown_name subroutine
+	byte "Longtown"
+	byte SCRIPT_END
+
+citytonberg_name subroutine
+	byte "Citytonberg"
+	byte SCRIPT_END
+
+widewater_river_name subroutine
+	byte "Widewater River"
+	byte SCRIPT_END
+
+l_warf_name subroutine
+	byte "L Warf"
+	byte SCRIPT_END
+
 blank_string subroutine
 	byte SCRIPT_END

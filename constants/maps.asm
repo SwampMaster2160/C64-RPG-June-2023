@@ -2,6 +2,8 @@
 	newEnum
 	enumVariant MAP_NULL
 	enumVariant MAP_NEWTOWN
+	enumVariant MAP_LONGTOWN_0
+	enumVariant MAP_LONGTOWN_1
 	enumVariant MAP_MIDLAND_PATH_1
 	enumVariant MAP_MIDLAND_PATH_2
 	enumVariant MAP_MIDLAND_PATH_3
@@ -40,6 +42,7 @@
 	enumVariant MAP_LITTLE_LAKE
 	enumVariant MAP_BAYSWATER_PENINSULA
 	enumVariant MAP_TWIN_WARFS_WEST
+	enumVariant MAP_WIDEWATER_RIVER
 	enumVariant MAP_NEWTOWN_HOUSE_0
 	enumVariant MAP_NEWTOWN_BUILDING_0
 	enumVariant MAP_NEWTOWN_BUILDING_1

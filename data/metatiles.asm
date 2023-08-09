@@ -7,7 +7,15 @@ metatiles subroutine
 	byte TILE_FLAT_ROOF_LEFT,                  TILE_FLAT_ROOF_RIGHT,                TILE_BUILDING_BOTTOM_LEFT_WITH_WINDOW,   TILE_BUILDING_BOTTOM_RIGHT_WITH_WINDOW ; Building without door
 	byte TILE_GRASS,                           TILE_GRASS,                          TILE_GRASS,                              TILE_GRASS                             ; Grass
 	byte TILE_TOWN_PATH_LEFT,                  TILE_TOWN_PATH_RIGHT,                TILE_TOWN_PATH_LEFT,                     TILE_TOWN_PATH_RIGHT                   ; Path town vertical
+	byte TILE_TOWN_PATH_TOP_LEFT,              TILE_TOWN_PATH_RIGHT,                TILE_TOWN_PATH_BOTTOM_LEFT,              TILE_TOWN_PATH_RIGHT                   ; Path town vertical left
+	byte TILE_TOWN_PATH_LEFT,                  TILE_TOWN_PATH_TOP_RIGHT,            TILE_TOWN_PATH_LEFT,                     TILE_TOWN_PATH_BOTTOM_RIGHT            ; Path town vertical right
 	byte TILE_TOWN_PATH_TOP,                   TILE_TOWN_PATH_TOP,                  TILE_TOWN_PATH_BOTTOM,                   TILE_TOWN_PATH_BOTTOM                  ; Path town horizontal
+	byte TILE_TOWN_PATH_TOP_LEFT,              TILE_TOWN_PATH_TOP_RIGHT,            TILE_TOWN_PATH_BOTTOM,                   TILE_TOWN_PATH_BOTTOM                  ; Path town horizontal up
+	byte TILE_TOWN_PATH_TOP,                   TILE_TOWN_PATH_TOP,                  TILE_TOWN_PATH_BOTTOM_LEFT,              TILE_TOWN_PATH_BOTTOM_RIGHT            ; Path town horizontal down
+	byte TILE_TOWN_PATH_TOP_LEFT,              TILE_TOWN_PATH_RIGHT,                TILE_TOWN_PATH_BOTTOM,                   TILE_TOWN_PATH_BOTTOM_RIGHT_CONCAVE    ; Path town up left
+	byte TILE_TOWN_PATH_LEFT,                  TILE_TOWN_PATH_TOP_RIGHT,            TILE_TOWN_PATH_BOTTOM_LEFT_CONCAVE,      TILE_TOWN_PATH_BOTTOM                  ; Path town up right
+	byte TILE_TOWN_PATH_TOP,                   TILE_TOWN_PATH_TOP_RIGHT_CONCAVE,    TILE_TOWN_PATH_BOTTOM_LEFT,              TILE_TOWN_PATH_RIGHT                   ; Path town down left
+	byte TILE_TOWN_PATH_TOP_LEFT_CONCAVE,      TILE_TOWN_PATH_TOP,                  TILE_TOWN_PATH_LEFT,                     TILE_TOWN_PATH_BOTTOM_RIGHT            ; Path town down right
 	byte TILE_TOWN_PATH_TOP_LEFT,              TILE_TOWN_PATH_TOP_RIGHT,            TILE_TOWN_PATH_BOTTOM_LEFT,              TILE_TOWN_PATH_BOTTOM_RIGHT            ; Path town cross
 	byte TILE_TREE,                            TILE_TREE,                           TILE_TREE,                               TILE_TREE                              ; Trees
 	byte TILE_WATER,                           TILE_WATER,                          TILE_WATER,                              TILE_WATER                             ; Water

@@ -80,3 +80,6 @@ world_chars subroutine
 	byte 171, 175, 175, 191, 191, 191, 191, 191 ; Left tunnel entrance top
 	byte 191, 191, 191, 191, 191, 175, 175, 171 ; Left tunnel entrance bottom
 	byte 170, 234, 174, 170, 234, 174, 170, 186 ; Rock floor
+
+	byte 253, 247, 217, 119, 221, 231, 221, 247 ; Pear tree canopy left
+	byte 223, 103, 223, 119, 217, 119, 159, 127 ; Pear tree canopy right

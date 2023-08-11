@@ -93,9 +93,47 @@ berton_name subroutine
 	byte "Berton"
 	byte SCRIPT_END
 
-raccoon_path_name subroutine
-	byte "Raccoon Path"
+delta_beach_name subroutine
+	byte "Delta Beach"
 	byte SCRIPT_END
 
+north_warf_name subroutine
+	byte "North Warf"
+	byte SCRIPT_END
+
+vegans_on_fish_path_name subroutine
+	byte "Vegans on Fish Path"
+	byte SCRIPT_END
+
+mountianpass_path_name subroutine
+	byte "Mountianpass Path"
+	byte SCRIPT_END
+
+mountianberg_name subroutine
+	byte "Mountianberg"
+	byte SCRIPT_END
+
+northpond_name subroutine
+	byte "Northpond"
+	byte SCRIPT_END
+
+bayview_name subroutine
+	byte "Bayview"
+	byte SCRIPT_END
+
+beachside_path_name subroutine
+	byte "Beachside Path"
+	byte SCRIPT_END
+
+money_beach_name subroutine
+	byte "Money Beach"
+	byte SCRIPT_END
+
+step_beach_name subroutine
+	byte "Step Beach"
+	byte SCRIPT_END
+
+raccoon_path_name subroutine
+	byte "Raccoon Path"
 blank_string subroutine
 	byte SCRIPT_END

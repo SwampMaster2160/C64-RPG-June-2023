@@ -85,5 +85,17 @@ l_warf_name subroutine
 	byte "L Warf"
 	byte SCRIPT_END
 
+moston_name subroutine
+	byte "Moston"
+	byte SCRIPT_END
+
+berton_name subroutine
+	byte "Berton"
+	byte SCRIPT_END
+
+raccoon_path_name subroutine
+	byte "Raccoon Path"
+	byte SCRIPT_END
+
 blank_string subroutine
 	byte SCRIPT_END

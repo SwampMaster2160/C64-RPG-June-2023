@@ -9,6 +9,9 @@
 	enumVariant MAP_CITYTONBERG_2
 	enumVariant MAP_CITYTONBERG_3
 	enumVariant MAP_CITYTONBERG_4
+	enumVariant MAP_BERTON
+	enumVariant MAP_MOSTON
+	enumVariant MAP_MIDLAND_PATH_0
 	enumVariant MAP_MIDLAND_PATH_1
 	enumVariant MAP_MIDLAND_PATH_2
 	enumVariant MAP_MIDLAND_PATH_3
@@ -38,6 +41,7 @@
 	enumVariant MAP_RIVERSIDE_PATH_2
 	enumVariant MAP_RIVERSIDE_PATH_3
 	enumVariant MAP_WARF_PATH
+	enumVariant MAP_RACCOON_PATH
 	enumVariant MAP_MARX_BEACH_0
 	enumVariant MAP_MARX_BEACH_1
 	enumVariant MAP_MARX_BEACH_2

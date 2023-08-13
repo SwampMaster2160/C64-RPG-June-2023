@@ -11,12 +11,29 @@
 	enumVariant MAP_CITYTONBERG_4
 	enumVariant MAP_BERTON
 	enumVariant MAP_MOSTON
+	enumVariant MAP_MOUNTIANBERG
 	enumVariant MAP_MIDLAND_PATH_0
 	enumVariant MAP_MIDLAND_PATH_1
 	enumVariant MAP_MIDLAND_PATH_2
 	enumVariant MAP_MIDLAND_PATH_3
 	enumVariant MAP_MIDLAND_PATH_4
 	enumVariant MAP_MIDLAND_PATH_5
+	enumVariant MAP_DELTA_BEACH_0
+	enumVariant MAP_DELTA_BEACH_1
+	enumVariant MAP_DELTA_BEACH_2
+	enumVariant MAP_DELTA_BEACH_3
+	enumVariant MAP_DELTA_BEACH_4
+	enumVariant MAP_DELTA_BEACH_5
+	enumVariant MAP_DELTA_BEACH_6
+	enumVariant MAP_MOUNTIANPASS_PATH_0
+	enumVariant MAP_MOUNTIANPASS_PATH_1
+	enumVariant MAP_MOUNTIANPASS_PATH_2
+	enumVariant MAP_MOUNTIANPASS_PATH_3
+	enumVariant MAP_VEGANS_ON_FISH_PATH_0
+	enumVariant MAP_VEGANS_ON_FISH_PATH_1
+	enumVariant MAP_VEGANS_ON_FISH_PATH_2
+	enumVariant MAP_VEGANS_ON_FISH_PATH_3
+	enumVariant MAP_VEGANS_ON_FISH_PATH_4
 	enumVariant MAP_TWO_ISLANDS_PATH_0
 	enumVariant MAP_TWO_ISLANDS_PATH_1
 	enumVariant MAP_TWO_ISLANDS_PATH_2
@@ -52,6 +69,8 @@
 	enumVariant MAP_BAYSWATER_PENINSULA
 	enumVariant MAP_TWIN_WARFS_EAST
 	enumVariant MAP_TWIN_WARFS_WEST
+	enumVariant MAP_NORTH_WARF
+	enumVariant MAP_NORTHPOND
 	enumVariant MAP_WIDEWATER_RIVER
 	enumVariant MAP_L_WARF_0
 	enumVariant MAP_L_WARF_1

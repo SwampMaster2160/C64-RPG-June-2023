@@ -45,7 +45,7 @@ warf_path_map_feature_script subroutine
 	byte SCRIPT_END
 
 longtown_0_map_feature_script subroutine
-	byte SCRIPT_SPAWN_ENTITY, ENTITY_BLOCK_HORIZONTAL, 9, 0
+	;byte SCRIPT_SPAWN_ENTITY, ENTITY_BLOCK_HORIZONTAL, 9, 0
 	byte SCRIPT_END
 
 newtown_house_0_map_feature_script subroutine

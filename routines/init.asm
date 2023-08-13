@@ -78,7 +78,7 @@ init subroutine
 	sta gui_background_color
 
 	jsr init_player
-	lda #MAP_MIDLAND_PATH_1;MAP_NEWTOWN
+	lda #MAP_MOUNTIANPASS_PATH_3;MAP_NEWTOWN
 	sta current_map
 	jsr load_map
 	jsr get_keys_pressed

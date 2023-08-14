@@ -83,3 +83,8 @@ world_chars subroutine
 
 	byte 253, 247, 217, 119, 221, 231, 221, 247 ; Pear tree canopy left
 	byte 223, 103, 223, 119, 217, 119, 159, 127 ; Pear tree canopy right
+
+	byte 127, 247, 127, 253, 219, 250, 106, 250 ; Dirt path top left concave
+	byte 127, 247, 127, 253, 219, 171, 167, 171 ; Dirt path top right concave
+	byte 122, 246, 122, 246, 223, 119, 255, 221 ; Dirt path bottom left concave
+	byte 175, 169, 171, 231, 223, 119, 255, 221 ; Dirt path bottom right concave

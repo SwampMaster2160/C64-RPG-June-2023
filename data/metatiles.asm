@@ -47,3 +47,7 @@ metatiles subroutine
 	byte TILE_ROCK_FLOOR,                      TILE_ROCK_FLOOR,                     TILE_ROCK_FLOOR,                         TILE_ROCK_FLOOR                        ; Rock floor
 	byte TILE_PEAR_TREE,                       TILE_PEAR_TREE,                      TILE_PEAR_TREE,                          TILE_PEAR_TREE                         ; Pear trees
 	byte TILE_PEAR_TREE,                       TILE_PEAR_TREE,                      TILE_GRASS,                              TILE_GRASS                             ; Grass with pear trees above
+	byte TILE_DIRT_PATH_TOP_LEFT,              TILE_DIRT_PATH_RIGHT,                TILE_DIRT_PATH_BOTTOM,                   TILE_DIRT_PATH_BOTTOM_RIGHT_CONCAVE    ; Dirt up left
+	byte TILE_DIRT_PATH_LEFT,                  TILE_DIRT_PATH_TOP_RIGHT,            TILE_DIRT_PATH_BOTTOM_LEFT_CONCAVE,      TILE_DIRT_PATH_BOTTOM                  ; Dirt up right
+	byte TILE_DIRT_PATH_TOP,                   TILE_DIRT_PATH_TOP_RIGHT_CONCAVE,    TILE_DIRT_PATH_BOTTOM_LEFT,              TILE_DIRT_PATH_RIGHT                   ; Dirt down left
+	byte TILE_DIRT_PATH_TOP_LEFT_CONCAVE,      TILE_DIRT_PATH_TOP,                  TILE_DIRT_PATH_LEFT,                     TILE_DIRT_PATH_BOTTOM_RIGHT            ; Dirt down right

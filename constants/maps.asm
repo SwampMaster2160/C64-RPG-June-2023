@@ -25,6 +25,13 @@
 	enumVariant MAP_DELTA_BEACH_4
 	enumVariant MAP_DELTA_BEACH_5
 	enumVariant MAP_DELTA_BEACH_6
+	enumVariant MAP_STEP_BEACH_0
+	enumVariant MAP_STEP_BEACH_1
+	enumVariant MAP_STEP_BEACH_2
+	enumVariant MAP_MONEY_BEACH_0
+	enumVariant MAP_MONEY_BEACH_1
+	enumVariant MAP_MONEY_BEACH_2
+	enumVariant MAP_MONEY_BEACH_3
 	enumVariant MAP_MOUNTIANPASS_PATH_0
 	enumVariant MAP_MOUNTIANPASS_PATH_1
 	enumVariant MAP_MOUNTIANPASS_PATH_2

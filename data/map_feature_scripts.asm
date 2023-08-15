@@ -32,7 +32,7 @@ two_islands_path_2_map_feature_script subroutine
 	byte SCRIPT_END
 
 two_islands_path_0_map_feature_script subroutine
-	byte SCRIPT_SPAWN_ENTITY, ENTITY_BLOCK_VERTICAL, 0, 5
+	;byte SCRIPT_SPAWN_ENTITY, ENTITY_BLOCK_VERTICAL, 0, 5
 	byte SCRIPT_END
 
 two_islands_path_4_map_feature_script subroutine

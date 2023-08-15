@@ -13,6 +13,8 @@
 	enumVariant MAP_MOSTON
 	enumVariant MAP_MOUNTIANBERG
 	enumVariant MAP_BAYVIEW
+	enumVariant MAP_TWO_ISLANDS_TOWN
+	enumVariant MAP_HILLBASE
 	enumVariant MAP_MIDLAND_PATH_0
 	enumVariant MAP_MIDLAND_PATH_1
 	enumVariant MAP_MIDLAND_PATH_2
@@ -59,6 +61,10 @@
 	enumVariant MAP_TANUKI_TUNNEL_0
 	enumVariant MAP_TANUKI_TUNNEL_1
 	enumVariant MAP_TANUKI_TUNNEL_2
+	enumVariant MAP_TWO_ISLANDS_BRIDGE_0
+	enumVariant MAP_TWO_ISLANDS_BRIDGE_1
+	enumVariant MAP_TWO_ISLANDS_BRIDGE_2
+	enumVariant MAP_TWO_ISLANDS_BEACH
 	enumVariant MAP_COMMIE_PATH_0
 	enumVariant MAP_COMMIE_PATH_1
 	enumVariant MAP_RIVERSIDE_PATH_0

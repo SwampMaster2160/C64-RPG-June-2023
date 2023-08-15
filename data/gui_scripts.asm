@@ -133,6 +133,22 @@ step_beach_name subroutine
 	byte "Step Beach"
 	byte SCRIPT_END
 
+two_islands_bridge_name subroutine
+	byte "Two Islands Bridge"
+	byte SCRIPT_END
+
+two_islands_beach_name subroutine
+	byte "Two Islands Beach"
+	byte SCRIPT_END
+
+two_islands_town_name subroutine
+	byte "Two Islands Town"
+	byte SCRIPT_END
+
+hillbase_name subroutine
+	byte "Hillbase"
+	byte SCRIPT_END
+
 raccoon_path_name subroutine
 	byte "Raccoon Path"
 blank_string subroutine

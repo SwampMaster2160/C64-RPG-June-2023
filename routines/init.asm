@@ -78,7 +78,7 @@ init subroutine
 	sta gui_background_color
 
 	jsr init_player
-	lda #MAP_DELTA_BEACH_6;MAP_NEWTOWN
+	lda #MAP_MONEY_BEACH_1;MAP_NEWTOWN
 	sta current_map
 	jsr load_map
 	jsr get_keys_pressed

@@ -76,7 +76,7 @@ tunnel_path_1_map_feature_script subroutine
 	byte SCRIPT_SPAWN_TILE_EVENT, TILE_EVENT_WARP_CAVE_ENTRENCE_LEFT_RIGHT
 	tileEventPos 5, 4, 5, 5
 	byte 2, MAP_TANUKI_TUNNEL_2, 17
-	byte SCRIPT_SPAWN_ENTITY, ENTITY_BLOCK_VERTICAL, 19, 4
+	;byte SCRIPT_SPAWN_ENTITY, ENTITY_BLOCK_VERTICAL, 19, 4
 	byte SCRIPT_END
 
 tanuki_tunnel_0_map_feature_script subroutine

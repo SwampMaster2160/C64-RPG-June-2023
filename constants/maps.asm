@@ -12,6 +12,7 @@
 	enumVariant MAP_BERTON
 	enumVariant MAP_MOSTON
 	enumVariant MAP_MOUNTIANBERG
+	enumVariant MAP_BAYVIEW
 	enumVariant MAP_MIDLAND_PATH_0
 	enumVariant MAP_MIDLAND_PATH_1
 	enumVariant MAP_MIDLAND_PATH_2
@@ -69,6 +70,8 @@
 	enumVariant MAP_MARX_BEACH_0
 	enumVariant MAP_MARX_BEACH_1
 	enumVariant MAP_MARX_BEACH_2
+	enumVariant MAP_BEACHSIDE_PATH_0
+	enumVariant MAP_BEACHSIDE_PATH_1
 	enumVariant MAP_GRAND_LAKE_0
 	enumVariant MAP_GRAND_LAKE_1
 	enumVariant MAP_LENIN_LAKE

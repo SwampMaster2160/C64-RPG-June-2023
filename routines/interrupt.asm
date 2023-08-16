@@ -36,7 +36,6 @@ gui_interrupt subroutine
 	; Change graphics modes
 	lda gui_background_color
 	sta c64_background_colors
-	;lda #(5 << 1) | (1 << 4)  ; Tile shapes at $27FF-$3000, tile selections at $0400-$0800
 	lda #(0 << 1) | (8 << 4)                        ; Tile shapes at $C000-$C7FF, tile selections at $E000-$E3FF
 	sta c64_vic_memory_layout
 	lda #(0 | C64_40_COLUMNS) ; No horizontal scroll, 40 columns, multicolor off
@@ -48,7 +47,7 @@ gui_interrupt subroutine
 
 world_interrupt subroutine
 	; Setup for GUI interrupt
-	lda #210                             ; Interrupt at line 210
+	lda #210                      ; Interrupt at line 210
 	sta c64_screen_interrupt_line
 	lda #1
 	sta is_next_screen_interrupt_for_gui
@@ -58,7 +57,6 @@ world_interrupt subroutine
 	; Change other graphics modes
 	lda world_background_color                      ; Change background colors to the world background colors
 	sta c64_background_colors
-	;lda #(4 << 1) | (1 << 4)                        ; Tile shapes at $2000-$27FF, tile selections at $0400-$0800
 	lda #(1 << 1) | (8 << 4)                        ; Tile shapes at $C800-$CFFF, tile selections at $E000-$E3FF
 	sta c64_vic_memory_layout
 	lda #(0 | C64_40_COLUMNS | C64_MULTICOLOR_MODE) ; No horizontal scroll, 40 columns, multicolor on
@@ -72,7 +70,6 @@ world_interrupt subroutine
 	; Change other graphics modes
 	lda world_background_color                      ; Change background colors to the world background colors
 	sta c64_background_colors
-	;lda #(4 << 1) | (1 << 4)                        ; Tile shapes at $2000-$27FF, tile selections at $0400-$0800
 	lda #(1 << 1) | (8 << 4)                        ; Tile shapes at $C800-$CFFF, tile selections at $E000-$E3FF
 	sta c64_vic_memory_layout
 	lda #(0 | C64_40_COLUMNS | C64_MULTICOLOR_MODE) ; No horizontal scroll, 40 columns, multicolor on

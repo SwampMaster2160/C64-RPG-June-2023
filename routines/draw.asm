@@ -375,7 +375,7 @@ draw_textbox_middle_chars_row subroutine
 	lda #GUI_CHAR_LINE_VERTICAL
 	sta (text_cursor_address),y
 	; Draw middle chars
-	lda '  ; Space
+	lda #'  ; Space
 .loop
 	dey
 	beq .loop_end

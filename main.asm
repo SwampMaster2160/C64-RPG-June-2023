@@ -28,28 +28,5 @@ basic_program subroutine
 	word 0              ; Null pointer to next line (end line)
 
 ; All of the code that gets assembled into bytes
-	include "routines/init.asm"
-	include "routines/interrupt.asm"
-	include "routines/math.asm"
-	include "routines/draw.asm"
-	include "routines/io.asm"
-	include "routines/world.asm"
-	include "routines/entity_tick.asm"
-	include "routines/script.asm"
-	include "routines/tile_events_steped_on.asm"
-	include "routines/tile_events_try_walk_towards.asm"
-
-* = $2000
-	include "data/world_chars.asm"
-* = $2800
-	include "data/gui_chars.asm"
-* = $3000 + (64 * 8)
-	include "data/tiles.asm"
-	include "data/metatiles.asm"
-	include "data/maps.asm"
-	include "data/entities.asm"
-	include "data/entity_sprites.asm"
-	include "data/map_feature_scripts.asm"
-	include "data/gui_scripts.asm"
-	include "data/tile_events.asm"
-	include "data/map_pointers.asm"
+	include "routines/mod.asm"
+	include "data/mod.asm"

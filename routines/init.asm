@@ -14,7 +14,7 @@ init subroutine
 	lda $DD0D
 	lda #%11111111
 	sta $DD02
-	lda #0;3    ; VIC bank 0
+	lda #0    ; VIC bank 3
 	sta $DD00
 	lda #%11111111
 	sta $DC02
@@ -27,9 +27,6 @@ init subroutine
 	sta c64_screen_interrupt_line
 	lda #(0 | C64_40_COLUMNS | C64_MULTICOLOR_MODE) ; No horizontal scroll, 40 columns, multicolor on
 	sta c64_screen_control_1
-	;lda #(4 << 1) | (1 << 4)                        ; Tile shapes at $2000-$27FF, tile selections at $0400-$07FF
-	lda #(0 << 1) | (9 << 4)                        ; Tile shapes at $C000-$C7FF, tile selections at $E400-$E7FF
-	sta c64_vic_memory_layout
 	lda #1                                          ; Interrupt only when a set scanline is reached
 	sta c64_vic_interrupt_control
 	lda #0                                          ; Disable sprites
@@ -70,6 +67,45 @@ init subroutine
 	sta $FFFE
 	lda #>irq
 	sta $FFFF
+	; Load chars
+	ldx #0
+.load_gui_chars_loop
+	lda gui_chars,x
+	sta gui_chars_loaded+8*32,x
+	lda gui_chars+$100,x
+	sta gui_chars_loaded+8*32+$100,x
+	lda gui_chars+$200,x
+	sta gui_chars_loaded+8*32+$200,x
+	lda gui_chars+$300,x
+	sta gui_chars_loaded+8*32+$300,x
+	lda gui_chars+$400,x
+	sta gui_chars_loaded+8*32+$400,x
+	lda gui_chars+$500,x
+	sta gui_chars_loaded+8*32+$500,x
+	lda gui_chars+$600,x
+	sta gui_chars_loaded+8*32+$600,x
+	inx
+	bne .load_gui_chars_loop
+
+.load_world_chars_loop
+	lda world_chars,x
+	sta world_chars_loaded,x
+	lda world_chars+$100,x
+	sta world_chars_loaded+$100,x
+	lda world_chars+$200,x
+	sta world_chars_loaded+$200,x
+	lda world_chars+$300,x
+	sta world_chars_loaded+$300,x
+	lda world_chars+$400,x
+	sta world_chars_loaded+$400,x
+	lda world_chars+$500,x
+	sta world_chars_loaded+$500,x
+	lda world_chars+$600,x
+	sta world_chars_loaded+$600,x
+	lda world_chars+$700,x
+	sta world_chars_loaded+$700,x
+	inx
+	bne .load_world_chars_loop
 	; Init vars
 	lda #0
 	sta is_next_screen_interrupt_for_gui

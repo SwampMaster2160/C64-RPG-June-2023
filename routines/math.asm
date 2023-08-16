@@ -18,36 +18,6 @@ generate_random subroutine
 	; Return the number generated
 	rts
 
-; Sets word_1 to point to the data for the current map
-; --- Inputs ---
-; map_id: The map to point to
-; --- Outputs ---
-; word_1: The map data pointer (maps + map_id * 64)
-; --- Corrupted ---
-; a
-/*load_map_data_pointer subroutine
-	; Low byte
-	lda map_id
-	asl
-	asl
-	asl
-	asl
-	asl
-	asl
-	clc
-	adc #<maps
-	php
-	sta word_1
-	; High byte
-	lda map_id
-	lsr
-	lsr
-	plp
-	adc #>maps
-	sta word_1+1
-	; Return
-	rts*/
-
 ; Sets word_0 to point to the data for the metatile
 ; --- Inputs ---
 ; a: The metatile whos data we should point to

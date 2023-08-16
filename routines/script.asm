@@ -48,7 +48,7 @@ execute_script subroutine
 	jmp .loop
 .skip_char_draw
 	; Call machine code subroutine
-	cmp #SCRIPT_CALL_MACHINE_SUBROUTINE
+	cmp #SCRIPT_CALL_INDIRECT_MACHINE_SUBROUTINE
 	bne .skip_call_machine_subroutine
 	lda script_address
 	pha
@@ -72,6 +72,32 @@ execute_script subroutine
 	ldy #3
 	jmp .loop
 .skip_call_machine_subroutine
+	; Call indirect
+	cmp #SCRIPT_CALL_INDIRECT
+	bne .skip_call_indirect
+	lda script_address
+	pha
+	lda script_address+1
+	pha
+	lda (script_address),y
+	sta word_1
+	iny
+	lda (script_address),y
+	sta word_1+1
+	ldy #0
+	lda (word_1),y
+	sta script_address
+	iny
+	lda (word_1),y
+	sta script_address+1
+	jsr execute_script
+	pla
+	sta script_address+1
+	pla
+	sta script_address
+	ldy #3
+	jmp .loop
+.skip_call_indirect
 	; Spawn entity opcode
 	cmp #SCRIPT_SPAWN_ENTITY
 	bne .skip_entity

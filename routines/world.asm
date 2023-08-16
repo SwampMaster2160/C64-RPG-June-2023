@@ -23,7 +23,7 @@ load_map subroutine
 	lda #1
 	sta does_map_need_redraw
 	; Load a pointer to the map's struct into word_1
-	lda map_id;map_pointers
+	lda map_id
 	asl
 	clc
 	adc #<map_pointers
@@ -46,7 +46,6 @@ load_map subroutine
 	iny
 	lda (word_0),y
 	sta word_1+1
-	;jsr load_map_data_pointer
 	; Load the map's metatiles
 	ldy #0
 .load_metatiles_loop
@@ -55,14 +54,14 @@ load_map subroutine
 	iny
 	cpy #50
 	bne .load_metatiles_loop
-	; Map features
+	; Colors
 	lda (word_1),y
 	sta map_colors
 	iny
 	lda (word_1),y
 	sta map_colors+1
 	iny
-
+	; Connections
 	lda (word_1),y
 	sta map_border_connections
 	iny
@@ -75,15 +74,14 @@ load_map subroutine
 	lda (word_1),y
 	sta map_border_connections+3
 	iny
-
-	;ldy #56
+	; Load address of script to call
 	lda (word_1),y
 	sta script_address
 	iny
 	lda (word_1),y
 	sta script_address+1
 	iny
-
+	; Map name
 	lda (word_1),y
 	sta map_name_address
 	iny
@@ -91,6 +89,7 @@ load_map subroutine
 	sta map_name_address+1
 	;iny
 
+	; Execute script that should be called when loading the map
 	jsr execute_script
 	; Set HUD to need redrawing
 	lda #1
@@ -637,10 +636,8 @@ entity_tick subroutine
 ; --- Outputs ---
 ; a: The metatile at the location
 ; --- Corrupted ---
-; byte_0, word_1, y
+; byte_0, y
 get_metatile subroutine
-	; Get the location of the map data
-	;jsr load_map_data_pointer
 	; Get metatile id
 	lda temp_y
 	pha
@@ -659,7 +656,6 @@ get_metatile subroutine
 	clc
 	adc byte_0
 	tay
-	;lda (word_1),y
 	lda map_metatiles,y
 	rts
 

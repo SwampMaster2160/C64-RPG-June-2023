@@ -150,7 +150,7 @@ draw_metatile subroutine
 
 ; Redraws the map
 ; --- Corrupted ---
-; a, x, y, word_0, word_1, word_2, byte_1
+; a, x, y, word_0, word_2, byte_1
 redraw_map subroutine
 	; Setup for world interrupt
 	lda #((3 | C64_25_ROWS) | %10000000) ; No vertical scroll, 25 rows, screen on, text mode, extended background off
@@ -159,16 +159,12 @@ redraw_map subroutine
 	sta c64_screen_interrupt_line
 	lda #0
 	sta is_next_screen_interrupt_for_gui
-	; Get the location that we should copy the map from
-	;jsr load_map_data_pointer
 	; Get the locations of the chars and colors that we should copy to for the first row
 	lda #<c64_chars
 	sta word_2
 	lda #>c64_chars
 	sta word_2+1
 	; Load map colors
-	;ldy #50
-	;lda (word_1),y
 	lda map_colors
 	sta c64_border_color
 	lsr
@@ -176,8 +172,6 @@ redraw_map subroutine
 	lsr
 	lsr
 	sta world_background_color
-	;iny
-	;lda (word_1),y
 	lda map_colors+1
 	sta c64_background_colors+1
 	lsr
@@ -198,7 +192,6 @@ redraw_map subroutine
 	; Draw metatile
 	tya
 	pha
-	;lda (word_1),y
 	lda map_metatiles,y
 	jsr draw_metatile
 	pla
@@ -739,18 +732,4 @@ redraw subroutine
 	jsr execute_script
 .skip_hud_redraw
 	; Return
-	rts
-
-draw_map_name subroutine
-	;inc c64_border_color
-	;jsr load_map_data_pointer
-	;ldy #58
-	;lda (word_1),y
-	lda map_name_address
-	sta script_address
-	;iny
-	;lda (word_1),y
-	lda map_name_address+1
-	sta script_address+1
-	jsr execute_script
 	rts

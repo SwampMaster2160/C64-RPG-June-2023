@@ -6,7 +6,7 @@ draw_hud subroutine
 	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_RED
 	byte GUI_CHAR_LOCATION_PIN
 	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_WHITE
-	byte SCRIPT_CALL_MACHINE_SUBROUTINE, #<draw_map_name, #>draw_map_name
+	byte SCRIPT_CALL_INDIRECT, #<map_name_address, #>map_name_address
 	byte SCRIPT_END
 
 newtown_name subroutine

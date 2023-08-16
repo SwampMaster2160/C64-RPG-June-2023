@@ -1,6 +1,7 @@
 ; World maps
 	newEnum
 	enumVariant MAP_NULL
+
 	enumVariant MAP_NEWTOWN
 	enumVariant MAP_LONGTOWN_0
 	enumVariant MAP_LONGTOWN_1
@@ -14,6 +15,7 @@
 	enumVariant MAP_MOUNTIANBERG
 	enumVariant MAP_BAYVIEW
 	enumVariant MAP_TWO_ISLANDS_TOWN
+
 	enumVariant MAP_HILLBASE
 	enumVariant MAP_MIDLAND_PATH_0
 	enumVariant MAP_MIDLAND_PATH_1
@@ -78,6 +80,7 @@
 	enumVariant MAP_MARX_BEACH_2
 	enumVariant MAP_BEACHSIDE_PATH_0
 	enumVariant MAP_BEACHSIDE_PATH_1
+
 	enumVariant MAP_GRAND_LAKE_0
 	enumVariant MAP_GRAND_LAKE_1
 	enumVariant MAP_LENIN_LAKE
@@ -91,6 +94,7 @@
 	enumVariant MAP_L_WARF_0
 	enumVariant MAP_L_WARF_1
 	enumVariant MAP_L_WARF_2
+
 	enumVariant MAP_NEWTOWN_HOUSE_0
 	enumVariant MAP_NEWTOWN_BUILDING_0
 	enumVariant MAP_NEWTOWN_BUILDING_1

@@ -6,6 +6,20 @@ init subroutine
 	sta _6510_processor_port_bit_directions
 	lda #%00100101
 	sta _6510_processor_port_out_bits
+	; CIA chips
+	lda #$7F  ; Disable interrupts from CIA chips
+	sta $DC0D
+	sta $DD0D
+	lda $DC0D ; Acknowledge any outstanding CIA interrupts
+	lda $DD0D
+	lda #%11111111
+	sta $DD02
+	lda #0;3    ; VIC bank 0
+	sta $DD00
+	lda #%11111111
+	sta $DC02
+	lda #%00000000
+	sta $DC03
 	; Setup VIC-II
 	lda #((3 | C64_25_ROWS) | %10000000)            ; No vertical scroll, 25 rows, screen off, text mode, extended background off
 	sta c64_screen_control_0
@@ -13,9 +27,8 @@ init subroutine
 	sta c64_screen_interrupt_line
 	lda #(0 | C64_40_COLUMNS | C64_MULTICOLOR_MODE) ; No horizontal scroll, 40 columns, multicolor on
 	sta c64_screen_control_1
-	;lda #0                                          ; Disable sprites
-	;sta c64_sprite_enables
-	lda #(4 << 1) | (1 << 4)                        ; Tile shapes at $2000-$27FF, tile selections at $0400-$0800
+	;lda #(4 << 1) | (1 << 4)                        ; Tile shapes at $2000-$27FF, tile selections at $0400-$07FF
+	lda #(0 << 1) | (9 << 4)                        ; Tile shapes at $C000-$C7FF, tile selections at $E400-$E7FF
 	sta c64_vic_memory_layout
 	lda #1                                          ; Interrupt only when a set scanline is reached
 	sta c64_vic_interrupt_control
@@ -36,7 +49,7 @@ init subroutine
 	sta c64_sprites_color_2
 	; Set sprite pointers
 	ldx #7
-	lda #($C0)+7
+	lda #($90)+7
 .set_sprite_pointers_loop
 	sta c64_sprite_pointers,x
 	sec
@@ -52,18 +65,6 @@ init subroutine
 	sta sprite_shapes+$0100,x
 	cpx #$FF
 	bne .clear_sprite_loop
-	; CIA chips
-	lda #$7F  ; Disable interrupts from CIA chips
-	sta $DC0D
-	sta $DD0D
-	lda $DC0D ; Acknowledge any outstanding CIA interrupts
-	lda $DD0D
-	lda #3    ; VIC bank 0
-	sta $DD00
-	lda #%11111111
-	sta $DC02
-	lda #%00000000
-	sta $DC03
 	; Set interrupt handler
 	lda #<irq
 	sta $FFFE
@@ -78,7 +79,7 @@ init subroutine
 	sta gui_background_color
 
 	jsr init_player
-	lda #MAP_TWO_ISLANDS_PATH_0;MAP_NEWTOWN
+	lda #MAP_NEWTOWN
 	sta current_map
 	jsr load_map
 	jsr get_keys_pressed

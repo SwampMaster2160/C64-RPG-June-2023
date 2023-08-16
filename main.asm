@@ -52,3 +52,4 @@ basic_program subroutine
 	include "data/map_feature_scripts.asm"
 	include "data/gui_scripts.asm"
 	include "data/tile_events.asm"
+	include "data/map_pointers.asm"

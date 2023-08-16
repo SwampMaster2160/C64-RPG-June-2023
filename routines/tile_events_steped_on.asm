@@ -10,7 +10,7 @@ door_outside_warp_tile_event_steped_on subroutine
 	lda tile_event_extra_bytes,y
 	tay
 	lda map_heap,y
-	sta current_map
+	sta map_id
 	iny
 	lda map_heap,y
 	sta entity_x_positions,x
@@ -31,7 +31,7 @@ cave_entrence_left_right_warp_steped_on subroutine
 	lda tile_event_extra_bytes,y
 	tay
 	lda map_heap,y
-	sta current_map
+	sta map_id
 	iny
 	lda map_heap,y
 	sta entity_x_positions,x

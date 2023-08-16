@@ -1,6 +1,6 @@
 ; Loads a map
 ; --- Inputs ---
-; current_map: The map ID to load
+; map_id: The map ID to load
 ; --- Corrupted ---
 ; a, word_1, word_0
 load_map subroutine
@@ -22,14 +22,75 @@ load_map subroutine
 	sta does_map_need_reload
 	lda #1
 	sta does_map_need_redraw
+	; Load a pointer to the map's struct into word_1
+	lda map_id;map_pointers
+	asl
+	clc
+	adc #<map_pointers
+	php
+	sta word_0
+	lda map_id
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	plp
+	adc #>map_pointers
+	sta word_0+1
+	ldy #0
+	lda (word_0),y
+	sta word_1
+	iny
+	lda (word_0),y
+	sta word_1+1
+	;jsr load_map_data_pointer
+	; Load the map's metatiles
+	ldy #0
+.load_metatiles_loop
+	lda (word_1),y
+	sta map_metatiles,y
+	iny
+	cpy #50
+	bne .load_metatiles_loop
 	; Map features
-	jsr load_map_data_pointer
-	ldy #56
+	lda (word_1),y
+	sta map_colors
+	iny
+	lda (word_1),y
+	sta map_colors+1
+	iny
+
+	lda (word_1),y
+	sta map_border_connections
+	iny
+	lda (word_1),y
+	sta map_border_connections+1
+	iny
+	lda (word_1),y
+	sta map_border_connections+2
+	iny
+	lda (word_1),y
+	sta map_border_connections+3
+	iny
+
+	;ldy #56
 	lda (word_1),y
 	sta script_address
 	iny
 	lda (word_1),y
 	sta script_address+1
+	iny
+
+	lda (word_1),y
+	sta map_name_address
+	iny
+	lda (word_1),y
+	sta map_name_address+1
+	;iny
+
 	jsr execute_script
 	; Set HUD to need redrawing
 	lda #1
@@ -433,7 +494,7 @@ entity_tick subroutine
 .skip_none
 	; Get the location of the map
 	; Low byte
-	lda current_map
+	/*lda map_id
 	asl
 	asl
 	asl
@@ -445,12 +506,12 @@ entity_tick subroutine
 	php
 	sta word_1
 	; High byte
-	lda current_map
+	lda map_id
 	lsr
 	lsr
 	plp
 	adc #>maps
-	sta word_1+1
+	sta word_1+1*/
 	; Calculate the tile pos the entity is facing
 	lda entity_x_positions,x
 	sta temp_x
@@ -491,10 +552,11 @@ entity_tick subroutine
 	beq .skip_return_0
 	rts
 .skip_return_0
-	ldy #55
-	lda (word_1),y
+	;ldy #55
+	;lda (word_1),y
+	lda map_border_connections+3
 	beq .skip_walk
-	sta current_map
+	sta map_id
 	lda #19
 	sta temp_x
 	lda #1
@@ -507,10 +569,11 @@ entity_tick subroutine
 	lda entity_discriminants,x
 	cmp #ENTITY_PLAYER
 	bne .skip_walk
-	ldy #53
-	lda (word_1),y
+	;ldy #53
+	;lda (word_1),y
+	lda map_border_connections+1
 	beq .skip_walk
-	sta current_map
+	sta map_id
 	lda #0
 	sta temp_x
 	lda #1
@@ -523,10 +586,11 @@ entity_tick subroutine
 	lda entity_discriminants,x
 	cmp #ENTITY_PLAYER
 	bne .skip_walk
-	ldy #52
-	lda (word_1),y
+	;ldy #52
+	;lda (word_1),y
+	lda map_border_connections
 	beq .skip_walk
-	sta current_map
+	sta map_id
 	lda #9
 	sta temp_y
 	lda #1
@@ -539,10 +603,11 @@ entity_tick subroutine
 	lda entity_discriminants,x
 	cmp #ENTITY_PLAYER
 	bne .skip_walk
-	ldy #54
-	lda (word_1),y
+	;ldy #54
+	;lda (word_1),y
+	lda map_border_connections+2
 	beq .skip_walk
-	sta current_map
+	sta map_id
 	lda #0
 	sta temp_y
 	lda #1
@@ -568,14 +633,14 @@ entity_tick subroutine
 
 ; Get the metatile ID of the metatile containing the tile at (temp_x, temp_y) of the currently loaded map
 ; --- Inputs ---
-; temp_x, temp_y, current_map
+; temp_x, temp_y, map_id
 ; --- Outputs ---
 ; a: The metatile at the location
 ; --- Corrupted ---
 ; byte_0, word_1, y
 get_metatile subroutine
 	; Get the location of the map data
-	jsr load_map_data_pointer
+	;jsr load_map_data_pointer
 	; Get metatile id
 	lda temp_y
 	pha
@@ -594,13 +659,13 @@ get_metatile subroutine
 	clc
 	adc byte_0
 	tay
-	lda (word_1),y
-	;sta c64_chars
+	;lda (word_1),y
+	lda map_metatiles,y
 	rts
 
 ; Get the tile ID of the tile at (temp_x, temp_y) of the currently loaded map
 ; --- Inputs ---
-; temp_x, temp_y, current_map
+; temp_x, temp_y, map_id
 ; --- Outputs ---
 ; a: The tile at the location
 ; --- Corrupted ---

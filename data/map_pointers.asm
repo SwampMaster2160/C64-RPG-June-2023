@@ -1,5 +1,5 @@
 ; Pointers to the data for each map
-map_pointers =  map_pointers - 2
+map_pointers = map_pointers_actual - 2
 
 map_pointers_actual subroutine
 	word newtown_map_data

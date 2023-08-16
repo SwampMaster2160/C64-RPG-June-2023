@@ -10,7 +10,7 @@ door_inside_warp_tile_event_looked_at subroutine
 	lda tile_event_extra_bytes,y
 	tay
 	lda map_heap,y
-	sta current_map
+	sta map_id
 	iny
 	lda map_heap,y
 	sta entity_x_positions,x

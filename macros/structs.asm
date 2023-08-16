@@ -1,7 +1,7 @@
 	mac mapExtraData
 	byte {1} | ({2} << 4), {3} | ({4} << 4), {5}, {6}, {7}, {8}
 	word {9}, {10}
-	byte 0, 0, 0, 0
+	;byte 0, 0, 0, 0
 	endm
 
 	mac tileExtraData

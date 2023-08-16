@@ -12,7 +12,7 @@ world_background_color ds 1
 world_sprites_visable ds 1
 gui_background_color ds 1
 is_next_screen_interrupt_for_gui ds 1
-current_map ds 1
+map_id ds 1
 does_map_need_redraw ds 1
 entity_discriminants ds 8
 entity_x_positions ds 8
@@ -32,3 +32,8 @@ tile_event_y_positions ds MAX_TILE_EVENTS
 tile_event_extra_bytes ds MAX_TILE_EVENTS
 does_map_need_reload ds 1
 map_heap_size ds 1
+map_colors ds 2
+map_border_connections ds 4
+map_name_address ds 2
+
+	echo "Zeropage vars end:",[*]

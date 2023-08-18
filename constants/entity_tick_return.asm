@@ -1,3 +1,0 @@
-	newEnum
-	enumVariant ENTITY_TICK_RETURN_NONE
-	enumVariant ENTITY_TICK_RETURN_TRY_WALK

@@ -1,12 +1,11 @@
 dummy_entity_tick subroutine
-	ldy #ENTITY_TICK_RETURN_NONE
 	jsr generate_random
 	and #%11110000
 	bne .do_not_walk
 	jsr generate_random
 	and #%00000011
 	jsr make_entity_face_direction
-	ldy #ENTITY_TICK_RETURN_TRY_WALK
+	jsr entity_try_walk
 .do_not_walk
 	rts
 
@@ -27,12 +26,12 @@ block_entity_vertical_tick subroutine
 	bmi .skip_moving_up
 	lda #DIRECTION_UP
 	jsr make_entity_face_direction
-	ldy #ENTITY_TICK_RETURN_TRY_WALK
+	jsr entity_try_walk
 	rts
 .skip_moving_up
 	lda #DIRECTION_DOWN
 	jsr make_entity_face_direction
-	ldy #ENTITY_TICK_RETURN_TRY_WALK
+	jsr entity_try_walk
 	rts
 	; Else look towards player if they are at the same y pos
 .skip_moving_vertically
@@ -41,12 +40,10 @@ block_entity_vertical_tick subroutine
 	bmi .skip_moving_left
 	lda #DIRECTION_LEFT
 	jsr make_entity_face_direction
-	ldy #ENTITY_TICK_RETURN_NONE
 	rts
 .skip_moving_left
 	lda #DIRECTION_RIGHT
 	jsr make_entity_face_direction
-	ldy #ENTITY_TICK_RETURN_NONE
 	rts
 
 block_entity_horizontal_tick subroutine
@@ -66,12 +63,12 @@ block_entity_horizontal_tick subroutine
 	bmi .skip_moving_left
 	lda #DIRECTION_LEFT
 	jsr make_entity_face_direction
-	ldy #ENTITY_TICK_RETURN_TRY_WALK
+	jsr entity_try_walk
 	rts
 .skip_moving_left
 	lda #DIRECTION_RIGHT
 	jsr make_entity_face_direction
-	ldy #ENTITY_TICK_RETURN_TRY_WALK
+	jsr entity_try_walk
 	rts
 	; Else look towards player if they are at the same x pos
 .skip_moving_horizontally
@@ -80,40 +77,41 @@ block_entity_horizontal_tick subroutine
 	bmi .skip_moving_up
 	lda #DIRECTION_UP
 	jsr make_entity_face_direction
-	ldy #ENTITY_TICK_RETURN_NONE
 	rts
 .skip_moving_up
 	lda #DIRECTION_DOWN
 	jsr make_entity_face_direction
-	ldy #ENTITY_TICK_RETURN_NONE
 	rts
 
 player_entity_tick subroutine
-	ldy #ENTITY_TICK_RETURN_NONE
-	; Rotation
-	lda is_up_key_pressed
+	; Load a null direction
+	lda #$FF
+	; If a movement key is pressed then load it's direction over the null direction
+	; Up
+	ldy is_up_key_pressed
 	beq .not_pressing_up
 	lda #DIRECTION_UP
-	jsr make_entity_face_direction
-	ldy #ENTITY_TICK_RETURN_TRY_WALK
 .not_pressing_up
-	lda is_down_key_pressed
+	; Down
+	ldy is_down_key_pressed
 	beq .not_pressing_down
 	lda #DIRECTION_DOWN
-	jsr make_entity_face_direction
-	ldy #ENTITY_TICK_RETURN_TRY_WALK
 .not_pressing_down
-	lda is_left_key_pressed
+	; Left
+	ldy is_left_key_pressed
 	beq .not_pressing_left
 	lda #DIRECTION_LEFT
-	jsr make_entity_face_direction
-	ldy #ENTITY_TICK_RETURN_TRY_WALK
 .not_pressing_left
-	lda is_right_key_pressed
+	; Right
+	ldy is_right_key_pressed
 	beq .not_pressing_right
 	lda #DIRECTION_RIGHT
-	jsr make_entity_face_direction
-	ldy #ENTITY_TICK_RETURN_TRY_WALK
 .not_pressing_right
+	; If a key was pressed then look in that direction and try to walk
+	cmp #$FF
+	beq .skip_walk
+	jsr make_entity_face_direction
+	jsr entity_try_walk
+.skip_walk
 	; Return
 	rts

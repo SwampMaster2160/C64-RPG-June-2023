@@ -434,6 +434,89 @@ do_tile_events_looked_at subroutine
 	; Return
 	rts
 
+entity_try_walk subroutine
+	; Calculate the tile pos the entity is facing
+	jsr get_tile_pos_infront_of_entity
+	; Call tile events that should be called when the player trys to walk towards them
+	jsr do_tile_events_looked_at
+	; If the entity wants to walk off the map then warp to the map connected to that side if it is a player, otherwise do not let the entity walk offscreen.
+	lda temp_x
+	cmp #$FF
+	bne .skip_walk_left_off_map
+	lda entity_discriminants,x
+	cmp #ENTITY_PLAYER
+	bne .skip_walk
+	lda map_border_connections+3
+	beq .skip_walk
+	sta map_id
+	lda #19
+	sta temp_x
+	lda #1
+	sta does_map_need_reload
+	jmp .can_walk
+.skip_walk_left_off_map
+	lda temp_x
+	cmp #20
+	bne .skip_walk_right_off_map
+	lda entity_discriminants,x
+	cmp #ENTITY_PLAYER
+	bne .skip_walk
+	lda map_border_connections+1
+	beq .skip_walk
+	sta map_id
+	lda #0
+	sta temp_x
+	lda #1
+	sta does_map_need_reload
+	jmp .can_walk
+.skip_walk_right_off_map
+	lda temp_y
+	cmp #$FF
+	bne .skip_walk_up_off_map
+	lda entity_discriminants,x
+	cmp #ENTITY_PLAYER
+	bne .skip_walk
+	lda map_border_connections
+	beq .skip_walk
+	sta map_id
+	lda #9
+	sta temp_y
+	lda #1
+	sta does_map_need_reload
+	jmp .can_walk
+.skip_walk_up_off_map
+	lda temp_y
+	cmp #10
+	bne .skip_walk_down_off_map
+	lda entity_discriminants,x
+	cmp #ENTITY_PLAYER
+	bne .skip_walk
+	lda map_border_connections+2
+	beq .skip_walk
+	sta map_id
+	lda #0
+	sta temp_y
+	lda #1
+	sta does_map_need_reload
+	jmp .can_walk
+.skip_walk_down_off_map
+	; If the entity is walking onto a tile that is onscreen then check that it can do so
+	jsr is_onscreen_tile_clear
+	cmp #TILE_MOVEMENT_WALL
+	beq .skip_walk
+	; Walk
+.can_walk
+	lda temp_x
+	sta entity_x_positions,x
+	lda temp_y
+	sta entity_y_positions,x
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+	ora #(%00111100 | ENTITY_NEEDS_REDRAW)
+	sta entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+.skip_walk
+	; Return
+	rts
+
 ; Calculate the position of the tile infront of the entity and store it into (temp_x, temp_y)
 ; --- Inputs ---
 ; x: The index of the entity in the current entity list
@@ -525,98 +608,6 @@ entity_tick subroutine
 	pha
 	jmp (word_1)
 .entity_tick_subroutine_end
-	; Return if the entity should do nothing
-	cpy #ENTITY_TICK_RETURN_NONE
-	bne .skip_none
-	rts
-.skip_none
-	; Calculate the tile pos the entity is facing
-	jsr get_tile_pos_infront_of_entity
-	; Try walk if the entity should walk
-	; Skip if the entity does not want to walk
-	cpy #ENTITY_TICK_RETURN_TRY_WALK
-	beq .do_walk
-	rts
-.do_walk
-	; Call tile events that should be called when the player thys to walk towards them
-	jsr do_tile_events_looked_at
-	; If the entity wants to walk off the map then warp to the map connected to that side if it is a player, otherwise do not let the entity walk offscreen.
-	lda temp_x
-	cmp #$FF
-	bne .skip_walk_left_off_map
-	lda entity_discriminants,x
-	cmp #ENTITY_PLAYER
-	beq .skip_return_0
-	rts
-.skip_return_0
-	lda map_border_connections+3
-	beq .skip_walk
-	sta map_id
-	lda #19
-	sta temp_x
-	lda #1
-	sta does_map_need_reload
-	jmp .can_walk
-.skip_walk_left_off_map
-	lda temp_x
-	cmp #20
-	bne .skip_walk_right_off_map
-	lda entity_discriminants,x
-	cmp #ENTITY_PLAYER
-	bne .skip_walk
-	lda map_border_connections+1
-	beq .skip_walk
-	sta map_id
-	lda #0
-	sta temp_x
-	lda #1
-	sta does_map_need_reload
-	jmp .can_walk
-.skip_walk_right_off_map
-	lda temp_y
-	cmp #$FF
-	bne .skip_walk_up_off_map
-	lda entity_discriminants,x
-	cmp #ENTITY_PLAYER
-	bne .skip_walk
-	lda map_border_connections
-	beq .skip_walk
-	sta map_id
-	lda #9
-	sta temp_y
-	lda #1
-	sta does_map_need_reload
-	jmp .can_walk
-.skip_walk_up_off_map
-	lda temp_y
-	cmp #10
-	bne .skip_walk_down_off_map
-	lda entity_discriminants,x
-	cmp #ENTITY_PLAYER
-	bne .skip_walk
-	lda map_border_connections+2
-	beq .skip_walk
-	sta map_id
-	lda #0
-	sta temp_y
-	lda #1
-	sta does_map_need_reload
-	jmp .can_walk
-.skip_walk_down_off_map
-	; If the entity is walking onto a tile that is onscreen then check that it can do so
-	jsr is_onscreen_tile_clear
-	cmp #TILE_MOVEMENT_WALL
-	beq .skip_walk
-	; Walk
-.can_walk
-	lda temp_x
-	sta entity_x_positions,x
-	lda temp_y
-	sta entity_y_positions,x
-	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
-	ora #(%00111100 | ENTITY_NEEDS_REDRAW)
-	sta entity_facing_directions_and_walk_offsets_and_redraw_flags,x
-.skip_walk
 	; Return
 	rts
 

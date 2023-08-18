@@ -434,6 +434,45 @@ do_tile_events_looked_at subroutine
 	; Return
 	rts
 
+; Calculate the position of the tile infront of the entity and store it into (temp_x, temp_y)
+; --- Inputs ---
+; x: The index of the entity in the current entity list
+; --- Outputs ---
+; (temp_x, temp_y): The position of the tile infront of the entity
+; --- Corrupted ---
+; a
+get_tile_pos_infront_of_entity subroutine
+	; Load position the entity is standing on into (temp_x, temp_y)
+	lda entity_x_positions,x
+	sta temp_x
+	lda entity_y_positions,x
+	sta temp_y
+	; Get the direction the entity is facing
+	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+	and #%00000011
+	; Decrement the y pos if the entity is facing up
+	cmp #DIRECTION_UP
+	bne .skip_up
+	dec temp_y
+.skip_up
+	; Increment the x pos if the entity is facing right
+	cmp #DIRECTION_RIGHT
+	bne .skip_right
+	inc temp_x
+.skip_right
+	; Increment the y pos if the entity is facing down
+	cmp #DIRECTION_DOWN
+	bne .skip_down
+	inc temp_y
+.skip_down
+	; Decrement the x pos if the entity is facing left
+	cmp #DIRECTION_LEFT
+	bne .skip_left
+	dec temp_x
+.skip_left
+	; Return
+	rts
+
 ; Entity tick
 ; --- Inputs ---
 ; x: The index of the entity
@@ -491,49 +530,8 @@ entity_tick subroutine
 	bne .skip_none
 	rts
 .skip_none
-	; Get the location of the map
-	; Low byte
-	/*lda map_id
-	asl
-	asl
-	asl
-	asl
-	asl
-	asl
-	clc
-	adc #<maps
-	php
-	sta word_1
-	; High byte
-	lda map_id
-	lsr
-	lsr
-	plp
-	adc #>maps
-	sta word_1+1*/
 	; Calculate the tile pos the entity is facing
-	lda entity_x_positions,x
-	sta temp_x
-	lda entity_y_positions,x
-	sta temp_y
-	lda entity_facing_directions_and_walk_offsets_and_redraw_flags,x
-	and #%00000011
-	cmp #DIRECTION_UP
-	bne .skip_up
-	dec temp_y
-.skip_up
-	cmp #DIRECTION_RIGHT
-	bne .skip_right
-	inc temp_x
-.skip_right
-	cmp #DIRECTION_DOWN
-	bne .skip_down
-	inc temp_y
-.skip_down
-	cmp #DIRECTION_LEFT
-	bne .skip_left
-	dec temp_x
-.skip_left
+	jsr get_tile_pos_infront_of_entity
 	; Try walk if the entity should walk
 	; Skip if the entity does not want to walk
 	cpy #ENTITY_TICK_RETURN_TRY_WALK
@@ -551,8 +549,6 @@ entity_tick subroutine
 	beq .skip_return_0
 	rts
 .skip_return_0
-	;ldy #55
-	;lda (word_1),y
 	lda map_border_connections+3
 	beq .skip_walk
 	sta map_id
@@ -568,8 +564,6 @@ entity_tick subroutine
 	lda entity_discriminants,x
 	cmp #ENTITY_PLAYER
 	bne .skip_walk
-	;ldy #53
-	;lda (word_1),y
 	lda map_border_connections+1
 	beq .skip_walk
 	sta map_id
@@ -585,8 +579,6 @@ entity_tick subroutine
 	lda entity_discriminants,x
 	cmp #ENTITY_PLAYER
 	bne .skip_walk
-	;ldy #52
-	;lda (word_1),y
 	lda map_border_connections
 	beq .skip_walk
 	sta map_id
@@ -602,8 +594,6 @@ entity_tick subroutine
 	lda entity_discriminants,x
 	cmp #ENTITY_PLAYER
 	bne .skip_walk
-	;ldy #54
-	;lda (word_1),y
 	lda map_border_connections+2
 	beq .skip_walk
 	sta map_id

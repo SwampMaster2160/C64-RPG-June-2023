@@ -209,30 +209,78 @@ make_entity_face_direction subroutine
 .end
 	rts
 
-; Checks if an entity can walk to a tile that is not offscreen
+; Returns weather an entity can move given a given tile movement
 ; --- Inputs ---
-; x:                The index of the entity
-; (temp_x, temp_y): The position that we want to check
+; x: The index of the entity
+; a: The tile movement
 ; --- Outputs ---
-; a: Can we walk to this tile
+; a, z: Can the entity move
 ; --- Corrupted ---
 ; y
-is_onscreen_tile_clear subroutine
-	; Collision with walls
-	jsr get_tile
-	ldy #4
-	jsr get_tile_high_nibble
+can_entity_move_for_tile_movement subroutine
+	; All entities can move for a clear tile movment
+	cmp #TILE_MOVEMENT_CLEAR
+	beq .can_move
+	; No entities can move for a wall tile movment
 	cmp #TILE_MOVEMENT_WALL
-	beq .not_clear
-	; Player only tiles
+	beq .cannot_move
+	; Only the player can move for a player only tile movment
 	cmp #TILE_MOVEMENT_PLAYER_ONLY
 	bne .skip_player_only_movment
 	lda entity_discriminants,x
 	cmp #ENTITY_PLAYER
-	bne .not_clear
+	beq .can_move
+	jmp .cannot_move
 .skip_player_only_movment
-	; Collision with other entities
-	; Loop through all entities
+	; Jump here to return if we can move
+.cannot_move
+	lda #0
+	rts
+.can_move
+	lda #1
+	rts
+
+; Get the tile movment for the tile pos
+; --- Inputs ---
+; x:                The index of the entity
+; (temp_x, temp_y): The position that we want to check
+; --- Outputs ---
+; a: The tile movment for the tile
+; --- Corrupted ---
+; y
+get_tile_movement subroutine
+	; Only the player can move outside the map
+	lda temp_x
+	cmp #$FF
+	bne .not_left_off_map
+	lda map_border_connections+3
+	beq	.wall
+	lda #TILE_MOVEMENT_PLAYER_ONLY
+	rts
+.not_left_off_map
+	cmp #20
+	bne .not_right_off_map
+	lda map_border_connections+1
+	beq	.wall
+	lda #TILE_MOVEMENT_PLAYER_ONLY
+	rts
+.not_right_off_map
+	lda temp_y
+	cmp #$FF
+	bne .not_up_off_map
+	lda map_border_connections
+	beq	.wall
+	lda #TILE_MOVEMENT_PLAYER_ONLY
+	rts
+.not_up_off_map
+	cmp #10
+	bne .not_down_off_map
+	lda map_border_connections+2
+	beq	.wall
+	lda #TILE_MOVEMENT_PLAYER_ONLY
+	rts
+.not_down_off_map
+	; Entities cannot move onto other entities
 	ldy #8
 .entity_collision_check_loop
 	dey
@@ -251,11 +299,15 @@ is_onscreen_tile_clear subroutine
 	cmp entity_y_positions,y
 	bne .entity_collision_check_loop
 	; Otherwise the tile is not clear
-	jmp .not_clear
-.entity_collision_check_loop_end
-	lda #TILE_MOVEMENT_CLEAR
+	lda #TILE_MOVEMENT_WALL
 	rts
-.not_clear
+.entity_collision_check_loop_end
+	; Otherwise get the movement for the tile itself
+	jsr get_tile
+	ldy #4
+	jsr get_tile_high_nibble
+	rts
+.wall
 	lda #TILE_MOVEMENT_WALL
 	rts
 
@@ -434,78 +486,60 @@ do_tile_events_looked_at subroutine
 	; Return
 	rts
 
+; Make the entity try to start walking to the tile that is infront of it and execute any scripts to execute when looked at
+; --- Inputs ---
+; x: The index of the entity
+; --- Corrupted ---
+; a, y, (temp_x, temp_y)
 entity_try_walk subroutine
 	; Calculate the tile pos the entity is facing
 	jsr get_tile_pos_infront_of_entity
 	; Call tile events that should be called when the player trys to walk towards them
 	jsr do_tile_events_looked_at
-	; If the entity wants to walk off the map then warp to the map connected to that side if it is a player, otherwise do not let the entity walk offscreen.
+	; Get tile movment
+	jsr get_tile_movement
+	jsr can_entity_move_for_tile_movement
+	beq .skip_walk
+	; Walk
+.can_walk
 	lda temp_x
 	cmp #$FF
 	bne .skip_walk_left_off_map
-	lda entity_discriminants,x
-	cmp #ENTITY_PLAYER
-	bne .skip_walk
 	lda map_border_connections+3
-	beq .skip_walk
 	sta map_id
 	lda #19
 	sta temp_x
 	lda #1
 	sta does_map_need_reload
-	jmp .can_walk
 .skip_walk_left_off_map
-	lda temp_x
 	cmp #20
 	bne .skip_walk_right_off_map
-	lda entity_discriminants,x
-	cmp #ENTITY_PLAYER
-	bne .skip_walk
 	lda map_border_connections+1
-	beq .skip_walk
 	sta map_id
 	lda #0
 	sta temp_x
 	lda #1
 	sta does_map_need_reload
-	jmp .can_walk
 .skip_walk_right_off_map
 	lda temp_y
 	cmp #$FF
 	bne .skip_walk_up_off_map
-	lda entity_discriminants,x
-	cmp #ENTITY_PLAYER
-	bne .skip_walk
 	lda map_border_connections
-	beq .skip_walk
 	sta map_id
 	lda #9
 	sta temp_y
 	lda #1
 	sta does_map_need_reload
-	jmp .can_walk
 .skip_walk_up_off_map
-	lda temp_y
 	cmp #10
 	bne .skip_walk_down_off_map
-	lda entity_discriminants,x
-	cmp #ENTITY_PLAYER
-	bne .skip_walk
 	lda map_border_connections+2
-	beq .skip_walk
 	sta map_id
 	lda #0
 	sta temp_y
 	lda #1
 	sta does_map_need_reload
-	jmp .can_walk
 .skip_walk_down_off_map
-	; If the entity is walking onto a tile that is onscreen then check that it can do so
-	jsr is_onscreen_tile_clear
-	cmp #TILE_MOVEMENT_WALL
-	beq .skip_walk
-	; Walk
-.can_walk
 	lda temp_x
 	sta entity_x_positions,x
 	lda temp_y
@@ -571,6 +605,7 @@ entity_tick subroutine
 	sbc #%00000100
 	ora #ENTITY_NEEDS_REDRAW
 	sta entity_facing_directions_and_walk_offsets_and_redraw_flags,x
+	; If the entity finnishes walking then process landing on a tile
 	and #%00111100
 	beq .landing_on_tile
 	rts
@@ -578,7 +613,7 @@ entity_tick subroutine
 	jsr entity_lands_on_tile
 	rts
 .skip_steping_forward
-	; Call the entities tick subroutine
+	; Get the address of the entities tick subroutine
 	lda entity_discriminants,x
 	asl
 	asl
@@ -602,12 +637,14 @@ entity_tick subroutine
 	iny
 	lda (word_0),y
 	sta word_1+1
-	lda #>(.entity_tick_subroutine_end-1)
+	; Store the return address so that we can use rts to return from a jmp
+	lda #>(.entity_tick_subroutine_return_address-1)
 	pha
-	lda #<(.entity_tick_subroutine_end-1)
+	lda #<(.entity_tick_subroutine_return_address-1)
 	pha
+	; Call entity tick subroutine
 	jmp (word_1)
-.entity_tick_subroutine_end
+.entity_tick_subroutine_return_address
 	; Return
 	rts
 

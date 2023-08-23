@@ -1,3 +1,15 @@
+load_map_metatiles subroutine
+/*.load_metatiles_loop
+	lda (word_1),y
+	sta map_metatiles,y
+	iny
+	cpy #50
+	bne .load_metatiles_loop*/
+	ldx #0
+.loop
+	lda (word_0),y
+	rts
+
 ; Loads a map
 ; --- Inputs ---
 ; map_id: The map ID to load
@@ -48,12 +60,7 @@ load_map subroutine
 	sta word_1+1
 	; Load the map's metatiles
 	ldy #0
-.load_metatiles_loop
-	lda (word_1),y
-	sta map_metatiles,y
-	iny
-	cpy #50
-	bne .load_metatiles_loop
+	jsr load_map_metatiles
 	; Colors
 	lda (word_1),y
 	sta map_colors

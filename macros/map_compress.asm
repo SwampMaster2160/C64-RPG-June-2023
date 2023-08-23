@@ -74,16 +74,30 @@ index set index + 1
 is_in_run set 0
 	endm
 
-	mac mapMetatileRow
+	/*mac mapMetatileRow
 .index set 1
 		repeat 10
+			echo {.index}
 			mapSingleMetatile {.index}
 .index set .index + 1
 		repend
+	endm*/
+	mac mapMetatileRow
+		mapSingleMetatile {1}
+		mapSingleMetatile {2}
+		mapSingleMetatile {3}
+		mapSingleMetatile {4}
+		mapSingleMetatile {5}
+		mapSingleMetatile {6}
+		mapSingleMetatile {7}
+		mapSingleMetatile {8}
+		mapSingleMetatile {9}
+		mapSingleMetatile {10}
 	endm
 
 	; Compress a single metatile
 	mac mapSingleMetatile
+		;echo "I", {1}
 		if is_in_run && (run_byte != {1} || run_length == 16)
 			endMapMetatiles
 		endif
@@ -94,11 +108,11 @@ run_length set run_length + 1
 			if recent_metatile == {1}
 is_in_run set 1
 run_byte set {1}
-run_length set 0
+run_length set 1
 			else
 				byte {1}
 				setRecentMetatile {1}
-				echo "B", {1}
+				echo "A", {1}
 			endif
 		endif
 	endm
@@ -108,5 +122,6 @@ run_length set 0
 is_in_run set 0
 			byte %10000000 | ((run_byte % 8) << 4) | (run_length - 1)
 			echo "B", %10000000 | ((run_byte % 8) << 4) | (run_length - 1)
+			echo "RB", run_byte, "RBM", (run_byte % 8), "RL", (run_length - 1)
 		endif
 	endm

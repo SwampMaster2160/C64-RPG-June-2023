@@ -1,14 +1,53 @@
 load_map_metatiles subroutine
-/*.load_metatiles_loop
-	lda (word_1),y
-	sta map_metatiles,y
-	iny
-	cpy #50
-	bne .load_metatiles_loop*/
-	ldx #0
+	ldx #8
+.init_recents_loop
+	dex
+	txa
+	sta map_heap,x
+	bne .init_recents_loop
 .loop
-	lda (word_0),y
+	cpx #50
+	bmi .do_not_return
 	rts
+.do_not_return
+	lda (word_1),y
+	iny
+	ora #0
+	bmi .is_run
+	sta map_metatiles,x
+	stx byte_1
+	pha
+	and #%00000111
+	tax
+	pla
+	sta map_heap,x
+	ldx byte_1
+	inx
+	jmp .loop
+.is_run
+	pha
+	stx byte_1
+	and #%00001111
+	sec
+	adc byte_1
+	sta byte_0
+	pla
+	and #%01110000
+	lsr
+	lsr
+	lsr
+	lsr
+	tax
+	lda map_heap,x
+	ldx byte_1
+.run_loop
+	cpx byte_0
+	bne .skip_run_end
+	jmp .loop
+.skip_run_end
+	sta map_metatiles,x
+	inx
+	jmp .run_loop
 
 ; Loads a map
 ; --- Inputs ---
@@ -16,6 +55,8 @@ load_map_metatiles subroutine
 ; --- Corrupted ---
 ; a, word_1, word_0
 load_map subroutine
+	lda #((3 | C64_25_ROWS) | %10000000) ; No vertical scroll, 25 rows, screen on, text mode, extended background off
+	sta c64_screen_control_0
 	; Set the current map id and clear non-player entities
 	tya
 	pha
@@ -58,9 +99,8 @@ load_map subroutine
 	iny
 	lda (word_0),y
 	sta word_1+1
-	; Load the map's metatiles
+	;
 	ldy #0
-	jsr load_map_metatiles
 	; Colors
 	lda (word_1),y
 	sta map_colors
@@ -94,13 +134,29 @@ load_map subroutine
 	iny
 	lda (word_1),y
 	sta map_name_address+1
-	;iny
-
-	; Execute script that should be called when loading the map
-	jsr execute_script
+	iny
 	; Set HUD to need redrawing
 	lda #1
 	sta does_hud_need_redraw
+	; Draw map colors
+	lda map_colors
+	sta c64_border_color
+	lsr
+	lsr
+	lsr
+	lsr
+	sta world_background_color
+	lda map_colors+1
+	sta c64_background_colors+1
+	lsr
+	lsr
+	lsr
+	lsr
+	sta c64_background_colors+2
+	; Load the map's metatiles
+	jsr load_map_metatiles
+	; Execute script that should be called when loading the map
+	jsr execute_script
 	; Return
 	pla
 	sta temp_y

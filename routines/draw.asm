@@ -166,6 +166,7 @@ redraw_map subroutine
 	sta word_2+1
 	; Load map colors
 	lda map_colors
+	;lda #(C64_MULTICOLOR_GREEN | C64_MULTICOLOR_YELLOW << 4)
 	sta c64_border_color
 	lsr
 	lsr
@@ -173,6 +174,7 @@ redraw_map subroutine
 	lsr
 	sta world_background_color
 	lda map_colors+1
+	;lda #(C64_MULTICOLOR_RED | C64_MULTICOLOR_BLUE << 4)
 	sta c64_background_colors+1
 	lsr
 	lsr

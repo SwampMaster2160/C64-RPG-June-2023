@@ -76,5 +76,7 @@ world_interrupt subroutine
 	sta c64_screen_control_1
 	lda world_sprites_visable
 	sta c64_sprite_enables
+	lda #(3 | C64_25_ROWS | C64_SCREEN_ON)          ; No vertical scroll, 25 rows, text mode, extended background off, screen on
+	sta c64_screen_control_0
 	; Return
 	rts

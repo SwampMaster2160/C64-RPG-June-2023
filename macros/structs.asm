@@ -1,7 +1,7 @@
 	mac mapExtraData
 		newMapMetatiles
 		byte {1} | ({2} << 4), {3} | ({4} << 4), {5}, {6}, {7}, {8}
-		word {9}, {10}
+		word {9}
 	endm
 
 	mac tileExtraData

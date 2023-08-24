@@ -121,13 +121,6 @@ load_map subroutine
 	lda (word_1),y
 	sta map_border_connections+3
 	iny
-	; Load address of script to call
-	lda (word_1),y
-	sta script_address
-	iny
-	lda (word_1),y
-	sta script_address+1
-	iny
 	; Map name
 	lda (word_1),y
 	sta map_name_address
@@ -156,6 +149,13 @@ load_map subroutine
 	; Load the map's metatiles
 	jsr load_map_metatiles
 	; Execute script that should be called when loading the map
+	tya
+	clc
+	adc word_1
+	sta script_address
+	lda word_1+1
+	adc #0
+	sta script_address+1
 	jsr execute_script
 	; Return
 	pla

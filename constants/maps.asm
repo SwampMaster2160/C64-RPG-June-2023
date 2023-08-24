@@ -98,3 +98,6 @@
 	enumVariant MAP_NEWTOWN_HOUSE_0
 	enumVariant MAP_NEWTOWN_BUILDING_0
 	enumVariant MAP_NEWTOWN_BUILDING_1
+
+	enumFrom 256
+	enumVariant MAP_IRRELEVANT

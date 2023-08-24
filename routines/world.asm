@@ -130,18 +130,45 @@ load_map subroutine
 	sta map_colors
 	iny
 	; Connections
-	lda (word_1),y
+	lda map_id
+	sec
+	sbc #1
 	sta map_border_connections
-	iny
-	lda (word_1),y
-	sta map_border_connections+1
-	iny
-	lda (word_1),y
-	sta map_border_connections+2
-	iny
-	lda (word_1),y
 	sta map_border_connections+3
+	clc
+	adc #2
+	sta map_border_connections+1
+	sta map_border_connections+2
+	lda (word_1),y
 	iny
+	tax
+	and #%00000001
+	beq .skip_north_connection
+	lda (word_1),y
+	iny
+	sta map_border_connections
+.skip_north_connection
+	txa
+	and #%00000010
+	beq .skip_east_connection
+	lda (word_1),y
+	iny
+	sta map_border_connections+1
+.skip_east_connection
+	txa
+	and #%00000100
+	beq .skip_south_connection
+	lda (word_1),y
+	iny
+	sta map_border_connections+2
+.skip_south_connection
+	txa
+	and #%00001000
+	beq .skip_west_connection
+	lda (word_1),y
+	iny
+	sta map_border_connections+3
+.skip_west_connection
 	; Map name
 	lda (word_1),y
 	sta map_name_address

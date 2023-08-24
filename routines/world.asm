@@ -1,36 +1,58 @@
+; Loads compressed metatiles to our map metatiles buffer
+; --- Inputs ---
+; word_1 + y: The pointer to the compressed metatiles
+; --- Outputs ---
+; word_1 + y: The pointer the byte after the last byte for the compressed metatiles
+; --- Corrupted ---
+; a, x, map_heap bytes 0-7
 load_map_metatiles subroutine
+.recent_metatiles = map_heap
+	; Start by initializing our recent metatile list metatiles to 0-7
 	ldx #8
 .init_recents_loop
 	dex
 	txa
-	sta map_heap,x
+	sta .recent_metatiles,x
 	bne .init_recents_loop
+	; The main loop for loading the metatiles
 .loop
+	; Return if we have loaded 50 metatiles
 	cpx #50
 	bmi .do_not_return
 	rts
 .do_not_return
+	; Load byte
 	lda (word_1),y
 	iny
 	ora #0
+	; If the high bit is set then the byte encodes a run
 	bmi .is_run
+	; Otherwise it encodes a single metatile
+	; So write the tile
 	sta map_metatiles,x
+	; Store the tile in the recent metatile list
 	stx byte_1
 	pha
 	and #%00000111
 	tax
 	pla
-	sta map_heap,x
+	sta .recent_metatiles,x
 	ldx byte_1
 	inx
+	; Continue to next byte
 	jmp .loop
+	; If the byte encodes a run
 .is_run
 	pha
+	; Save the index into the loaded map where we are copying to
 	stx byte_1
+	; The run length is the low 4 bits + 1, calculate where we should end the run
 	and #%00001111
 	sec
 	adc byte_1
 	sta byte_0
+	; Bits 4-6 are the index into the recent metatiles that holds the metatile that the run consists of
+	; Get the metatile for the run
 	pla
 	and #%01110000
 	lsr
@@ -38,8 +60,10 @@ load_map_metatiles subroutine
 	lsr
 	lsr
 	tax
-	lda map_heap,x
+	lda .recent_metatiles,x
+	; Restore where we are copying to
 	ldx byte_1
+	; Load the metatile into all addresses from where we are to the last metatile of the run we calculated
 .run_loop
 	cpx byte_0
 	bne .skip_run_end

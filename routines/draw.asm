@@ -148,15 +148,25 @@ draw_metatile subroutine
 	; Return
 	rts
 
+; Sets the screen border and map colors from map_colors
+; --- Inputs ---
+; map_colors low nibble:  The border color
+; map_colors high nibble: The map palette
+; --- Corrupted ---
+; a, x
 draw_map_colors subroutine
+	; Get colors
 	lda map_colors
+	; Store low nibble in screen border register
 	sta c64_border_color
+	; x = high nibble * 2, the offset into the pallete table to get our pallete
 	lsr
 	lsr
 	lsr
 	lsr
 	asl
 	tax
+	; Get first 2 background colors from pallete
 	lda map_palettes,x
 	sta world_background_color
 	lsr
@@ -164,13 +174,15 @@ draw_map_colors subroutine
 	lsr
 	lsr
 	sta c64_background_colors+1
+	; Get last background color from  pallete
 	lda map_palettes+1,x
 	sta c64_background_colors+2
+	; Return
 	rts
 
 ; Redraws the map
 ; --- Corrupted ---
-; a, x, y, word_0, word_2, byte_1
+; a, x, y, word_0, word_2, byte_1, byte_0
 redraw_map subroutine
 	; Setup for world interrupt
 	lda #((3 | C64_25_ROWS) | %10000000) ; No vertical scroll, 25 rows, screen on, text mode, extended background off

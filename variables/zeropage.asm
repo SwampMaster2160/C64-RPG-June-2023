@@ -32,7 +32,7 @@ tile_event_y_positions ds MAX_TILE_EVENTS
 tile_event_extra_bytes ds MAX_TILE_EVENTS
 does_map_need_reload ds 1
 map_heap_size ds 1
-map_colors ds 2
+map_colors ds 1
 map_border_connections ds 4
 map_name_address ds 2
 

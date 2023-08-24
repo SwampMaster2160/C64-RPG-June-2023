@@ -105,9 +105,6 @@ load_map subroutine
 	lda (word_1),y
 	sta map_colors
 	iny
-	lda (word_1),y
-	sta map_colors+1
-	iny
 	; Connections
 	lda (word_1),y
 	sta map_border_connections
@@ -132,20 +129,7 @@ load_map subroutine
 	lda #1
 	sta does_hud_need_redraw
 	; Draw map colors
-	lda map_colors
-	sta c64_border_color
-	lsr
-	lsr
-	lsr
-	lsr
-	sta world_background_color
-	lda map_colors+1
-	sta c64_background_colors+1
-	lsr
-	lsr
-	lsr
-	lsr
-	sta c64_background_colors+2
+	jsr draw_map_colors
 	; Load the map's metatiles
 	jsr load_map_metatiles
 	; Execute script that should be called when loading the map

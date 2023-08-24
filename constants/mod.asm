@@ -10,3 +10,4 @@
 	include "constants/world.asm"
 	include "constants/tile_movement.asm"
 	include "constants/tile_events.asm"
+	include "constants/map_palettes.asm"

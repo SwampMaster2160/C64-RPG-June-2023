@@ -148,6 +148,26 @@ draw_metatile subroutine
 	; Return
 	rts
 
+draw_map_colors subroutine
+	lda map_colors
+	sta c64_border_color
+	lsr
+	lsr
+	lsr
+	lsr
+	asl
+	tax
+	lda map_palettes,x
+	sta world_background_color
+	lsr
+	lsr
+	lsr
+	lsr
+	sta c64_background_colors+1
+	lda map_palettes+1,x
+	sta c64_background_colors+2
+	rts
+
 ; Redraws the map
 ; --- Corrupted ---
 ; a, x, y, word_0, word_2, byte_1
@@ -159,31 +179,16 @@ redraw_map subroutine
 	sta c64_screen_interrupt_line
 	lda #0
 	sta is_next_screen_interrupt_for_gui
+	; Draw map colors
+	jsr draw_map_colors
 	; Get the locations of the chars and colors that we should copy to for the first row
 	lda #<c64_chars
 	sta word_2
 	lda #>c64_chars
 	sta word_2+1
-	; Load map colors
-	lda map_colors
-	;lda #(C64_MULTICOLOR_GREEN | C64_MULTICOLOR_YELLOW << 4)
-	sta c64_border_color
-	lsr
-	lsr
-	lsr
-	lsr
-	sta world_background_color
-	lda map_colors+1
-	;lda #(C64_MULTICOLOR_RED | C64_MULTICOLOR_BLUE << 4)
-	sta c64_background_colors+1
-	lsr
-	lsr
-	lsr
-	lsr
-	sta c64_background_colors+2
 	; Set the index into the metatiles of the map to 0
 	ldy #0
-; At the start or each time we finnish drawing a row of metatiles
+	; At the start or each time we finnish drawing a row of metatiles
 .rows_loop
 	; Set the amount of metatiles we have drawn this row to 0
 	lda #0

@@ -1,0 +1,4 @@
+	newEnum
+	enumVariant MAP_PALETTE_TOWN
+	enumVariant MAP_PALETTE_PATH
+	enumVariant MAP_PALETTE_INSIDE

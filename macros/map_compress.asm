@@ -112,7 +112,7 @@ run_length set 1
 			else
 				byte {1}
 				setRecentMetatile {1}
-				echo "A", {1}
+				;echo "A", {1}
 			endif
 		endif
 	endm
@@ -121,7 +121,7 @@ run_length set 1
 		if is_in_run
 is_in_run set 0
 			byte %10000000 | ((run_byte % 8) << 4) | (run_length - 1)
-			echo "B", %10000000 | ((run_byte % 8) << 4) | (run_length - 1)
-			echo "RB", run_byte, "RBM", (run_byte % 8), "RL", (run_length - 1)
+			;echo "B", %10000000 | ((run_byte % 8) << 4) | (run_length - 1)
+			;echo "RB", run_byte, "RBM", (run_byte % 8), "RL", (run_length - 1)
 		endif
 	endm

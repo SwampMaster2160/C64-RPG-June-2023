@@ -10,6 +10,7 @@ newtown_map_data subroutine
 	endMapMetatiles
 	; Feature script
 	byte SCRIPT_SPAWN_ENTITY, ENTITY_TEST, 16, 5
+	byte SCRIPT_SPAWN_ENTITY, ENTITY_EMERALD, 5, 5
 
 	byte SCRIPT_SPAWN_TILE_EVENT, TILE_EVENT_WARP_DOOR_OUTSIDE
 	tileEventPos 0, 3, 0, 3

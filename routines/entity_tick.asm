@@ -9,6 +9,9 @@ dummy_entity_tick subroutine
 .do_not_walk
 	rts
 
+blank_entity_tick subroutine
+	rts
+
 block_entity_vertical_tick subroutine
 	; Find player index and load into y
 	txa

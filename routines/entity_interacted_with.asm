@@ -7,3 +7,6 @@ blank_entity_interacted_with subroutine
 dummy_entity_interacted_with subroutine
 	inc c64_chars
 	rts
+
+gem_entity_interacted_with subroutine
+	rts

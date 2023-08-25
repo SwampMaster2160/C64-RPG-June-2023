@@ -628,12 +628,12 @@ redraw_entity_image subroutine
 	asl
 	asl
 	asl
+	asl
 	clc
 	adc #<entities
 	php
 	sta word_0
 	lda entity_discriminants,x
-	lsr
 	lsr
 	lsr
 	lsr

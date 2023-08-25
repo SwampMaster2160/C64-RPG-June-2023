@@ -23,6 +23,7 @@ is_right_key_pressed ds 1
 is_down_key_pressed ds 1
 is_left_key_pressed ds 1
 is_action_key_pressed ds 1
+was_action_key_pressed_last_frame ds 1
 does_hud_need_redraw ds 1
 text_cursor_address ds 2
 script_address ds 2

@@ -29,8 +29,8 @@ macro_map_id set macro_map_id + 1
 	endm
 
 	mac entityData
-		byte {1}, {2}, {3}, {4}, {5}, 0
-		word {6}
+		byte {1}, {2}, {3}, {4}, {5}, 0, 0, 0
+		word {6}, {7}, 0, 0
 	endm
 
 	; Start x, start y, end x, end y

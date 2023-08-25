@@ -584,6 +584,13 @@ do_tile_events_looked_at subroutine
 	; Return
 	rts
 
+; Make the entity interact with any entities infront of it
+; --- Inputs ---
+; x: The index of the entity that is to interact with other entities
+; --- Corrupted ---
+entity_interact subroutine
+	rts
+
 ; Make the entity try to start walking to the tile that is infront of it and execute any scripts to execute when looked at
 ; --- Inputs ---
 ; x: The index of the entity
@@ -716,8 +723,9 @@ entity_tick subroutine
 	asl
 	asl
 	asl
+	asl
 	clc
-	adc #<(entities+6)
+	adc #<(entities+8)
 	php
 	sta word_0
 	lda entity_discriminants,x
@@ -725,9 +733,8 @@ entity_tick subroutine
 	lsr
 	lsr
 	lsr
-	lsr
 	plp
-	adc #>(entities+6)
+	adc #>(entities+8)
 	sta word_0+1
 	ldy #0
 	lda (word_0),y
@@ -819,8 +826,22 @@ get_tile_high_nibble subroutine
 	lsr
 	rts
 
+; Gets if the action key is pressed this frame but was not last frame
+; --- Outputs ---
+; a: Is the action key is pressed starting this frame (bool)
+is_action_key_pressed_starting_this_frame subroutine
+	lda was_action_key_pressed_last_frame
+	bne .no
+	lda is_action_key_pressed
+	rts
+.no
+	lda #0
+	rts
+
 ; Called 50 times/second
 world_tick subroutine
+	lda is_action_key_pressed
+	sta was_action_key_pressed_last_frame
 	jsr get_keys_pressed
 	; Tick each non-null entity
 	ldx #0

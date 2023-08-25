@@ -84,6 +84,12 @@ block_entity_horizontal_tick subroutine
 	rts
 
 player_entity_tick subroutine
+	; Interact then return if the player is pressing the action button
+	jsr is_action_key_pressed_starting_this_frame
+	beq .no_interaction
+	jsr entity_interact
+	rts
+.no_interaction
 	; Load a null direction
 	lda #$FF
 	; If a movement key is pressed then load it's direction over the null direction

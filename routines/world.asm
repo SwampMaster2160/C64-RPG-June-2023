@@ -588,7 +588,70 @@ do_tile_events_looked_at subroutine
 ; --- Inputs ---
 ; x: The index of the entity that is to interact with other entities
 ; --- Corrupted ---
+; a, y, (temp_x, temp_y), word_0
 entity_interact subroutine
+	; Calculate the tile pos the entity is facing
+	jsr get_tile_pos_infront_of_entity
+	; Loop over all entities
+	ldy #$FF
+.entity_interaction_loop
+	; End loop if we have gone over all entities
+	iny
+	cpy #8
+	beq .entity_interaction_loop_end
+	; Skip null entities
+	lda entity_discriminants,y
+	beq .entity_interaction_loop
+	; Skip if the entity is not infront of the entity
+	lda temp_x
+	cmp entity_x_positions,y
+	bne .entity_interaction_loop
+	lda temp_y
+	cmp entity_y_positions,y
+	bne .entity_interaction_loop
+	; Get the entity interaction subroutine address
+	lda entity_discriminants,y
+	asl
+	asl
+	asl
+	asl
+	clc
+	adc #<(entities+10)
+	sta word_0
+	php
+	lda entity_discriminants,y
+	lsr
+	lsr
+	lsr
+	lsr
+	plp
+	adc #>(entities+10)
+	sta word_0+1
+	tya
+	pha
+	ldy #0
+	lda (word_0),y
+	pha
+	iny
+	lda (word_0),y
+	sta word_0+1
+	pla
+	sta word_0
+	pla
+	tay
+	; Push the return address to stack
+	lda #>(.entity_interaction_end_subroutine_end-1)
+	pha
+	lda #<(.entity_interaction_end_subroutine_end-1)
+	pha
+	; Call the entity interaction subroutine
+	jmp (word_0)
+.entity_interaction_end_subroutine_end
+	; Next entity
+	jmp .entity_interaction_loop
+	; Once we have gone over all entities
+.entity_interaction_loop_end
+	; Return
 	rts
 
 ; Make the entity try to start walking to the tile that is infront of it and execute any scripts to execute when looked at

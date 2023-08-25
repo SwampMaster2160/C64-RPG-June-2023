@@ -5,4 +5,5 @@ blank_entity_interacted_with subroutine
 	rts
 
 dummy_entity_interacted_with subroutine
+	inc c64_chars
 	rts

@@ -921,6 +921,23 @@ world_tick subroutine
 	beq .map_does_not_need_reloading
 	jsr load_map
 .map_does_not_need_reloading
+	; Resume a suspended script if needed
+	lda suspended_script_state
+	beq .skip_scripts
+	cmp #SUSPENDED_SCRIPT_RESUME_ON_ACTION
+	bne .skip_resume_script_on_action_button_press
+	jsr is_action_key_pressed_starting_this_frame
+	beq .skip_scripts
+	lda #SUSPENDED_SCRIPT_NONE
+	sta suspended_script_state
+	lda suspended_script_address
+	sta script_address
+	lda suspended_script_address+1
+	sta script_address+1
+	jsr execute_script
+	jmp .skip_scripts
+.skip_resume_script_on_action_button_press
+.skip_scripts
 	; Return
 	rts
 

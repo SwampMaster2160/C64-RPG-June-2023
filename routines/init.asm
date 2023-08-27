@@ -121,6 +121,8 @@ init subroutine
 	jsr get_keys_pressed
 	lda #1
 	sta does_hud_need_redraw
+	lda #SUSPENDED_SCRIPT_NONE
+	sta suspended_script_address
 	
 	; Loop untill interrupt
 	cli

@@ -1,13 +1,15 @@
 	newEnum
-	enumVariant SCRIPT_END                                 ; End of script
-	enumVariant SCRIPT_CALL_INDIRECT_MACHINE_SUBROUTINE    ; Call a subroutine written in machine code
-	enumVariant SCRIPT_DRAW_TEXTBOX                        ; Draw a text box
-	enumVariant SCRIPT_CHANGE_TEXT_COLOR                   ; Change text color
-	enumVariant SCRIPT_CHANGE_TEXT_CURSOR_POINTER          ; Change the text cursor pointer
+	enumVariant SCRIPT_END                                    ; End of script
+	enumVariant SCRIPT_CALL_INDIRECT_MACHINE_SUBROUTINE       ; Call a subroutine written in machine code
+	enumVariant SCRIPT_DRAW_TEXTBOX                           ; Draw a text box
+	enumVariant SCRIPT_CHANGE_TEXT_COLOR                      ; Change text color
+	enumVariant SCRIPT_CHANGE_TEXT_CURSOR_POINTER             ; Change the text cursor pointer
 	enumFrom SCRIPT_CHANGE_TEXT_CURSOR_POINTER+4
-	enumVariant SCRIPT_CALL_INDIRECT                       ; Call another script that has it's address at an address
-	enumVariant SCRIPT_SPAWN_ENTITY                        ; Spawn an entity
-	enumVariant SCRIPT_SPAWN_TILE_EVENT                    ; Spawn a tile event
+	enumVariant SCRIPT_CALL_INDIRECT                          ; Call another script that has it's address at an address
+	enumVariant SCRIPT_CALL                                   ; Call another script
+	enumVariant SCRIPT_CALL_SUSPEND_UNTILL_ACTION_KEY_PRESSED ; Suspend the script untill the action key is pressed
+	enumVariant SCRIPT_SPAWN_ENTITY                           ; Spawn an entity
+	enumVariant SCRIPT_SPAWN_TILE_EVENT                       ; Spawn a tile event
 
 ; GUI Chars
 	enumFrom $80

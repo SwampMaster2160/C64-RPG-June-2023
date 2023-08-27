@@ -72,6 +72,42 @@ execute_script subroutine
 	ldy #3
 	jmp .loop
 .skip_call_machine_subroutine
+	; Suspend untill action key pressed
+	cmp #SCRIPT_CALL_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	bne .skip_suspend_untill_action_key_pressed
+	clc
+	lda script_address
+	adc #1
+	sta suspended_script_address
+	lda script_address+1
+	adc #0
+	sta suspended_script_address+1
+	lda #SUSPENDED_SCRIPT_RESUME_ON_ACTION
+	sta suspended_script_state
+	rts
+.skip_suspend_untill_action_key_pressed
+	; Call
+	cmp #SCRIPT_CALL
+	bne .skip_call
+	lda script_address
+	pha
+	lda script_address+1
+	pha
+	lda (script_address),y
+	pha
+	iny
+	lda (script_address),y
+	sta script_address+1
+	pla
+	sta script_address
+	jsr execute_script
+	pla
+	sta script_address+1
+	pla
+	sta script_address
+	ldy #3
+	jmp .loop
+.skip_call
 	; Call indirect
 	cmp #SCRIPT_CALL_INDIRECT
 	bne .skip_call_indirect

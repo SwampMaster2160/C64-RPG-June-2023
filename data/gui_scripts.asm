@@ -1,8 +1,13 @@
-draw_hud subroutine
+; Draw a textbox for printing text, change the text color to white and set the text cursor to the upper left of the boxes inside.
+draw_basic_textbox_script subroutine
 	byte SCRIPT_CHANGE_TEXT_CURSOR_POINTER+>(20*40), <(20*40)
 	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_WHITE
 	byte SCRIPT_DRAW_TEXTBOX, 40, 5
 	byte SCRIPT_CHANGE_TEXT_CURSOR_POINTER+>(21*40+1), <(21*40+1)
+	byte SCRIPT_END
+
+draw_hud subroutine
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
 	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_RED
 	byte GUI_CHAR_LOCATION_PIN
 	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_WHITE
@@ -152,4 +157,11 @@ hillbase_name subroutine
 raccoon_path_name subroutine
 	byte "Raccoon Path"
 blank_string subroutine
+	byte SCRIPT_END
+
+test_entity_script subroutine
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte "I am a test entity."
+	byte SCRIPT_CALL_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_hud, #>draw_hud
 	byte SCRIPT_END

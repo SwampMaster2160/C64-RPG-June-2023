@@ -107,6 +107,8 @@ init subroutine
 	inx
 	bne .load_world_chars_loop
 	; Init vars
+	lda #GAMESTATE_INGAME
+	sta suspended_script_state
 	lda #0
 	sta is_next_screen_interrupt_for_gui
 	lda #0
@@ -121,8 +123,6 @@ init subroutine
 	jsr get_keys_pressed
 	lda #1
 	sta does_hud_need_redraw
-	lda #SUSPENDED_SCRIPT_NONE
-	sta suspended_script_address
 	
 	; Loop untill interrupt
 	cli

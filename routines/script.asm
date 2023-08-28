@@ -82,7 +82,7 @@ execute_script subroutine
 	lda script_address+1
 	adc #0
 	sta suspended_script_address+1
-	lda #SUSPENDED_SCRIPT_RESUME_ON_ACTION
+	lda #GAMESTATE_SCRIPT_RESUME_AFTER_TICK_AND_ON_ACTION
 	sta suspended_script_state
 	rts
 .skip_suspend_untill_action_key_pressed

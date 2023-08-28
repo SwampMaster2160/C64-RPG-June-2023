@@ -906,7 +906,9 @@ world_tick subroutine
 	lda is_action_key_pressed
 	sta was_action_key_pressed_last_frame
 	jsr get_keys_pressed
-	; Tick each non-null entity
+	; Gamestate
+	lda suspended_script_state
+	bne .skip_ingame
 	ldx #0
 .entity_tick_loop
 	lda entity_discriminants,x
@@ -916,28 +918,33 @@ world_tick subroutine
 	inx
 	cpx #8
 	bne .entity_tick_loop
-	; Reload map if needed
-	lda does_map_need_reload
-	beq .map_does_not_need_reloading
-	jsr load_map
-.map_does_not_need_reloading
-	; Resume a suspended script if needed
-	lda suspended_script_state
-	beq .skip_scripts
-	cmp #SUSPENDED_SCRIPT_RESUME_ON_ACTION
+	jmp .end_scripts
+.skip_ingame
+	cmp #GAMETSATE_SCRIPT_RESUME_ON_ACTION
 	bne .skip_resume_script_on_action_button_press
 	jsr is_action_key_pressed_starting_this_frame
-	beq .skip_scripts
-	lda #SUSPENDED_SCRIPT_NONE
+	beq .end_scripts
+	lda #GAMESTATE_INGAME
 	sta suspended_script_state
 	lda suspended_script_address
 	sta script_address
 	lda suspended_script_address+1
 	sta script_address+1
 	jsr execute_script
-	jmp .skip_scripts
+	jmp .end_scripts
 .skip_resume_script_on_action_button_press
-.skip_scripts
+	cmp #GAMESTATE_SCRIPT_RESUME_AFTER_TICK_AND_ON_ACTION
+	bne .skip_resume_script_on_action_button_press_and_after_tick
+	lda #GAMETSATE_SCRIPT_RESUME_ON_ACTION
+	sta suspended_script_state
+	jmp .end_scripts
+.skip_resume_script_on_action_button_press_and_after_tick
+.end_scripts
+	; Reload map if needed
+	lda does_map_need_reload
+	beq .map_does_not_need_reloading
+	jsr load_map
+.map_does_not_need_reloading
 	; Return
 	rts
 

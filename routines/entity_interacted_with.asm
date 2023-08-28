@@ -13,11 +13,16 @@ dummy_entity_interacted_with subroutine
 	rts
 
 gem_entity_interacted_with subroutine
+	txa
+	pha
 	tya
 	pha
 	lda entity_discriminants,y
 	sec
 	sbc #ENTITY_SAPHIRE
+	pha
+	jsr set_plot_completion_flag
+	pla
 	asl
 	tay
 	lda gem_names,y
@@ -33,4 +38,6 @@ gem_entity_interacted_with subroutine
 	lda #>found_gem_script
 	sta script_address+1
 	jsr execute_script
+	pla
+	tax
 	rts

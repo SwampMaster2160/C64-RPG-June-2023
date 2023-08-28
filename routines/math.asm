@@ -88,3 +88,56 @@ map_heap_allocate subroutine
 	adc map_heap_size
 	sta map_heap_size
 	rts
+
+; Sets the given plot completion flag
+; --- Inputs ---
+; a: The ID of the plot completion flag
+; --- Corrupted ---
+; a, x, byte_0
+set_plot_completion_flag subroutine
+	pha
+	lsr
+	lsr
+	lsr
+	sta byte_0
+	pla
+	and #%00000111
+	tax
+	lda #1
+.bit_shift_loop
+	dex
+	bmi .bit_shift_loop_end
+	asl
+	jmp .bit_shift_loop
+.bit_shift_loop_end
+	ldx byte_0
+	ora plot_completion_flags,x
+	sta plot_completion_flags,x
+	rts
+
+; Returns weather the plot completion flag is set or not
+; --- Inputs ---
+; a: The ID of the plot completion flag
+; --- Outputs ---
+; a: Is the flag set (bool)
+; --- Corrupted ---
+; a, x, byte_0
+is_plot_completion_flag_set subroutine
+	pha
+	and #%00000111
+	sta byte_0
+	pla
+	lsr
+	lsr
+	lsr
+	tax
+	lda plot_completion_flags,x
+	ldx byte_0
+.bit_shift_loop
+	dex
+	bmi .bit_shift_loop_end
+	lsr
+	jmp .bit_shift_loop
+.bit_shift_loop_end
+	and #%00000001
+	rts

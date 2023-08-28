@@ -38,5 +38,6 @@ map_border_connections ds 4
 map_name_address ds 2
 suspended_script_address ds 2
 gamestate ds 1
+plot_completion_flags ds 32
 
 	echo "Zeropage vars end:",[*]

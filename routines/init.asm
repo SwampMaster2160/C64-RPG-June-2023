@@ -106,6 +106,13 @@ init subroutine
 	sta world_chars_loaded+$700,x
 	inx
 	bne .load_world_chars_loop
+	; Clear flags
+	ldx #31
+	lda #0
+.clear_flags_loop
+	sta plot_completion_flags,x
+	dex
+	bpl .clear_flags_loop
 	; Init vars
 	lda #GAMESTATE_INGAME
 	sta gamestate

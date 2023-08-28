@@ -907,7 +907,7 @@ world_tick subroutine
 	sta was_action_key_pressed_last_frame
 	jsr get_keys_pressed
 	; Gamestate
-	lda suspended_script_state
+	lda gamestate
 	bne .skip_ingame
 	ldx #0
 .entity_tick_loop
@@ -925,7 +925,7 @@ world_tick subroutine
 	jsr is_action_key_pressed_starting_this_frame
 	beq .end_scripts
 	lda #GAMESTATE_INGAME
-	sta suspended_script_state
+	sta gamestate
 	lda suspended_script_address
 	sta script_address
 	lda suspended_script_address+1
@@ -936,7 +936,7 @@ world_tick subroutine
 	cmp #GAMESTATE_SCRIPT_RESUME_AFTER_TICK_AND_ON_ACTION
 	bne .skip_resume_script_on_action_button_press_and_after_tick
 	lda #GAMETSATE_SCRIPT_RESUME_ON_ACTION
-	sta suspended_script_state
+	sta gamestate
 	jmp .end_scripts
 .skip_resume_script_on_action_button_press_and_after_tick
 .end_scripts

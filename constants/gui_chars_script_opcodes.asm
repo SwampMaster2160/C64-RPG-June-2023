@@ -7,7 +7,7 @@
 	enumFrom SCRIPT_CHANGE_TEXT_CURSOR_POINTER+4
 	enumVariant SCRIPT_CALL_INDIRECT                          ; Call another script that has it's address at an address
 	enumVariant SCRIPT_CALL                                   ; Call another script
-	enumVariant SCRIPT_CALL_SUSPEND_UNTILL_ACTION_KEY_PRESSED ; Suspend the script untill the action key is pressed
+	enumVariant SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED ; Suspend the script untill the action key is pressed
 	enumVariant SCRIPT_SPAWN_ENTITY                           ; Spawn an entity
 	enumVariant SCRIPT_SPAWN_TILE_EVENT                       ; Spawn a tile event
 

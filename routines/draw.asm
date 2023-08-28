@@ -744,9 +744,9 @@ redraw subroutine
 	beq .skip_hud_redraw
 	lda #0
 	sta does_hud_need_redraw
-	lda <#draw_hud
+	lda <#draw_hud_script
 	sta script_address
-	lda >#draw_hud
+	lda >#draw_hud_script
 	sta script_address+1
 	jsr execute_script
 .skip_hud_redraw

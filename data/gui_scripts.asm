@@ -6,7 +6,13 @@ draw_basic_textbox_script subroutine
 	byte SCRIPT_CHANGE_TEXT_CURSOR_POINTER+>(21*40+1), <(21*40+1)
 	byte SCRIPT_END
 
-draw_hud subroutine
+draw_enter_fire_script subroutine
+	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_WHITE
+	byte SCRIPT_CHANGE_TEXT_CURSOR_POINTER+>(24*40+1), <(24*40+1)
+	byte "Press Enter/Fire"
+	byte SCRIPT_END
+
+draw_hud_script subroutine
 	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
 	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_RED
 	byte GUI_CHAR_LOCATION_PIN
@@ -159,9 +165,60 @@ raccoon_path_name subroutine
 blank_string subroutine
 	byte SCRIPT_END
 
+saphire_text subroutine
+	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_BLUE
+	byte "Saphire"
+	byte SCRIPT_END
+
+ruby_text subroutine
+	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_RED
+	byte "Ruby"
+	byte SCRIPT_END
+
+emerald_text subroutine
+	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_GREEN
+	byte "Emerald"
+	byte SCRIPT_END
+
+amethyst_text subroutine
+	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_MAGENTA
+	byte "Amethyst"
+	byte SCRIPT_END
+
+topaz_text subroutine
+	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_ORANGE
+	byte "Topaz"
+	byte SCRIPT_END
+
+quartz_text subroutine
+	byte "Quartz"
+	byte SCRIPT_END
+
+legrandite_text subroutine
+	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_YELLOW
+	byte "Legrandite"
+	byte SCRIPT_END
+
+diamond_text subroutine
+	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_CYAN
+	byte "Diamond"
+	byte SCRIPT_END
+
 test_entity_script subroutine
 	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
 	byte "I am a test entity."
-	byte SCRIPT_CALL_SUSPEND_UNTILL_ACTION_KEY_PRESSED
-	byte SCRIPT_CALL, #<draw_hud, #>draw_hud
+	byte SCRIPT_CALL, #<draw_enter_fire_script, #>draw_enter_fire_script
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
+	byte SCRIPT_END
+
+found_gem_script subroutine
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte "Found the "
+	byte SCRIPT_CALL_INDIRECT, <word_0, >word_0
+	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_WHITE
+	byte "."
+	byte SCRIPT_CALL, #<draw_enter_fire_script, #>draw_enter_fire_script
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
 	byte SCRIPT_END

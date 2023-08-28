@@ -73,7 +73,7 @@ execute_script subroutine
 	jmp .loop
 .skip_call_machine_subroutine
 	; Suspend untill action key pressed
-	cmp #SCRIPT_CALL_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	cmp #SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
 	bne .skip_suspend_untill_action_key_pressed
 	clc
 	lda script_address
@@ -83,7 +83,7 @@ execute_script subroutine
 	adc #0
 	sta suspended_script_address+1
 	lda #GAMESTATE_SCRIPT_RESUME_AFTER_TICK_AND_ON_ACTION
-	sta suspended_script_state
+	sta gamestate
 	rts
 .skip_suspend_untill_action_key_pressed
 	; Call

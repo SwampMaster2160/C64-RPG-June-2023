@@ -9,3 +9,4 @@
 	include "data/tile_events.asm"
 	include "data/map_pointers.asm"
 	include "data/map_palettes.asm"
+	include "data/gem_names.asm"

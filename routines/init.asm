@@ -108,7 +108,7 @@ init subroutine
 	bne .load_world_chars_loop
 	; Init vars
 	lda #GAMESTATE_INGAME
-	sta suspended_script_state
+	sta gamestate
 	lda #0
 	sta is_next_screen_interrupt_for_gui
 	lda #0

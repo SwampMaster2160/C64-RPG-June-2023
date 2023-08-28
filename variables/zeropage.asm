@@ -37,6 +37,6 @@ map_colors ds 1
 map_border_connections ds 4
 map_name_address ds 2
 suspended_script_address ds 2
-suspended_script_state ds 1
+gamestate ds 1
 
 	echo "Zeropage vars end:",[*]

@@ -1,0 +1,9 @@
+gem_names subroutine
+	word saphire_text
+	word ruby_text
+	word emerald_text
+	word amethyst_text
+	word topaz_text
+	word quartz_text
+	word legrandite_text
+	word diamond_text

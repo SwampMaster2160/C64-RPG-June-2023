@@ -10,3 +10,4 @@
 	include "data/map_pointers.asm"
 	include "data/map_palettes.asm"
 	include "data/gem_names.asm"
+	include "data/dropped_item_locations.asm"

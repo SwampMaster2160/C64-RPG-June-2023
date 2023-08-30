@@ -121,7 +121,7 @@ set_plot_completion_flag subroutine
 ; --- Outputs ---
 ; a: Is the flag set (bool)
 ; --- Corrupted ---
-; a, x, byte_0
+; x, byte_0
 is_plot_completion_flag_set subroutine
 	pha
 	and #%00000111

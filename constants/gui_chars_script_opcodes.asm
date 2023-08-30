@@ -1,6 +1,6 @@
 	newEnum
 	enumVariant SCRIPT_END                                    ; End of script
-	enumVariant SCRIPT_CALL_INDIRECT_MACHINE_SUBROUTINE       ; Call a subroutine written in machine code
+	enumVariant SCRIPT_CALL_MACHINE_SUBROUTINE                ; Call a subroutine written in machine code
 	enumVariant SCRIPT_DRAW_TEXTBOX                           ; Draw a text box
 	enumVariant SCRIPT_CHANGE_TEXT_COLOR                      ; Change text color
 	enumVariant SCRIPT_CHANGE_TEXT_CURSOR_POINTER             ; Change the text cursor pointer

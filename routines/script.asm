@@ -48,7 +48,7 @@ execute_script subroutine
 	jmp .loop
 .skip_char_draw
 	; Call machine code subroutine
-	cmp #SCRIPT_CALL_INDIRECT_MACHINE_SUBROUTINE
+	cmp #SCRIPT_CALL_MACHINE_SUBROUTINE
 	bne .skip_call_machine_subroutine
 	lda script_address
 	pha

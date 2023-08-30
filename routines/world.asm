@@ -1008,3 +1008,39 @@ spawn_tile_event subroutine
 .copy_loop_end
 	; Return
 	rts
+
+; Searches the dropped_item_locations table and spawn the dropped item for the current map if it has not already been collected
+; --- Corrupted ---
+; a, x, y, temp_x, temp_y
+spawn_map_dropped_item subroutine
+	ldx #$FF ; Map id
+	ldy #$FD ; Table offset
+	; Get the index into the dropped item location table that is for our map
+.loop
+	inx
+	iny
+	iny
+	iny
+	lda dropped_item_locations,y
+	cmp map_id
+	bne .loop
+	; Return if the item has already been collected
+	txa
+	pha
+	jsr is_plot_completion_flag_set
+	beq .item_has_not_been_collected
+	pla
+	rts
+.item_has_not_been_collected
+	; Spawn the item
+	iny
+	lda dropped_item_locations,y
+	sta temp_x
+	iny
+	lda dropped_item_locations,y
+	sta temp_y
+	pla
+	clc
+	adc #ENTITY_SAPHIRE
+	jsr spawn_entity
+	rts

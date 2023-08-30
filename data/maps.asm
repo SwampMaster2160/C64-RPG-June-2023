@@ -10,7 +10,7 @@ newtown_map_data subroutine
 	endMapMetatiles
 	; Feature script
 	byte SCRIPT_SPAWN_ENTITY, ENTITY_TEST, 16, 5
-	byte SCRIPT_SPAWN_ENTITY, ENTITY_EMERALD, 5, 5
+	;byte SCRIPT_SPAWN_ENTITY, ENTITY_EMERALD, 5, 5
 
 	byte SCRIPT_SPAWN_TILE_EVENT, TILE_EVENT_WARP_DOOR_OUTSIDE
 	tileEventPos 0, 3, 0, 3
@@ -145,6 +145,7 @@ bayview_map_data subroutine
 	mapMetatileRow METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TOWN_PATH_VERTICAL, METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES
 	endMapMetatiles
 
+	byte SCRIPT_CALL_MACHINE_SUBROUTINE, #<spawn_map_dropped_item, #>spawn_map_dropped_item
 	byte SCRIPT_END
 
 two_islands_town_map_data subroutine
@@ -167,6 +168,7 @@ hillbase_map_data subroutine
 	mapMetatileRow METATILE_TREES, METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES
 	endMapMetatiles
 
+	byte SCRIPT_CALL_MACHINE_SUBROUTINE, #<spawn_map_dropped_item, #>spawn_map_dropped_item
 	byte SCRIPT_END
 
 midland_path_0_map_data subroutine
@@ -244,6 +246,7 @@ delta_beach_0_map_data subroutine
 	mapMetatileRow METATILE_ROCKS, METATILE_TREES, METATILE_TREES, METATILE_TREES, METATILE_TREES, METATILE_TREES, METATILE_TREES, METATILE_TREES, METATILE_TREES, METATILE_TREES
 	endMapMetatiles
 
+	byte SCRIPT_CALL_MACHINE_SUBROUTINE, #<spawn_map_dropped_item, #>spawn_map_dropped_item
 	byte SCRIPT_END
 
 delta_beach_1_map_data subroutine
@@ -646,6 +649,7 @@ tunnel_path_1_map_data subroutine
 	byte SCRIPT_SPAWN_TILE_EVENT, TILE_EVENT_WARP_CAVE_ENTRENCE_LEFT_RIGHT
 	tileEventPos 5, 4, 5, 5
 	byte 2, MAP_TANUKI_TUNNEL_2, 17
+	byte SCRIPT_CALL_MACHINE_SUBROUTINE, #<spawn_map_dropped_item, #>spawn_map_dropped_item
 	byte SCRIPT_END
 
 tanuki_tunnel_0_map_data subroutine
@@ -828,6 +832,7 @@ marx_beach_0_map_data subroutine
 	mapMetatileRow METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_SAND,  METATILE_SAND,  METATILE_SAND,  METATILE_SAND,  METATILE_TREES
 	endMapMetatiles
 
+	byte SCRIPT_CALL_MACHINE_SUBROUTINE, #<spawn_map_dropped_item, #>spawn_map_dropped_item
 	byte SCRIPT_END
 
 marx_beach_1_map_data subroutine
@@ -905,6 +910,7 @@ lenin_lake_map_data subroutine
 	mapMetatileRow METATILE_TREES, METATILE_TREES, METATILE_TREES, METATILE_GRASS, METATILE_WATER, METATILE_TREES, METATILE_TREES, METATILE_TREES, METATILE_TREES, METATILE_TREES
 	endMapMetatiles
 
+	byte SCRIPT_CALL_MACHINE_SUBROUTINE, #<spawn_map_dropped_item, #>spawn_map_dropped_item
 	byte SCRIPT_END
 
 little_lake_map_data subroutine
@@ -927,6 +933,7 @@ bayswater_peninsula_map_data subroutine
 	mapMetatileRow METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER
 	endMapMetatiles
 
+	byte SCRIPT_CALL_MACHINE_SUBROUTINE, #<spawn_map_dropped_item, #>spawn_map_dropped_item
 	byte SCRIPT_END
 
 twin_warfs_east_map_data subroutine
@@ -1015,6 +1022,7 @@ l_warf_2_map_data subroutine
 	mapMetatileRow METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER,              METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER
 	endMapMetatiles
 
+	byte SCRIPT_CALL_MACHINE_SUBROUTINE, #<spawn_map_dropped_item, #>spawn_map_dropped_item
 	byte SCRIPT_END
 
 newtown_house_0_map_data subroutine

@@ -1044,3 +1044,17 @@ spawn_map_dropped_item subroutine
 	adc #ENTITY_SAPHIRE
 	jsr spawn_entity
 	rts
+
+spawn_beach_blocker subroutine
+	lda plot_completion_flags+[PLOT_COMPLETION_FLAG_GOT_DO_NOT_BLOCK_AMULET/8]
+	and #1<<(PLOT_COMPLETION_FLAG_GOT_DO_NOT_BLOCK_AMULET%8)
+	beq .amulet_not_got
+	rts
+.amulet_not_got
+	lda #3
+	sta temp_x
+	lda #3
+	sta temp_y
+	lda #ENTITY_BEACH_BLOCKER
+	jsr spawn_entity
+	rts

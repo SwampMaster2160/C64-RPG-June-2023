@@ -62,3 +62,11 @@ do_not_block_amulet_giver_interacted_with subroutine
 	sta script_address+1
 	jsr execute_script
 	rts
+
+beach_blocker_interacted_with subroutine
+	lda #<beach_blocker_script
+	sta script_address
+	lda #>beach_blocker_script
+	sta script_address+1
+	jsr execute_script
+	rts

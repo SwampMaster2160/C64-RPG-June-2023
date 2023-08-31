@@ -581,6 +581,7 @@ bayswater_beach_2_map_data subroutine
 	mapMetatileRow METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER,         METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER
 	endMapMetatiles
 
+	byte SCRIPT_CALL_MACHINE_SUBROUTINE, #<spawn_beach_blocker, #>spawn_beach_blocker
 	byte SCRIPT_END
 
 bayswater_beach_3_map_data subroutine

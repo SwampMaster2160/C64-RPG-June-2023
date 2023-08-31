@@ -222,3 +222,25 @@ found_gem_script subroutine
 	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
 	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
 	byte SCRIPT_END
+
+get_do_not_block_amulet_script subroutine
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte '", "I have this amulet that stops people"
+	byte SCRIPT_CHANGE_TEXT_CURSOR_POINTER+>(22*40+1), <(22*40+1)
+	byte "from randomly blocking a path for no"
+	byte SCRIPT_CHANGE_TEXT_CURSOR_POINTER+>(23*40+1), <(23*40+1)
+	byte "reason.", '"
+	byte SCRIPT_CALL, #<draw_enter_fire_script, #>draw_enter_fire_script
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte "Got the do not block amulet."
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
+	byte SCRIPT_END
+
+do_not_block_amulet_already_got_script subroutine
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte '", "I hope the amulet helps.", '"
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
+	byte SCRIPT_END

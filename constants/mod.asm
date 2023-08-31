@@ -12,3 +12,4 @@
 	include "constants/tile_events.asm"
 	include "constants/map_palettes.asm"
 	include "constants/gamestates.asm"
+	include "constants/plot_completion_flags.asm"

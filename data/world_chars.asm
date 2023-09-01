@@ -89,11 +89,11 @@ world_chars subroutine
 	byte 122, 246, 122, 246, 223, 119, 255, 221 ; Dirt path bottom left concave
 	byte 175, 169, 171, 231, 223, 119, 255, 221 ; Dirt path bottom right concave
 
-	byte 254, 239, 238, 254, 239, 238, 254, 239 ; Brick wall vertical 0
-	byte 238, 238, 254, 239, 238, 254, 239, 238 ; Brick wall vertical 1
+	byte 254, 239, 238, 254, 239, 238, 254, 239 ; Brick wall vertical 1
+	byte 238, 238, 254, 239, 238, 254, 239, 238 ; Brick wall vertical 0
 	byte 254, 239, 238, 254, 239,   2,  50,   3 ; Brick wall vertical key hole
 	byte 170, 187, 170, 187, 170, 139, 170, 184 ; Wall vertical water grate
-	
+
 	byte 255, 223, 253, 255, 125, 247, 173, 167 ; Fallen tree top left
 	byte 255, 127, 223, 119, 221, 119, 221, 119 ; Fallen tree top right
 	byte 173, 167, 253, 247, 125, 255, 247, 223 ; Fallen tree bottom left

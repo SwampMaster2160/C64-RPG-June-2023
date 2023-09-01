@@ -92,7 +92,7 @@ world_chars subroutine
 	byte 254, 239, 238, 254, 239, 238, 254, 239 ; Brick wall vertical 1
 	byte 238, 238, 254, 239, 238, 254, 239, 238 ; Brick wall vertical 0
 	byte 254, 239, 238, 254, 239,   2,  50,   3 ; Brick wall vertical key hole
-	byte 170, 187, 170, 187, 170, 139, 170, 184 ; Wall vertical water grate
+	byte 170, 187, 187, 187, 170, 139, 187, 184 ; Wall vertical water grate
 
 	byte 255, 223, 253, 255, 125, 247, 173, 167 ; Fallen tree top left
 	byte 255, 127, 223, 119, 221, 119, 221, 119 ; Fallen tree top right

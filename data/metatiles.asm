@@ -52,6 +52,6 @@ metatiles subroutine
 	byte TILE_DIRT_PATH_TOP,                        TILE_DIRT_PATH_TOP_RIGHT_CONCAVE,    TILE_DIRT_PATH_BOTTOM_LEFT,                TILE_DIRT_PATH_RIGHT                   ; Dirt down left
 	byte TILE_DIRT_PATH_TOP_LEFT_CONCAVE,           TILE_DIRT_PATH_TOP,                  TILE_DIRT_PATH_LEFT,                       TILE_DIRT_PATH_BOTTOM_RIGHT            ; Dirt down right
 	byte TILE_BRICK_WALL_VERTICAL,                  TILE_GRASS,                          TILE_BRICK_WALL_VERTICAL,                  TILE_GRASS                             ; Vertical brick wall with grass on right
-	byte TILE_BRICK_WALL_VERTICAL_WITH_KEY_HOLE,    TILE_TOWN_PATH_TOP,                  TILE_BRICK_WALL_VERTICAL,                  TILE_TOWN_PATH_BOTTOM                  ; Vertical brick wall with key hole and path on right
+	byte TILE_BRICK_WALL_VERTICAL_WITH_KEY_HOLE,    TILE_DIRT_PATH_TOP,                  TILE_BRICK_WALL_VERTICAL,                  TILE_DIRT_PATH_BOTTOM                  ; Vertical brick wall with key hole and path on right
 	byte TILE_BRICK_WALL_VERTICAL_WITH_WATER_GRATE, TILE_WATER,                          TILE_BRICK_WALL_VERTICAL_WITH_WATER_GRATE, TILE_WATER                             ; Vertical brick wall with water on right
 	byte TILE_TREE_STUMP,                           TILE_FALLEN_TREE,                    TILE_GRASS,                                TILE_GRASS                             ; Fallen tree with grass below

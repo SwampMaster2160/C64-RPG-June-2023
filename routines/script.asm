@@ -2,7 +2,7 @@
 ; --- Inputs ---
 ; script_address: A pointer to the map script
 ; --- Corrupted ---
-; a, x, y, script_address
+; a, x, y, script_address, byte_0
 execute_script subroutine
 	ldy #0
 .loop
@@ -183,6 +183,22 @@ execute_script subroutine
 	sta text_color
 	jmp .loop
 .skip_color_change
+	; Replace metatile if plot completion flag set
+	cmp #SCRIPT_REPLACE_METATILE_IF_PLOT_COMPLETION_FLAG_SET
+	bne .skip_replace
+	lda (script_address),y ; Plot flag
+	iny
+	jsr is_plot_completion_flag_set
+	beq .end
+	lda (script_address),y ; Tile index to replace
+	iny
+	tax
+	lda (script_address),y ; Tile ID to replace with
+	iny
+	sta map_metatiles,x
+.end
+	jmp .loop
+.skip_replace
 	; Change text cursor pointer
 	pha
 	and #%11111100

@@ -1107,24 +1107,3 @@ spawn_beach_blocker subroutine
 	lda #ENTITY_BEACH_BLOCKER
 	jsr spawn_entity
 	rts
-
-clear_gate_if_opened subroutine
-	lda map_id
-	cmp #MAP_TWO_ISLANDS_PATH_3
-	beq .two_islands_path_3
-	lda #PLOT_COMPLETION_FLAG_OPENED_GATE_RIVERSIDE_PATH_3
-	jsr is_plot_completion_flag_set
-	beq .end
-	ldx #3*10+4
-	lda #METATILE_DIRT_PATH_HORIZONTAL
-	sta map_metatiles,x
-	rts
-.two_islands_path_3
-	lda #PLOT_COMPLETION_FLAG_OPENED_GATE_TWO_ISLANDS_PATH_3
-	jsr is_plot_completion_flag_set
-	beq .end
-	ldx #2*10+2
-	lda #METATILE_DIRT_PATH_HORIZONTAL
-	sta map_metatiles,x
-.end
-	rts

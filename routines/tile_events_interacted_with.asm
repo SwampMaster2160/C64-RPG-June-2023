@@ -18,7 +18,7 @@ wall_gate_interacted_with subroutine
 	; Return if key has not been collected
 	lda #PLOT_COMPLETION_FLAG_GOT_GATE_KEY
 	jsr is_plot_completion_flag_set
-	;beq .no_key
+	beq .no_key
 	; Make map_heap+x point to the extra bytes for the event
 	lda tile_event_extra_bytes,y
 	tax

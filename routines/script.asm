@@ -6,7 +6,33 @@
 execute_script subroutine
 	ldy #0
 .loop
+	; Get opcode
+	lda (script_address),y
+	iny
+	; Draw char
+	cmp #32
+	bcc .skip_char_draw
+	ldx #0
+	sta (text_cursor_address,x)
+	lda text_cursor_address
+	sta word_1
+	lda text_cursor_address+1
+	clc
+	adc #>(c64_char_colors-c64_chars)
+	sta word_1+1
+	lda text_color
+	sta (word_1,x)
+	lda text_cursor_address
+	clc
+	adc #1
+	sta text_cursor_address
+	lda text_cursor_address+1
+	adc #0
+	sta text_cursor_address+1
+	jmp .loop
+.skip_char_draw
 	; Increment script_address by y and set y to 0
+	dey
 	tya
 	clc
 	adc script_address
@@ -15,7 +41,6 @@ execute_script subroutine
 	adc #0
 	sta script_address+1
 	ldy #0
-	; Get opcode
 	lda (script_address),y
 	iny
 	; Script end opcode
@@ -23,30 +48,6 @@ execute_script subroutine
 	bne .skip_end
 	rts
 .skip_end
-	; Draw char
-	cmp #32
-	bcc .skip_char_draw
-	ldy #0
-	sta (text_cursor_address),y
-	lda text_cursor_address
-	sta word_1
-	lda text_cursor_address+1
-	clc
-	adc #>(c64_char_colors-c64_chars)
-	sta word_1+1
-	lda text_color
-	ldy #0
-	sta (word_1),y
-	lda text_cursor_address
-	clc
-	adc #1
-	sta text_cursor_address
-	lda text_cursor_address+1
-	adc #0
-	sta text_cursor_address+1
-	ldy #1
-	jmp .loop
-.skip_char_draw
 	; Call machine code subroutine
 	cmp #SCRIPT_CALL_MACHINE_SUBROUTINE
 	bne .skip_call_machine_subroutine

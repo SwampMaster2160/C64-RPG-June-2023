@@ -12,5 +12,7 @@
 	enumVariant ENTITY_QUARTZ
 	enumVariant ENTITY_LEGRANDITE
 	enumVariant ENTITY_DIAMOND
+	enumVariant ENTITY_KEY
+	enumVariant ENTITY_SHOVEL
 	enumVariant ENTITY_DO_NOT_BLOCK_AMULET_GIVER
 	enumVariant ENTITY_BEACH_BLOCKER

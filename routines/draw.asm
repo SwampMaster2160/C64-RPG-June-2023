@@ -183,16 +183,7 @@ draw_map_colors subroutine
 ; Redraws the map
 ; --- Corrupted ---
 ; a, x, y, word_0, word_2, byte_1, byte_0
-redraw_map subroutine
-	; Setup for world interrupt
-	lda #((3 | C64_25_ROWS) | %10000000) ; No vertical scroll, 25 rows, screen on, text mode, extended background off
-	sta c64_screen_control_0
-	lda #32                              ; Interrupt at line 288
-	sta c64_screen_interrupt_line
-	lda #0
-	sta is_next_screen_interrupt_for_gui
-	; Draw map colors
-	jsr draw_map_colors
+redraw_map_metatiles_only subroutine
 	; Get the locations of the chars and colors that we should copy to for the first row
 	lda #<c64_chars
 	sta word_2
@@ -244,6 +235,25 @@ redraw_map subroutine
 	; Continue on to draw next row
 	jmp .rows_loop
 ; One all tiles have been drawn
+.end
+	; Return
+	rts
+
+; Redraws the map
+; --- Corrupted ---
+; a, x, y, word_0, word_2, byte_1, byte_0
+redraw_map subroutine
+	; Setup for world interrupt
+	lda #((3 | C64_25_ROWS) | %10000000) ; No vertical scroll, 25 rows, screen on, text mode, extended background off
+	sta c64_screen_control_0
+	lda #32                              ; Interrupt at line 288
+	sta c64_screen_interrupt_line
+	lda #0
+	sta is_next_screen_interrupt_for_gui
+	; Draw map colors
+	jsr draw_map_colors
+	; Draw tiles
+	jsr redraw_map_metatiles_only
 .end
 	; Return
 	rts

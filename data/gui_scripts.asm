@@ -204,6 +204,11 @@ diamond_text subroutine
 	byte "Diamond"
 	byte SCRIPT_END
 
+gate_key_text subroutine
+	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_YELLOW
+	byte "Gate Key"
+	byte SCRIPT_END
+
 test_entity_script subroutine
 	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
 	byte "I am a test entity."
@@ -250,6 +255,20 @@ beach_blocker_script subroutine
 	byte '", "I'm just blocking this beach for no"
 	byte SCRIPT_CHANGE_TEXT_CURSOR_POINTER+>(22*40+1), <(22*40+1)
 	byte "reason.", '"
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
+	byte SCRIPT_END
+
+gate_opened_script subroutine
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte "Used the key to open the gate."
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
+	byte SCRIPT_END
+
+gate_no_key_script subroutine
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte "This gate needs a key."
 	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
 	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
 	byte SCRIPT_END

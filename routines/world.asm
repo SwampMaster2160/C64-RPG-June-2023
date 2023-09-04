@@ -489,12 +489,12 @@ entity_lands_on_tile subroutine
 	lda tile_event_discriminants,y
 	asl
 	asl
+	asl
 	clc
 	adc #<tile_events
 	sta word_0
 	php
 	lda tile_event_discriminants,y
-	lsr
 	lsr
 	lsr
 	lsr
@@ -548,12 +548,12 @@ do_tile_events_looked_at subroutine
 	lda tile_event_discriminants,y
 	asl
 	asl
+	asl
 	clc
 	adc #<tile_events
 	sta word_0
 	php
 	lda tile_event_discriminants,y
-	lsr
 	lsr
 	lsr
 	lsr
@@ -651,6 +651,55 @@ entity_interact subroutine
 	jmp .entity_interaction_loop
 	; Once we have gone over all entities
 .entity_interaction_loop_end
+	; Interact with tile events
+	ldy #$FF
+.next_tile_event
+	iny
+	cpy #MAX_TILE_EVENTS
+	beq .tile_event_loop_end
+	; Skip null tile events
+	lda tile_event_discriminants,y
+	beq .next_tile_event
+	; Are we looking at the tile entity?
+	jsr is_pos_on_tile_event
+	cmp #0
+	beq .next_tile_event
+	; If we are looking at the tile entity
+	lda tile_event_discriminants,y
+	asl
+	asl
+	asl
+	clc
+	adc #<tile_events
+	sta word_0
+	php
+	lda tile_event_discriminants,y
+	lsr
+	lsr
+	lsr
+	lsr
+	lsr
+	plp
+	adc #>tile_events
+	sta word_0+1
+	tya
+	pha
+	ldy #4
+	lda (word_0),y
+	sta word_2
+	iny
+	lda (word_0),y
+	sta word_2+1
+	pla
+	tay
+	lda #>(.tile_event_subroutine_end-1)
+	pha
+	lda #<(.tile_event_subroutine_end-1)
+	pha
+	jmp (word_2)
+.tile_event_subroutine_end
+	; Next tile event
+.tile_event_loop_end
 	; Return
 	rts
 

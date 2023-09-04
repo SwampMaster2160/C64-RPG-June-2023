@@ -530,13 +530,16 @@ two_islands_path_2_map_data subroutine
 
 two_islands_path_3_map_data subroutine
 	mapExtraData C64_COLOR_GREEN, MAP_PALETTE_PATH, MAP_IRRELEVANT, MAP_NEWTOWN, MAP_IRRELEVANT, MAP_TWO_ISLANDS_PATH_2, two_islands_path_name
-	mapMetatileRow METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_WATER,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES
-	mapMetatileRow METATILE_GRASS,                METATILE_GRASS,                METATILE_GRASS,                METATILE_GRASS,                METATILE_WATER,                METATILE_GRASS,                METATILE_GRASS,                METATILE_GRASS,                METATILE_GRASS,                METATILE_TREES
-	mapMetatileRow METATILE_DIRT_PATH_HORIZONTAL, METATILE_DIRT_PATH_HORIZONTAL, METATILE_DIRT_PATH_HORIZONTAL, METATILE_DIRT_PATH_HORIZONTAL, METATILE_BOARDWALK_HORIZONTAL, METATILE_DIRT_PATH_HORIZONTAL, METATILE_DIRT_PATH_HORIZONTAL, METATILE_DIRT_PATH_HORIZONTAL, METATILE_DIRT_PATH_HORIZONTAL, METATILE_DIRT_PATH_HORIZONTAL
-	mapMetatileRow METATILE_GRASS,                METATILE_GRASS,                METATILE_GRASS,                METATILE_GRASS,                METATILE_WATER,                METATILE_GRASS,                METATILE_GRASS,                METATILE_GRASS,                METATILE_GRASS,                METATILE_TREES
-	mapMetatileRow METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_WATER,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES
+	mapMetatileRow METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                                            METATILE_TREES,                METATILE_WATER,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES
+	mapMetatileRow METATILE_GRASS,                METATILE_GRASS,                METATILE_BRICK_WALL_VERTICAL_WITH_RIGHT_GRASS,             METATILE_GRASS,                METATILE_WATER,                METATILE_GRASS,                METATILE_GRASS,                METATILE_GRASS,                METATILE_GRASS,                METATILE_TREES
+	mapMetatileRow METATILE_DIRT_PATH_HORIZONTAL, METATILE_DIRT_PATH_HORIZONTAL, METATILE_BRICK_WALL_VERTICAL_KEY_HOLE_AND_WITH_RIGHT_PATH, METATILE_DIRT_PATH_HORIZONTAL, METATILE_BOARDWALK_HORIZONTAL, METATILE_DIRT_PATH_HORIZONTAL, METATILE_DIRT_PATH_HORIZONTAL, METATILE_DIRT_PATH_HORIZONTAL, METATILE_DIRT_PATH_HORIZONTAL, METATILE_DIRT_PATH_HORIZONTAL
+	mapMetatileRow METATILE_GRASS,                METATILE_GRASS,                METATILE_BRICK_WALL_VERTICAL_WITH_RIGHT_GRASS,             METATILE_GRASS,                METATILE_WATER,                METATILE_GRASS,                METATILE_GRASS,                METATILE_GRASS,                METATILE_GRASS,                METATILE_TREES
+	mapMetatileRow METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                                            METATILE_TREES,                METATILE_WATER,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES
 	endMapMetatiles
 
+	byte SCRIPT_SPAWN_TILE_EVENT, TILE_EVENT_WALL_GATE
+	tileEventPos 4, 4, 4, 5
+	byte 2, PLOT_COMPLETION_FLAG_OPENED_GATE_TWO_ISLANDS_PATH_3, 2*10+2
 	byte SCRIPT_END
 
 two_islands_path_4_map_data subroutine
@@ -927,6 +930,7 @@ little_lake_map_data subroutine
 	mapMetatileRow METATILE_TREES, METATILE_TREES, METATILE_TREES, METATILE_TREES, METATILE_WATER, METATILE_TREES, METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES
 	endMapMetatiles
 
+	byte SCRIPT_CALL_MACHINE_SUBROUTINE, #<spawn_map_dropped_item, #>spawn_map_dropped_item
 	byte SCRIPT_END
 
 bayswater_peninsula_map_data subroutine

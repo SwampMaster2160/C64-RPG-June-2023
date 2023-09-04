@@ -7,3 +7,4 @@ gem_names subroutine
 	word quartz_text
 	word legrandite_text
 	word diamond_text
+	word gate_key_text

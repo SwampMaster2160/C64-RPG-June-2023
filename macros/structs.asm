@@ -39,5 +39,5 @@ macro_map_id set macro_map_id + 1
 	endm
 
 	mac tileEventData
-		word {1}, {2}
+		word {1}, {2}, {3}, 0
 	endm

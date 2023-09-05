@@ -17,3 +17,4 @@ entities_actual subroutine
 	entityData ENTITY_SPRITE_SHOVEL,    ENTITY_SPRITE_SHOVEL,       ENTITY_SPRITE_SHOVEL,      ENTITY_SPRITE_SHOVEL,      C64_COLOR_ORANGE,  blank_entity_tick,            gem_entity_interacted_with                ; Shovel
 	entityData ENTITY_SPRITE_PLAYER_UP, ENTITY_SPRITE_PLAYER_RIGHT, ENTITY_SPRITE_PLAYER_DOWN, ENTITY_SPRITE_PLAYER_LEFT, C64_COLOR_RED,     blank_entity_tick,            do_not_block_amulet_giver_interacted_with ; Do not block amulet giver
 	entityData ENTITY_SPRITE_PLAYER_UP, ENTITY_SPRITE_PLAYER_RIGHT, ENTITY_SPRITE_PLAYER_DOWN, ENTITY_SPRITE_PLAYER_LEFT, C64_COLOR_GREEN,   block_entity_vertical_tick,   beach_blocker_interacted_with             ; Beach blocker
+	entityData ENTITY_SPRITE_PLAYER_UP, ENTITY_SPRITE_PLAYER_RIGHT, ENTITY_SPRITE_PLAYER_DOWN, ENTITY_SPRITE_PLAYER_LEFT, C64_COLOR_BROWN,   blank_entity_tick,            toolsmith_interacted_with                 ; Toolsmith

@@ -99,6 +99,7 @@
 	enumVariant MAP_NEWTOWN_BUILDING_0
 	enumVariant MAP_NEWTOWN_BUILDING_1
 	enumVariant MAP_MOSTON_BUILDING_0
+	enumVariant MAP_LONGTOWN_TOOLSHED
 
 	enumFrom 256
 	enumVariant MAP_IRRELEVANT

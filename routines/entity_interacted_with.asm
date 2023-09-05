@@ -70,3 +70,26 @@ beach_blocker_interacted_with subroutine
 	sta script_address+1
 	jsr execute_script
 	rts
+
+toolsmith_interacted_with subroutine
+	lda plot_completion_flags+[PLOT_COMPLETION_FLAG_GOT_WEAK_AXE/8]
+	and #1<<(PLOT_COMPLETION_FLAG_GOT_WEAK_AXE%8)
+	beq .weak_axe_not_already_got
+	jmp .no_item_handed_out
+.weak_axe_not_already_got
+	lda plot_completion_flags+[PLOT_COMPLETION_FLAG_GOT_WEAK_AXE/8]
+	ora #1<<(PLOT_COMPLETION_FLAG_GOT_WEAK_AXE%8)
+	sta plot_completion_flags+[PLOT_COMPLETION_FLAG_GOT_WEAK_AXE/8]
+	lda #<get_weak_shovel_script
+	sta script_address
+	lda #>get_weak_shovel_script
+	sta script_address+1
+	jsr execute_script
+	rts
+.no_item_handed_out
+	lda #<toolsmith_no_item_handed_out_script
+	sta script_address
+	lda #>toolsmith_no_item_handed_out_script
+	sta script_address+1
+	jsr execute_script
+	rts

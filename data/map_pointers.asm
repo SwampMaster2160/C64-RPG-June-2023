@@ -99,3 +99,4 @@ map_pointers_actual subroutine
 	word newtown_building_0_map_data
 	word newtown_building_1_map_data
 	word moston_building_0_map_data
+	word longtown_toolshed_map_data

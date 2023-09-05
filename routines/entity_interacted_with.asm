@@ -93,3 +93,11 @@ toolsmith_interacted_with subroutine
 	sta script_address+1
 	jsr execute_script
 	rts
+
+block_path_untill_repaired_entity_interacted_with subroutine
+	lda #<path_damaged_script
+	sta script_address
+	lda #>path_damaged_script
+	sta script_address+1
+	jsr execute_script
+	rts

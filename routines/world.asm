@@ -1107,3 +1107,38 @@ spawn_beach_blocker subroutine
 	lda #ENTITY_BEACH_BLOCKER
 	jsr spawn_entity
 	rts
+
+; Returns weather or not the first 4 gems have been collected
+; --- Outputs ---
+; a, z: Have the first 4 gems have been collected (bool)
+has_got_first_4_gems subroutine
+	lda plot_completion_flags
+	and #%00001111
+	cmp #%00001111
+	beq .yes
+	lda #0
+	rts
+.yes
+	lda #1
+	rts
+
+riverside_path_0_path_repairs_add_features subroutine
+	; Check if we have the first 4 gems
+	jsr has_got_first_4_gems
+	;lda #1
+	bne .path_complete
+	; If not:
+	lda #10
+	sta temp_x
+	lda #6
+	sta temp_y
+	lda #ENTITY_BLOCK_PATH_UNTILL_REPAIRED
+	jsr spawn_entity
+	rts
+.path_complete
+	; If so:
+	lda #METATILE_DIRT_PATH_HORIZONTAL
+	sta map_metatiles+3*10+1
+	sta map_metatiles+3*10+3
+	sta map_metatiles+3*10+4
+	rts

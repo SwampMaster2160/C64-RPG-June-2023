@@ -770,6 +770,8 @@ riverside_path_0_map_data subroutine
 	mapMetatileRow METATILE_TREES,                METATILE_TREES, METATILE_TREES,                METATILE_TREES, METATILE_TREES, METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES
 	endMapMetatiles
 
+	byte SCRIPT_CALL_MACHINE_SUBROUTINE, <riverside_path_0_path_repairs_add_features, >riverside_path_0_path_repairs_add_features
+
 	byte SCRIPT_END
 
 riverside_path_1_map_data subroutine

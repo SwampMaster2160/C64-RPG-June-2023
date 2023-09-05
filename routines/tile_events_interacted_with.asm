@@ -63,20 +63,21 @@ fallen_tree_interacted_with subroutine
 	; Return if the weak axe has not been collected
 	lda plot_completion_flags+[PLOT_COMPLETION_FLAG_GOT_WEAK_AXE/8]
 	and #1<<(PLOT_COMPLETION_FLAG_GOT_WEAK_AXE%8)
-	;beq .no_key
+	beq .no_axe
+	lda #0
 	; Set tree as cleared
 	lda plot_completion_flags+[PLOT_COMPLETION_FLAG_REMOVED_MIDLAND_PATH_0_FALLEN_TREE/8]
 	ora #1<<(PLOT_COMPLETION_FLAG_REMOVED_MIDLAND_PATH_0_FALLEN_TREE%8)
 	sta plot_completion_flags+[PLOT_COMPLETION_FLAG_REMOVED_MIDLAND_PATH_0_FALLEN_TREE/8]
 	; Change gate tile to a path tile
-	lda #METATILE_DIRT_PATH_HORIZONTAL
-	sta map_metatiles+2*10+5
+	lda #METATILE_GRASS
+	sta map_metatiles+2*10+4
 	lda #1
 	sta does_map_need_redraw
 	; Print text
-	lda #<gate_opened_script
+	lda #<fallen_tree_cleared_script
 	sta script_address
-	lda #>gate_opened_script
+	lda #>fallen_tree_cleared_script
 	sta script_address+1
 	jsr execute_script
 	; Return
@@ -84,9 +85,9 @@ fallen_tree_interacted_with subroutine
 	rts
 .no_axe
 	; Print text
-	lda #<gate_no_key_script
+	lda #<fallen_tree_no_axe_script
 	sta script_address
-	lda #>gate_no_key_script
+	lda #>fallen_tree_no_axe_script
 	sta script_address+1
 	jsr execute_script
 	jmp .end

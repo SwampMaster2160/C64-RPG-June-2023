@@ -270,6 +270,22 @@ gate_opened_script subroutine
 	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
 	byte SCRIPT_END
 
+fallen_tree_cleared_script subroutine
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte "Used the axe to clear the fallen tree."
+	byte SCRIPT_CALL, #<draw_enter_fire_script, #>draw_enter_fire_script
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
+	byte SCRIPT_END
+
+fallen_tree_no_axe_script subroutine
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte "A fallen tree is blocking the path."
+	byte SCRIPT_CALL, #<draw_enter_fire_script, #>draw_enter_fire_script
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
+	byte SCRIPT_END
+
 gate_no_key_script subroutine
 	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
 	byte "This gate needs a key."

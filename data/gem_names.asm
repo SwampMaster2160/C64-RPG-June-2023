@@ -8,3 +8,4 @@ gem_names subroutine
 	word legrandite_text
 	word diamond_text
 	word gate_key_text
+	word shovel_text

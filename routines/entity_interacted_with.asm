@@ -72,6 +72,8 @@ beach_blocker_interacted_with subroutine
 	rts
 
 toolsmith_interacted_with subroutine
+	jsr has_got_first_4_gems
+	bne .got_4_gems
 	lda plot_completion_flags+[PLOT_COMPLETION_FLAG_GOT_WEAK_AXE/8]
 	and #1<<(PLOT_COMPLETION_FLAG_GOT_WEAK_AXE%8)
 	beq .weak_axe_not_already_got
@@ -90,6 +92,19 @@ toolsmith_interacted_with subroutine
 	lda #<toolsmith_no_item_handed_out_script
 	sta script_address
 	lda #>toolsmith_no_item_handed_out_script
+	sta script_address+1
+	jsr execute_script
+	rts
+.got_4_gems
+	lda plot_completion_flags+[PLOT_COMPLETION_FLAG_GOT_AXE/8]
+	and #1<<(PLOT_COMPLETION_FLAG_GOT_AXE%8)
+	bne .no_item_handed_out
+	lda plot_completion_flags+[PLOT_COMPLETION_FLAG_GOT_AXE/8]
+	ora #1<<(PLOT_COMPLETION_FLAG_GOT_AXE%8)
+	sta plot_completion_flags+[PLOT_COMPLETION_FLAG_GOT_AXE/8]
+	lda #<get_shovel_script
+	sta script_address
+	lda #>get_shovel_script
 	sta script_address+1
 	jsr execute_script
 	rts

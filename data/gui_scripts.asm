@@ -209,6 +209,11 @@ gate_key_text subroutine
 	byte "Gate Key"
 	byte SCRIPT_END
 
+shovel_text subroutine
+	byte SCRIPT_CHANGE_TEXT_COLOR, C64_COLOR_LIGHT_GREY
+	byte "Shovel"
+	byte SCRIPT_END
+
 test_entity_script subroutine
 	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
 	byte "I am a test entity."
@@ -309,6 +314,26 @@ get_weak_shovel_script subroutine
 	byte '", "It is only strong enough to clear"
 	byte SCRIPT_CHANGE_TEXT_CURSOR_POINTER+>(22*40+1), <(22*40+1)
 	byte "fallen, rotten trees.", '"
+	byte SCRIPT_CALL, #<draw_enter_fire_script, #>draw_enter_fire_script
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
+	byte SCRIPT_END
+
+get_shovel_script subroutine
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte '", "I have an another axe that I no"
+	byte SCRIPT_CHANGE_TEXT_CURSOR_POINTER+>(22*40+1), <(22*40+1)
+	byte "longer need.", '"
+	byte SCRIPT_CALL, #<draw_enter_fire_script, #>draw_enter_fire_script
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte "Got the axe."
+	byte SCRIPT_CALL, #<draw_enter_fire_script, #>draw_enter_fire_script
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte '", "It is stronger than the last axe I"
+	byte SCRIPT_CHANGE_TEXT_CURSOR_POINTER+>(22*40+1), <(22*40+1)
+	byte "gave you.", '"
 	byte SCRIPT_CALL, #<draw_enter_fire_script, #>draw_enter_fire_script
 	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
 	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script

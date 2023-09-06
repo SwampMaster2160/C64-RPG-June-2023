@@ -558,6 +558,7 @@ bayswater_beach_0_map_data subroutine
 	mapMetatileRow METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER, METATILE_WATER
 	endMapMetatiles
 
+	byte SCRIPT_CALL_MACHINE_SUBROUTINE, <spawn_shovel, >spawn_shovel
 	byte SCRIPT_END
 
 bayswater_beach_1_map_data subroutine

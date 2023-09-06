@@ -1094,6 +1094,14 @@ spawn_map_dropped_item subroutine
 	jsr spawn_entity
 	rts
 
+; Spawn the dropped shovel if the player has gotten 4 gems
+spawn_shovel subroutine
+	jsr has_got_first_4_gems
+	beq .end
+	jsr spawn_map_dropped_item
+.end
+	rts
+
 spawn_beach_blocker subroutine
 	lda plot_completion_flags+[PLOT_COMPLETION_FLAG_GOT_DO_NOT_BLOCK_AMULET/8]
 	and #1<<(PLOT_COMPLETION_FLAG_GOT_DO_NOT_BLOCK_AMULET%8)
@@ -1113,6 +1121,7 @@ spawn_beach_blocker subroutine
 ; a, z: Have the first 4 gems have been collected (bool)
 has_got_first_4_gems subroutine
 	lda plot_completion_flags
+	;lda #%00001111
 	and #%00001111
 	cmp #%00001111
 	beq .yes

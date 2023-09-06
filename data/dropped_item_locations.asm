@@ -10,3 +10,4 @@ dropped_item_locations subroutine
 	byte MAP_L_WARF_2,            8,  6
 	byte MAP_HILLBASE,            3,  4 ; Diamond
 	byte MAP_LITTLE_LAKE,         13, 4 ; Key
+	byte MAP_BAYSWATER_BEACH_0,   7,  3 ; Shovel

@@ -8,3 +8,4 @@ tile_events_actual subroutine
 	tileEventData dummy_steped_on,                         dummy_looked_at,                       wall_gate_interacted_with      ; Wall gate
 	tileEventData dummy_steped_on,                         dummy_looked_at,                       fallen_tree_interacted_with    ; Fallen tree
 	tileEventData dummy_steped_on,                         dummy_looked_at,                       choppable_tree_interacted_with ; Choppable tree
+	tileEventData dummy_steped_on,                         dummy_looked_at,                       deep_river_interacted_with     ; Make water shallow

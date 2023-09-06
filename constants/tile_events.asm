@@ -7,3 +7,4 @@
 	enumVariant TILE_EVENT_WALL_GATE                     ; Opens if the player has the gate key
 	enumVariant TILE_EVENT_FALLEN_TREE                   ; Can be removed with a weak axe
 	enumVariant TILE_EVENT_CHOPPABLE_TREE                ; Can be removed with an axe
+	enumVariant TILE_EVENT_DEEP_RIVER                    ; Can be shallowed

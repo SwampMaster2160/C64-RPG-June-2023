@@ -151,3 +151,62 @@ choppable_tree_interacted_with subroutine
 	sta script_address+1
 	jsr execute_script
 	jmp .end
+
+deep_river_interacted_with subroutine
+	; Push x since we don't need to know what entity is interacting with the gate
+	txa
+	pha
+	; Make map_heap+x point to the extra bytes for the event
+	lda tile_event_extra_bytes,y
+	tax
+	; Return if the river has been shallowed
+	lda map_heap,x
+	jsr is_plot_completion_flag_set
+	bne .end
+	; Return if key has not been collected
+	lda #PLOT_COMPLETION_FLAG_GOT_SHOVEL
+	jsr is_plot_completion_flag_set
+	beq .no_shovel
+	; Make map_heap+x point to the extra bytes for the event
+	lda tile_event_extra_bytes,y
+	tax
+	; Set river as shallowed
+	lda map_heap,x
+	jsr set_plot_completion_flag
+	; Make map_heap+x point to the extra bytes for the event
+	lda tile_event_extra_bytes,y
+	tax
+	; Change metatile and metatile below to be shallow water
+	lda map_heap+1,x
+	tax
+	lda #METATILE_SHALLOW_WATER
+	sta map_metatiles,x
+	lda tile_event_extra_bytes,y
+	tax
+	lda map_heap+1,x
+	clc
+	adc #10
+	tax
+	lda #METATILE_SHALLOW_WATER
+	sta map_metatiles,x
+	lda #1
+	sta does_map_need_redraw
+	; Print text
+	lda #<river_shallowed_script
+	sta script_address
+	lda #>river_shallowed_script
+	sta script_address+1
+	jsr execute_script
+	; Restore x and return
+.end
+	pla
+	tax
+	rts
+.no_shovel
+	; Print text
+	lda #<river_no_shovel_script
+	sta script_address
+	lda #>river_no_shovel_script
+	sta script_address+1
+	jsr execute_script
+	jmp .end

@@ -91,3 +91,63 @@ fallen_tree_interacted_with subroutine
 	sta script_address+1
 	jsr execute_script
 	jmp .end
+
+choppable_tree_interacted_with subroutine
+	; Push x since we don't need to know what entity is interacting with the gate
+	txa
+	pha
+	; Make map_heap+x point to the extra bytes for the event
+	lda tile_event_extra_bytes,y
+	tax
+	; Return if the tree is chopped
+	lda map_heap,x
+	jsr is_plot_completion_flag_set
+	bne .end
+	; Return if axe has not been collected
+	lda #PLOT_COMPLETION_FLAG_GOT_AXE
+	jsr is_plot_completion_flag_set
+	beq .no_axe
+	; Make map_heap+x point to the extra bytes for the event
+	lda tile_event_extra_bytes,y
+	tax
+	; Set tree as chopped
+	lda map_heap,x
+	jsr set_plot_completion_flag
+	; Make map_heap+x point to the extra bytes for the event
+	lda tile_event_extra_bytes,y
+	tax
+	; Change gate tile to a path/grass tile
+	lda map_id
+	cmp #MAP_MONEY_BEACH_1
+	beq .use_grass
+	lda #METATILE_DIRT_PATH_VERTICAL
+	jmp .not_grass
+.use_grass
+	lda #METATILE_GRASS
+.not_grass
+	pha
+	lda map_heap+1,x
+	tax
+	pla
+	sta map_metatiles,x
+	lda #1
+	sta does_map_need_redraw
+	; Print text
+	lda #<tree_chopped_script
+	sta script_address
+	lda #>tree_chopped_script
+	sta script_address+1
+	jsr execute_script
+	; Restore x and return
+.end
+	pla
+	tax
+	rts
+.no_axe
+	; Print text
+	lda #<choppable_tree_no_axe_script
+	sta script_address
+	lda #>choppable_tree_no_axe_script
+	sta script_address+1
+	jsr execute_script
+	jmp .end

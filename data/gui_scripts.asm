@@ -283,9 +283,27 @@ fallen_tree_cleared_script subroutine
 	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
 	byte SCRIPT_END
 
+tree_chopped_script subroutine
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte "Used the axe to chop the tree."
+	byte SCRIPT_CALL, #<draw_enter_fire_script, #>draw_enter_fire_script
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
+	byte SCRIPT_END
+
 fallen_tree_no_axe_script subroutine
 	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
 	byte "A fallen tree is blocking the path."
+	byte SCRIPT_CALL, #<draw_enter_fire_script, #>draw_enter_fire_script
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
+	byte SCRIPT_END
+
+choppable_tree_no_axe_script subroutine
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte "A tree is blocking the path, it can"
+	byte SCRIPT_CHANGE_TEXT_CURSOR_POINTER+>(22*40+1), <(22*40+1)
+	byte "easily be chopped with a good axe."
 	byte SCRIPT_CALL, #<draw_enter_fire_script, #>draw_enter_fire_script
 	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
 	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
@@ -299,7 +317,7 @@ gate_no_key_script subroutine
 	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
 	byte SCRIPT_END
 
-get_weak_shovel_script subroutine
+get_weak_axe_script subroutine
 	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
 	byte '", "I have an old axe that I no longer"
 	byte SCRIPT_CHANGE_TEXT_CURSOR_POINTER+>(22*40+1), <(22*40+1)
@@ -319,7 +337,7 @@ get_weak_shovel_script subroutine
 	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
 	byte SCRIPT_END
 
-get_shovel_script subroutine
+get_axe_script subroutine
 	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
 	byte '", "I have an another axe that I no"
 	byte SCRIPT_CHANGE_TEXT_CURSOR_POINTER+>(22*40+1), <(22*40+1)

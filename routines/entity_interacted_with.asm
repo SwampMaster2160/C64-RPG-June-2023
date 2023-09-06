@@ -82,9 +82,9 @@ toolsmith_interacted_with subroutine
 	lda plot_completion_flags+[PLOT_COMPLETION_FLAG_GOT_WEAK_AXE/8]
 	ora #1<<(PLOT_COMPLETION_FLAG_GOT_WEAK_AXE%8)
 	sta plot_completion_flags+[PLOT_COMPLETION_FLAG_GOT_WEAK_AXE/8]
-	lda #<get_weak_shovel_script
+	lda #<get_weak_axe_script
 	sta script_address
-	lda #>get_weak_shovel_script
+	lda #>get_weak_axe_script
 	sta script_address+1
 	jsr execute_script
 	rts
@@ -102,9 +102,9 @@ toolsmith_interacted_with subroutine
 	lda plot_completion_flags+[PLOT_COMPLETION_FLAG_GOT_AXE/8]
 	ora #1<<(PLOT_COMPLETION_FLAG_GOT_AXE%8)
 	sta plot_completion_flags+[PLOT_COMPLETION_FLAG_GOT_AXE/8]
-	lda #<get_shovel_script
+	lda #<get_axe_script
 	sta script_address
-	lda #>get_shovel_script
+	lda #>get_axe_script
 	sta script_address+1
 	jsr execute_script
 	rts

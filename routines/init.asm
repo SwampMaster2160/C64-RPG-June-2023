@@ -130,6 +130,9 @@ init subroutine
 	jsr get_keys_pressed
 	lda #1
 	sta does_hud_need_redraw
+
+	lda #PLOT_COMPLETION_FLAG_GOT_AXE
+	;jsr set_plot_completion_flag
 	
 	; Loop untill interrupt
 	cli

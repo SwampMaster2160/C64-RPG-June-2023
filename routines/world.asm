@@ -1131,6 +1131,21 @@ has_got_first_4_gems subroutine
 	lda #1
 	rts
 
+; Returns weather or not the first 7 gems have been collected
+; --- Outputs ---
+; a, z: Have the first 7 gems have been collected (bool)
+has_got_first_7_gems subroutine
+	lda plot_completion_flags
+	;lda #%01111111
+	and #%01111111
+	cmp #%01111111
+	beq .yes
+	lda #0
+	rts
+.yes
+	lda #1
+	rts
+
 riverside_path_0_path_repairs_add_features subroutine
 	; Check if we have the first 4 gems
 	jsr has_got_first_4_gems

@@ -124,7 +124,7 @@ init subroutine
 	sta gui_background_color
 
 	jsr init_player
-	lda #MAP_NEWTOWN
+	lda #MAP_LONGTOWN_0;MAP_NEWTOWN
 	sta map_id
 	jsr load_map
 	jsr get_keys_pressed

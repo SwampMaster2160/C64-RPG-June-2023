@@ -124,15 +124,15 @@ init subroutine
 	sta gui_background_color
 
 	jsr init_player
-	lda #MAP_LONGTOWN_0;MAP_NEWTOWN
+	lda #MAP_NEWTOWN
 	sta map_id
 	jsr load_map
 	jsr get_keys_pressed
 	lda #1
 	sta does_hud_need_redraw
 
-	lda #PLOT_COMPLETION_FLAG_GOT_SHOVEL
-	;jsr set_plot_completion_flag
+	lda #PLOT_COMPLETION_FLAG_GOT_BRIDGE_REPAIR_KIT
+	jsr set_plot_completion_flag
 	
 	; Loop untill interrupt
 	cli

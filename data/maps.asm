@@ -753,6 +753,12 @@ two_islands_bridge_2_map_data subroutine
 	mapMetatileRow METATILE_WATER,                               METATILE_WATER,                METATILE_WATER,                METATILE_WATER,                METATILE_WATER,                METATILE_ROCKS,                METATILE_ROCKS,                METATILE_ROCKS,                METATILE_ROCKS,                METATILE_TREES
 	endMapMetatiles
 
+	byte SCRIPT_SPAWN_TILE_EVENT, TILE_EVENT_FALLEN_BRIDGE
+	tileEventPos 0, 4, 0, 5
+	byte 0
+
+	byte SCRIPT_REPLACE_METATILE_IF_PLOT_COMPLETION_FLAG_SET, PLOT_COMPLETION_FLAG_REPAIRED_BRIDGE, 2*10+0, METATILE_BOARDWALK_HORIZONTAL
+
 	byte SCRIPT_END
 
 two_islands_beach_map_data subroutine

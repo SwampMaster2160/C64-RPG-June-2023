@@ -210,3 +210,40 @@ deep_river_interacted_with subroutine
 	sta script_address+1
 	jsr execute_script
 	jmp .end
+
+broken_bridge_interacted_with subroutine
+	; Return if the bridge has been repaired
+	lda plot_completion_flags+[PLOT_COMPLETION_FLAG_REPAIRED_BRIDGE/8]
+	and #1<<(PLOT_COMPLETION_FLAG_REPAIRED_BRIDGE%8)
+	bne .end
+	; Return if the bridge repair kit has not been collected
+	lda plot_completion_flags+[PLOT_COMPLETION_FLAG_GOT_BRIDGE_REPAIR_KIT/8]
+	and #1<<(PLOT_COMPLETION_FLAG_GOT_BRIDGE_REPAIR_KIT%8)
+	beq .no_bridge_repair_kit
+	lda #0
+	; Repair bridge
+	lda plot_completion_flags+[PLOT_COMPLETION_FLAG_REPAIRED_BRIDGE/8]
+	ora #1<<(PLOT_COMPLETION_FLAG_REPAIRED_BRIDGE%8)
+	sta plot_completion_flags+[PLOT_COMPLETION_FLAG_REPAIRED_BRIDGE/8]
+	; Change gate tile to a path tile
+	lda #METATILE_BOARDWALK_HORIZONTAL
+	sta map_metatiles+2*10+0
+	lda #1
+	sta does_map_need_redraw
+	; Print text
+	lda #<bridge_repaired_script
+	sta script_address
+	lda #>bridge_repaired_script
+	sta script_address+1
+	jsr execute_script
+	; Return
+.end
+	rts
+.no_bridge_repair_kit
+	; Print text
+	lda #<no_bridge_repair_kit_script
+	sta script_address
+	lda #>no_bridge_repair_kit_script
+	sta script_address+1
+	jsr execute_script
+	jmp .end

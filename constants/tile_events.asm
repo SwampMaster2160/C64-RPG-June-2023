@@ -8,3 +8,4 @@
 	enumVariant TILE_EVENT_FALLEN_TREE                   ; Can be removed with a weak axe
 	enumVariant TILE_EVENT_CHOPPABLE_TREE                ; Can be removed with an axe
 	enumVariant TILE_EVENT_DEEP_RIVER                    ; Can be shallowed
+	enumVariant TILE_EVENT_FALLEN_BRIDGE                 ; Can be repaired

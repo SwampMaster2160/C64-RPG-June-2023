@@ -9,6 +9,8 @@ newtown_map_data subroutine
 	mapMetatileRow METATILE_TREES,                 METATILE_TREES,                METATILE_TREES,                 METATILE_TREES,                METATILE_TOWN_PATH_VERTICAL, METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                METATILE_TREES,                 METATILE_TREES
 	endMapMetatiles
 
+	byte SCRIPT_SPAWN_ENTITY, ENTITY_NEWTOWN_GEM_PERSON, 14, 4
+
 	byte SCRIPT_END
 
 longtown_0_map_data subroutine

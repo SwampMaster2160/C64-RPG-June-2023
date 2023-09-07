@@ -19,3 +19,4 @@ entities_actual subroutine
 	entityData ENTITY_SPRITE_PLAYER_UP, ENTITY_SPRITE_PLAYER_RIGHT, ENTITY_SPRITE_PLAYER_DOWN, ENTITY_SPRITE_PLAYER_LEFT, C64_COLOR_GREEN,   block_entity_vertical_tick,   beach_blocker_interacted_with                     ; Beach blocker
 	entityData ENTITY_SPRITE_PLAYER_UP, ENTITY_SPRITE_PLAYER_RIGHT, ENTITY_SPRITE_PLAYER_DOWN, ENTITY_SPRITE_PLAYER_LEFT, C64_COLOR_BROWN,   blank_entity_tick,            toolsmith_interacted_with                         ; Toolsmith
 	entityData ENTITY_SPRITE_PLAYER_UP, ENTITY_SPRITE_PLAYER_RIGHT, ENTITY_SPRITE_PLAYER_DOWN, ENTITY_SPRITE_PLAYER_LEFT, C64_COLOR_MAGENTA, block_entity_vertical_tick,   block_path_untill_repaired_entity_interacted_with ; Block path untill repaired
+	entityData ENTITY_SPRITE_PLAYER_UP, ENTITY_SPRITE_PLAYER_RIGHT, ENTITY_SPRITE_PLAYER_DOWN, ENTITY_SPRITE_PLAYER_LEFT, C64_COLOR_GREEN,   blank_entity_tick,            gem_person_interacted_with                        ; Gem person

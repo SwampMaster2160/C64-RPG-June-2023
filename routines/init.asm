@@ -131,8 +131,8 @@ init subroutine
 	lda #1
 	sta does_hud_need_redraw
 
-	lda #PLOT_COMPLETION_FLAG_GOT_BRIDGE_REPAIR_KIT
-	jsr set_plot_completion_flag
+	lda #PLOT_COMPLETION_FLAG_GOT_DIAMOND
+	;jsr set_plot_completion_flag
 	
 	; Loop untill interrupt
 	cli

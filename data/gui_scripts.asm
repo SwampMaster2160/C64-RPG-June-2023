@@ -428,3 +428,29 @@ path_damaged_script subroutine
 	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
 	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
 	byte SCRIPT_END
+
+gem_person_no_gems_script subroutine
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte '", "You must adventure out an collect the"
+	byte SCRIPT_CHANGE_TEXT_CURSOR_POINTER+>(22*40+1), <(22*40+1)
+	byte "8 gems and return or the world will"
+	byte SCRIPT_CHANGE_TEXT_CURSOR_POINTER+>(23*40+1), <(23*40+1)
+	byte "end or some trash.", '"
+	byte SCRIPT_CALL, #<draw_enter_fire_script, #>draw_enter_fire_script
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
+	byte SCRIPT_END
+
+gem_person_all_gems_script subroutine
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte '", "All the gems have been collected so"
+	byte SCRIPT_CHANGE_TEXT_CURSOR_POINTER+>(22*40+1), <(22*40+1)
+	byte "the world won't end now."
+	byte SCRIPT_CALL, #<draw_enter_fire_script, #>draw_enter_fire_script
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_basic_textbox_script, #>draw_basic_textbox_script
+	byte '", "This game is complete now.", '"
+	byte SCRIPT_CALL, #<draw_enter_fire_script, #>draw_enter_fire_script
+	byte SCRIPT_SUSPEND_UNTILL_ACTION_KEY_PRESSED
+	byte SCRIPT_CALL, #<draw_hud_script, #>draw_hud_script
+	byte SCRIPT_END

@@ -131,3 +131,20 @@ block_path_untill_repaired_entity_interacted_with subroutine
 	sta script_address+1
 	jsr execute_script
 	rts
+
+gem_person_interacted_with subroutine
+	lda plot_completion_flags
+	bmi .gems_got
+	lda #<gem_person_no_gems_script
+	sta script_address
+	lda #>gem_person_no_gems_script
+	sta script_address+1
+	jsr execute_script
+	rts
+.gems_got
+	lda #<gem_person_all_gems_script
+	sta script_address
+	lda #>gem_person_all_gems_script
+	sta script_address+1
+	jsr execute_script
+	rts

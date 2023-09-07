@@ -28,6 +28,7 @@ is_in_run set 0
 is_in_run set 0
 			byte %10000000 | ((run_byte % 8) << 4) | (run_length - 1)
 		endif
+macro_map_id set macro_map_id + 1
 	endm
 
 ; ----- Only used within this file -----

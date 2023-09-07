@@ -72,10 +72,10 @@ beach_blocker_interacted_with subroutine
 	rts
 
 toolsmith_interacted_with subroutine
-	jsr has_got_first_4_gems
-	bne .got_4_gems
 	jsr has_got_first_7_gems
 	bne .got_7_gems
+	jsr has_got_first_4_gems
+	bne .got_4_gems
 	lda plot_completion_flags+[PLOT_COMPLETION_FLAG_GOT_WEAK_AXE/8]
 	and #1<<(PLOT_COMPLETION_FLAG_GOT_WEAK_AXE%8)
 	beq .weak_axe_not_already_got

@@ -20,7 +20,6 @@
 			byte {6}
 		endif
 		word {7}
-macro_map_id set macro_map_id + 1
 		newMapMetatiles
 	endm
 
